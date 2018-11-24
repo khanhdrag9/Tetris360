@@ -23,9 +23,9 @@ public:
 	void MoveBy(const cocos2d::Vec2& iPos);
 	void RotateBy(float iAngle);
 
+	CC_SYNTHESIZE(cocos2d::Size, _size, Size);
 	CC_SYNTHESIZE(float, _sideLength, SideLength);
 	CC_SYNTHESIZE(int, _type, Type);
-	//CC_SYNTHESIZE(std::vector<Square*>, _listSquare, ListSquare);
-	std::vector<Square*> _listSquare;
+	CC_SYNTHESIZE(std::vector<Square*>, _listSquare, ListSquare);
 };
 

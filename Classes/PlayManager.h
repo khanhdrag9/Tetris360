@@ -11,10 +11,12 @@ class PlayManager
 	
 	static PlayManager* _instance;
 
-	std::vector<Block*> _listBlock;
+	std::vector<Square*> _listBlock;
+	std::vector<Vec2> _listColumn;
 	Block* _blockIsFalling;
 	float _timeCountRotate;
 	float _intervalRotate;
+	float _lengthEachSquare;
 	Size _screenSize;
 	Vec2 _origin;
 	int _statusGame;
@@ -26,6 +28,7 @@ public:
 	void createBlock();
 	bool checkFillRow();
 	void checkCreateBlock();
+	bool checkAvaiableBlock(const Vec2& pos);
 	bool canMove();
 	void rotateBlocks();
 	void rotatePlay();

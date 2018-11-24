@@ -52,6 +52,8 @@ bool Block::init(int type, float sideLength)
 			cocos2d::Vec2(1.f, 1.f),
 			cocos2d::Vec2(-1.f, 1.f)
 		};
+
+		_size = Size(sideLength*2.f, sideLength*2.f);
 		break;
 	case typeBlock::I:
 		break;
@@ -78,6 +80,7 @@ void Block::createSquares(cocos2d::Vec2* _listVec, int number)
 		auto newAnchor = Vec2(square->getAnchorPoint() - _listVec[i] / 2.f);
 		square->setAnchorPoint(newAnchor);
 		square->setPosition(0, 0);
+		square->setScale(_sideLength / (float)square->getBoundingBox().size.width);
 
 		_listSquare.push_back(square);
 		this->addChild(square);
