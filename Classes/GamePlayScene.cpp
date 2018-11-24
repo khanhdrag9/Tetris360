@@ -1,8 +1,10 @@
 #include "GamePlayScene.h"
+#include "Defines.h"
 
-
-GamePlayScene::GamePlayScene()
+GamePlayScene::GamePlayScene():
+	_manager(PlayManager::getInstance())
 {
+
 }
 
 
@@ -24,6 +26,10 @@ bool GamePlayScene::init()
 {
 	if (!Layer::init())
 		return false;
+
+	_manager->setCurrentLayer(this);
+	_manager->createGame();
+	_manager->createBlock();
 
 
 	return true;

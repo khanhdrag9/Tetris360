@@ -14,6 +14,7 @@ bool HomeScene::init()
 	if (!Layer::init())
 		return false;
 
+	goToPlay();
 
 	return true;
 }

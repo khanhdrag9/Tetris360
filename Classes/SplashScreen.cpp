@@ -1,5 +1,6 @@
 #include "SplashScreen.h"
-#include "HomeScene.h"
+//#include "HomeScene.h"
+#include "GamePlayScene.h"
 
 cocos2d::Scene* SplashScreen::createScene()
 {
@@ -31,6 +32,6 @@ bool SplashScreen::init()
 
 void SplashScreen::changeScene(float)
 {
-	auto scene = HomeScene::createScene();
+	auto scene = GamePlayScene::createScene();
 	cocos2d::Director::getInstance()->replaceScene(cocos2d::TransitionFade::create(TIME_FADE, scene));
 }

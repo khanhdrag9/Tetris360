@@ -10,15 +10,31 @@ Square::~Square()
 }
 
 
-Square* Square::createSquare()
+Square* Square::createSquare(const char* filePath, cocos2d::Vec2 anchor)
 {
-	// TODO: Add your implementation code here.
+	Square* sprite = new Square();
+	if (sprite && sprite->initWithFile(filePath))
+	{
+		sprite->setAnchorWorldPoint(anchor);
+		sprite->autorelease();
+		return sprite;
+	}
+
+	CC_SAFE_DELETE(sprite);
 	return nullptr;
 }
 
 
-Square* Square::createSquareWithNameFrame()
+Square* Square::createSquareWithNameFrame(const char* nameFrame, cocos2d::Vec2 anchor)
 {
-	// TODO: Add your implementation code here.
+	Square* sprite = new Square();
+	if (sprite && sprite->initWithSpriteFrameName(nameFrame))
+	{
+		sprite->setAnchorWorldPoint(anchor);
+		sprite->autorelease();
+		return sprite;
+	}
+
+	CC_SAFE_DELETE(sprite);
 	return nullptr;
 }

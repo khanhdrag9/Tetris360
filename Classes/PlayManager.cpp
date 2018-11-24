@@ -1,4 +1,5 @@
 #include "PlayManager.h"
+#include "Defines.h"
 
 PlayManager* PlayManager::_instance = new PlayManager();
 
@@ -29,7 +30,11 @@ void PlayManager::createGame()
 
 void PlayManager::createBlock()
 {
-	// TODO: Add your implementation code here.
+	Block* test = Block::create(Vec2(400, 200), Block::typeBlock::O, 0);
+	if (_currentLayer)
+	{
+		_currentLayer->addChild(test);
+	}
 }
 
 

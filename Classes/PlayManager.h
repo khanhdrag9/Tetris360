@@ -33,5 +33,7 @@ public:
 	bool isLose();
 	void pause();
 	void reset();
+
+	CC_SYNTHESIZE(cocos2d::Layer*, _currentLayer, CurrentLayer);
 };
 
