@@ -9,7 +9,8 @@ PlayManager::PlayManager():
 	_intervalRotate(0.0f),
 	_statusGame(0),
 	_blockIsFalling(nullptr),
-	_lengthEachSquare(0.0f)
+	_lengthEachSquare(0.0f),
+	_speedFall(SPEED_FALL_ORIGN)
 {
 	
 }
@@ -17,6 +18,10 @@ PlayManager::PlayManager():
 
 PlayManager::~PlayManager()
 {
+	for (auto x : _listSquares)
+		if (x) CC_SAFE_DELETE(x);
+	_listSquares.clear();
+	_listColumn.clear();
 }
 
 PlayManager* PlayManager::getInstance()
@@ -46,7 +51,7 @@ void PlayManager::update(float dt)
 {
 	if (_blockIsFalling)
 	{
-		_blockIsFalling->MoveBy(Vec2(0, -2.f));
+		_blockIsFalling->MoveBy(Vec2(0, -_speedFall));
 	}
 
 	checkCreateBlock();
@@ -80,7 +85,24 @@ bool PlayManager::checkFillRow()
 
 void PlayManager::checkCreateBlock()
 {
-	
+	if (_blockIsFalling)
+	{
+		auto posBlockFalling = _blockIsFalling->getPosition();
+		auto sizeBlockFalling = _blockIsFalling->getSize();
+		auto ratioAnchorBlockFalling = _blockIsFalling->getRatioAnchor();
+
+		//auto minX = sizeBlockFalling.width * ratioAnchorBlockFalling.x;
+		//auto maxX = _screenSize.width - minX;
+		auto minY = sizeBlockFalling.height * ratioAnchorBlockFalling.y;
+
+		//check with bottom edge
+		if (posBlockFalling.y <= minY)
+		{
+			_blockIsFalling->setPositionY(minY);
+			_blockIsFalling = nullptr;
+			createBlock();
+		}
+	}
 }
 
 

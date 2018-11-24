@@ -11,9 +11,10 @@ class PlayManager
 	
 	static PlayManager* _instance;
 
-	std::vector<Square*> _listBlock;
+	std::vector<Square*> _listSquares;
 	std::vector<Vec2> _listColumn;
 	Block* _blockIsFalling;
+	float _speedFall;
 	float _timeCountRotate;
 	float _intervalRotate;
 	float _lengthEachSquare;

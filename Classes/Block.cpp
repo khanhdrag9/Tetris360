@@ -54,6 +54,7 @@ bool Block::init(int type, float sideLength)
 		};
 
 		_size = Size(sideLength*2.f, sideLength*2.f);
+		_ratioAnchor = Vec2(0.5f, 0.5f);
 		break;
 	case typeBlock::I:
 		break;
