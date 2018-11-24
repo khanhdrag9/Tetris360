@@ -88,11 +88,11 @@ void Block::createSquares(cocos2d::Vec2* _listVec, int number)
 
 void Block::MoveBy(const cocos2d::Vec2& iPos)
 {
-	// TODO: Add your implementation code here.
+	this->setPosition(this->getPosition() + iPos);
 }
 
 
 void Block::RotateBy(float iAngle)
 {
-	// TODO: Add your implementation code here.
+	this->setRotation(this->getRotation() + iAngle);
 }

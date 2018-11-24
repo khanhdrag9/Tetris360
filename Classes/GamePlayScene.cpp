@@ -32,12 +32,14 @@ bool GamePlayScene::init()
 	_manager->createBlock();
 
 
+	this->scheduleUpdate();
+
 	return true;
 }
 
 void GamePlayScene::update(float dt)
 {
-	// TODO: Add your implementation code here.
+	_manager->update(dt);
 }
 
 

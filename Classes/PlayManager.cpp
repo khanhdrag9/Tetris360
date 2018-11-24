@@ -27,12 +27,20 @@ void PlayManager::createGame()
 	// TODO: Add your implementation code here.
 }
 
+void PlayManager::update(float dt)
+{
+	for (auto x : _listBlock)
+	{
+		x->MoveBy(Vec2(0, -3));
+	}
+}
 
 void PlayManager::createBlock()
 {
 	Block* test = Block::create(Vec2(400, 200), Block::typeBlock::O, 0);
 	if (_currentLayer)
 	{
+		_listBlock.push_back(test);
 		_currentLayer->addChild(test);
 	}
 }

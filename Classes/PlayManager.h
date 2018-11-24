@@ -31,6 +31,7 @@ public:
 	void rotatePlay();
 	bool isRotatedPlay();
 	bool isLose();
+	void update(float dt);
 	void pause();
 	void reset();
 
