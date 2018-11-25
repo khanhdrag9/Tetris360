@@ -32,6 +32,12 @@ bool GamePlayScene::init()
 	_manager->createBlock();
 
 
+	auto touchListener = cocos2d::EventListenerTouchOneByOne::create();
+	touchListener->onTouchBegan = CC_CALLBACK_2(GamePlayScene::onTouchBegan, this);
+	touchListener->onTouchMoved = CC_CALLBACK_2(GamePlayScene::onTouchMove, this);
+	touchListener->onTouchEnded = CC_CALLBACK_2(GamePlayScene::onTouchEnd, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+
 	this->scheduleUpdate();
 
 	return true;
@@ -51,18 +57,23 @@ void GamePlayScene::updateTime(float dt)
 
 bool GamePlayScene::onTouchBegan(cocos2d::Touch* iTouch, cocos2d::Event* iEvent)
 {
-	// TODO: Add your implementation code here.
-	return false;
+	auto space = iTouch->getLocation() - _manager->_blockIsFalling->getPosition();
+	_manager->setSpaceBeginTouch(space);
+	return true;
 }
 
 
-void GamePlayScene::onTouchMoved(cocos2d::Touch* iTouch, cocos2d::Event* iEvent)
+void GamePlayScene::onTouchMove(cocos2d::Touch* iTouch, cocos2d::Event* iEvent)
 {
-	// TODO: Add your implementation code here.
+	if (_manager->_blockIsFalling)
+	{
+		auto newPX = iTouch->getLocation().x - _manager->getSpaceBeginTouch().x;
+		_manager->_blockIsFalling->setPositionX(newPX);
+	}
 }
 
 
 void GamePlayScene::onTouchEnd(cocos2d::Touch* iTouch, cocos2d::Event* iEvent)
 {
-	// TODO: Add your implementation code here.
+	_manager->setSpaceBeginTouch(Vec2(0.f, 0.f));
 }

@@ -51,7 +51,18 @@ void PlayManager::update(float dt)
 {
 	if (_blockIsFalling)
 	{
-		_blockIsFalling->MoveBy(Vec2(0, -_speedFall));
+		auto newPos = _blockIsFalling->getPosition() + Vec2(0, -_speedFall);
+		if (canMove(newPos) == typeCollision::BOTTOM_EDGE)
+		{
+			newPos.y = _blockIsFalling->getSize().height * _blockIsFalling->getRatioAnchor().y;
+			_blockIsFalling->setPosition(newPos);
+			_blockIsFalling = nullptr;
+			createBlock();
+		}
+		else
+		{
+			_blockIsFalling->setPosition(newPos);
+		}
 	}
 
 	checkCreateBlock();
@@ -59,9 +70,9 @@ void PlayManager::update(float dt)
 
 void PlayManager::createBlock()
 {
-	Block* block= Block::create(Vec2(0, 0), Block::typeBlock::O, _lengthEachSquare);
 	if (_currentLayer)
 	{
+		Block* block = Block::create(Vec2(0, 0), Block::typeBlock::O, _lengthEachSquare);
 		_blockIsFalling = block;
 		_currentLayer->addChild(block);
 
@@ -85,9 +96,14 @@ bool PlayManager::checkFillRow()
 
 void PlayManager::checkCreateBlock()
 {
+	
+}
+
+int PlayManager::canMove(const cocos2d::Vec2& newPos)
+{
 	if (_blockIsFalling)
 	{
-		auto posBlockFalling = _blockIsFalling->getPosition();
+		auto posBlockFalling = newPos;
 		auto sizeBlockFalling = _blockIsFalling->getSize();
 		auto ratioAnchorBlockFalling = _blockIsFalling->getRatioAnchor();
 
@@ -98,18 +114,13 @@ void PlayManager::checkCreateBlock()
 		//check with bottom edge
 		if (posBlockFalling.y <= minY)
 		{
-			_blockIsFalling->setPositionY(minY);
-			_blockIsFalling = nullptr;
-			createBlock();
+			return typeCollision::BOTTOM_EDGE;
 		}
+		//check with other square
+
 	}
-}
-
-
-bool PlayManager::canMove()
-{
 	
-	return false;
+	return typeCollision::NONE;
 }
 
 

@@ -7,13 +7,18 @@ USING_NS_CC;
 
 class PlayManager
 {
+	enum typeCollision {
+		NONE,
+		BOTTOM_EDGE,
+		OTHER_BLOCK
+	}typeCollision;
+
 	PlayManager();
 	
 	static PlayManager* _instance;
 
 	std::vector<Square*> _listSquares;
 	std::vector<Vec2> _listColumn;
-	Block* _blockIsFalling;
 	float _speedFall;
 	float _timeCountRotate;
 	float _intervalRotate;
@@ -30,7 +35,7 @@ public:
 	bool checkFillRow();
 	void checkCreateBlock();
 	bool checkAvaiableBlock(const Vec2& pos);
-	bool canMove();
+	int canMove(const cocos2d::Vec2& newPos);
 	void rotateBlocks();
 	void rotatePlay();
 	bool isRotatedPlay();
@@ -39,6 +44,8 @@ public:
 	void pause();
 	void reset();
 
+	Block* _blockIsFalling;
+	CC_SYNTHESIZE(cocos2d::Vec2, _spaceBeginTouch, SpaceBeginTouch);
 	CC_SYNTHESIZE(cocos2d::Layer*, _currentLayer, CurrentLayer);
 };
 
