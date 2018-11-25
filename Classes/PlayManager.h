@@ -7,12 +7,6 @@ USING_NS_CC;
 
 class PlayManager
 {
-	enum typeCollision {
-		NONE,
-		BOTTOM_EDGE,
-		OTHER_BLOCK
-	}typeCollision;
-
 	PlayManager();
 	
 	static PlayManager* _instance;
@@ -27,15 +21,27 @@ class PlayManager
 	Vec2 _origin;
 	int _statusGame;
 public:
+	enum typeCollision {
+		NONE,
+		BOTTOM_EDGE,
+		RIGHT_EDGE,
+		LEFT_EDGE,
+		OTHER_BLOCK
+	}typeCollision;
+
+
 	virtual ~PlayManager();
 	static PlayManager* getInstance();
 
 	void createGame();
 	void createBlock();
+	void putBlockToList();	//put squares of block to list
 	bool checkFillRow();
 	void checkCreateBlock();
 	bool checkAvaiableBlock(const Vec2& pos);
-	int canMove(const cocos2d::Vec2& newPos);
+	int canMove(const cocos2d::Vec2& newPos, 
+		const cocos2d::Size& sizeBlock = cocos2d::Size(0.f, 0.f), 
+		const cocos2d::Vec2& ratioAnchor = cocos2d::Vec2(0.f, 0.f));
 	void rotateBlocks();
 	void rotatePlay();
 	bool isRotatedPlay();

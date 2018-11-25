@@ -11,10 +11,10 @@ Block::Block()
 
 Block::~Block()
 {
-	for (auto x : _listSquare)
+	/*for (auto x : _listSquare)
 		if (x)
 			CC_SAFE_DELETE(x);
-	_listSquare.clear();
+	_listSquare.clear();*/
 }
 
 

@@ -68,7 +68,11 @@ void GamePlayScene::onTouchMove(cocos2d::Touch* iTouch, cocos2d::Event* iEvent)
 	if (_manager->_blockIsFalling)
 	{
 		auto newPX = iTouch->getLocation().x - _manager->getSpaceBeginTouch().x;
-		_manager->_blockIsFalling->setPositionX(newPX);
+		float posX = _manager->_blockIsFalling->getPositionY();
+		if (_manager->canMove(Vec2(newPX, posX)) == PlayManager::typeCollision::NONE)
+		{
+			_manager->_blockIsFalling->setPositionX(newPX);
+		}
 	}
 }
 

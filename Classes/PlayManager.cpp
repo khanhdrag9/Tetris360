@@ -51,13 +51,29 @@ void PlayManager::update(float dt)
 {
 	if (_blockIsFalling)
 	{
+		auto sizeBlockFalling = _blockIsFalling->getSize();
+		auto ratioAnchorBlockFalling = _blockIsFalling->getRatioAnchor();
+
 		auto newPos = _blockIsFalling->getPosition() + Vec2(0, -_speedFall);
-		if (canMove(newPos) == typeCollision::BOTTOM_EDGE)
+		//int checkMove = canMove(newPos, sizeBlockFalling, ratioAnchorBlockFalling);
+		int checkMove = canMove(newPos);
+
+		if (checkMove == typeCollision::BOTTOM_EDGE)
 		{
-			newPos.y = _blockIsFalling->getSize().height * _blockIsFalling->getRatioAnchor().y;
+			newPos.y = sizeBlockFalling.height * ratioAnchorBlockFalling.y;
 			_blockIsFalling->setPosition(newPos);
-			_blockIsFalling = nullptr;
+			putBlockToList();
 			createBlock();
+		}
+		else if (checkMove == typeCollision::RIGHT_EDGE)
+		{
+			newPos.x = _listColumn[NUMBER_BLOCK_ROW - 2].x;
+			_blockIsFalling->setPosition(newPos);
+		}
+		else if (checkMove == typeCollision::RIGHT_EDGE)
+		{
+			newPos.x = _listColumn[0].x;
+			_blockIsFalling->setPosition(newPos);
 		}
 		else
 		{
@@ -82,6 +98,15 @@ void PlayManager::createBlock()
 	}
 }
 
+void PlayManager::putBlockToList()
+{
+	for (auto x : _blockIsFalling->getListSquare())
+	{
+		_listSquares.push_back(x);
+	}
+	_blockIsFalling = nullptr;
+}
+
 bool PlayManager::checkAvaiableBlock(const Vec2& pos)
 {
 	
@@ -99,25 +124,49 @@ void PlayManager::checkCreateBlock()
 	
 }
 
-int PlayManager::canMove(const cocos2d::Vec2& newPos)
+int PlayManager::canMove(const cocos2d::Vec2& newPos, const cocos2d::Size& sizeBlock, const cocos2d::Vec2& ratioAnchor)
 {
 	if (_blockIsFalling)
 	{
 		auto posBlockFalling = newPos;
-		auto sizeBlockFalling = _blockIsFalling->getSize();
-		auto ratioAnchorBlockFalling = _blockIsFalling->getRatioAnchor();
+		Size psizeBlock;
+		Vec2 pratioAnchor;
 
-		//auto minX = sizeBlockFalling.width * ratioAnchorBlockFalling.x;
-		//auto maxX = _screenSize.width - minX;
-		auto minY = sizeBlockFalling.height * ratioAnchorBlockFalling.y;
+		if (sizeBlock.width == 0.f && sizeBlock.height == 0.f)
+			psizeBlock = _blockIsFalling->getSize();
+		else
+			psizeBlock = sizeBlock;
 
-		//check with bottom edge
+		if (ratioAnchor == Vec2(0.f, 0.f))
+			pratioAnchor = _blockIsFalling->getRatioAnchor();
+		else
+			pratioAnchor = ratioAnchor;
+
+		auto minX = psizeBlock.width * pratioAnchor.x;
+		auto maxX = _screenSize.width - minX;
+		auto minY = psizeBlock.height * pratioAnchor.y;
+
+		//check with edges
 		if (posBlockFalling.y <= minY)
 		{
 			return typeCollision::BOTTOM_EDGE;
 		}
+		else if(posBlockFalling.x >= maxX)
+		{
+			return typeCollision::RIGHT_EDGE;
+		}
+		else if (posBlockFalling.x <= minX)
+		{
+			return typeCollision::LEFT_EDGE;
+		}
 		//check with other square
+		else
+		{
+			for (auto squares : _listSquares)
+			{
 
+			}
+		}
 	}
 	
 	return typeCollision::NONE;
