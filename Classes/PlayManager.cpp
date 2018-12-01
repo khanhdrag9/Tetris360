@@ -10,7 +10,10 @@ PlayManager::PlayManager():
 	_statusGame(0),
 	_blockIsFalling(nullptr),
 	_lengthEachSquare(0.0f),
-	_speedFall(SPEED_FALL_ORIGN)
+	_speedFall(SPEED_FALL_ORIGN),
+	_currentPosIndex(-1),
+	_beginTouch(Vec2(-1.f, -1.f)),
+	_directionBlockMove(0)
 {
 	
 }
@@ -70,7 +73,7 @@ void PlayManager::update(float dt)
 			newPos.x = _listColumn[NUMBER_BLOCK_ROW - 2].x;
 			_blockIsFalling->setPosition(newPos);
 		}
-		else if (checkMove == typeCollision::RIGHT_EDGE)
+		else if (checkMove == typeCollision::LEFT_EDGE)
 		{
 			newPos.x = _listColumn[0].x;
 			_blockIsFalling->setPosition(newPos);
@@ -79,6 +82,8 @@ void PlayManager::update(float dt)
 		{
 			_blockIsFalling->setPosition(newPos);
 		}
+
+		moveBlockFalling(_directionBlockMove);
 	}
 
 	checkCreateBlock();
@@ -92,8 +97,9 @@ void PlayManager::createBlock()
 		_blockIsFalling = block;
 		_currentLayer->addChild(block);
 
-		int ran = rand() % (_listColumn.size());
-		Vec2 blockPos = Vec2(_listColumn[ran].x, _screenSize.height + block->getSize().height);
+		_currentPosIndex = rand() % (_listColumn.size());
+
+		Vec2 blockPos = Vec2(_listColumn[_currentPosIndex].x, _screenSize.height + block->getSize().height);
 		block->setPosition(blockPos);
 	}
 }
@@ -172,7 +178,6 @@ int PlayManager::canMove(const cocos2d::Vec2& newPos, const cocos2d::Size& sizeB
 	return typeCollision::NONE;
 }
 
-
 void PlayManager::rotateBlocks()
 {
 	// TODO: Add your implementation code here.
@@ -208,4 +213,32 @@ void PlayManager::pause()
 void PlayManager::reset()
 {
 	// TODO: Add your implementation code here.
+}
+
+void PlayManager::moveBlockFalling(int typeMove, int number)
+{
+	if (_blockIsFalling->getNumberOfRunningActionsByTag(typeMove::MOVE) <= 0)
+	{
+		Action* action;
+		switch (typeMove)
+		{
+		case typeMove::LEFT:
+			action = MoveBy::create(TIME_MOVE, Vec2(-_lengthEachSquare, 0.f));
+			break;
+		case typeMove::RIGHT:
+			action = MoveBy::create(TIME_MOVE, Vec2(_lengthEachSquare, 0.f));
+			break;
+		case typeMove::DOWN:
+			break;
+		default:
+			action = nullptr;
+			break;
+		}
+
+		if (action)
+		{
+			action->setTag(typeMove::MOVE);
+			_blockIsFalling->runAction(action);
+		}
+	}
 }

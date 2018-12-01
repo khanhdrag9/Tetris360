@@ -12,7 +12,7 @@ class PlayManager
 	static PlayManager* _instance;
 
 	std::vector<Square*> _listSquares;
-	std::vector<Vec2> _listColumn;
+	 ;
 	float _speedFall;
 	float _timeCountRotate;
 	float _intervalRotate;
@@ -20,6 +20,7 @@ class PlayManager
 	Size _screenSize;
 	Vec2 _origin;
 	int _statusGame;
+
 public:
 	enum typeCollision {
 		NONE,
@@ -27,7 +28,14 @@ public:
 		RIGHT_EDGE,
 		LEFT_EDGE,
 		OTHER_BLOCK
-	}typeCollision;
+	};
+
+	enum typeMove {
+		MOVE,
+		LEFT = 1,
+		RIGHT,
+		DOWN
+	};
 
 
 	virtual ~PlayManager();
@@ -50,8 +58,14 @@ public:
 	void pause();
 	void reset();
 
+	void moveBlockFalling(int typeMove, int number = 1);
+
 	Block* _blockIsFalling;
-	CC_SYNTHESIZE(cocos2d::Vec2, _spaceBeginTouch, SpaceBeginTouch);
+	CC_SYNTHESIZE(int, _directionBlockMove, DirectionBlockMove);
+	CC_SYNTHESIZE(std::vector<Vec2>, _listColumn, ListColumn);
+	CC_SYNTHESIZE(int, _currentPosIndex, CurrentPosIndex);
+	CC_SYNTHESIZE(cocos2d::Vec2, _beginTouch, BeginTouch);
+	CC_SYNTHESIZE(cocos2d::Vec2, _previousTouchMove, PreviousTouchMove);
 	CC_SYNTHESIZE(cocos2d::Layer*, _currentLayer, CurrentLayer);
 };
 

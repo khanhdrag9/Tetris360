@@ -57,8 +57,9 @@ void GamePlayScene::updateTime(float dt)
 
 bool GamePlayScene::onTouchBegan(cocos2d::Touch* iTouch, cocos2d::Event* iEvent)
 {
-	auto space = iTouch->getLocation() - _manager->_blockIsFalling->getPosition();
-	_manager->setSpaceBeginTouch(space);
+	_manager->setBeginTouch(iTouch->getLocation());
+	_manager->setPreviousTouchMove(iTouch->getLocation());
+
 	return true;
 }
 
@@ -67,11 +68,36 @@ void GamePlayScene::onTouchMove(cocos2d::Touch* iTouch, cocos2d::Event* iEvent)
 {
 	if (_manager->_blockIsFalling)
 	{
-		auto newPX = iTouch->getLocation().x - _manager->getSpaceBeginTouch().x;
-		float posX = _manager->_blockIsFalling->getPositionY();
-		if (_manager->canMove(Vec2(newPX, posX)) == PlayManager::typeCollision::NONE)
+		auto touchPos = iTouch->getLocation();
+		auto sideEachSquare = _manager->_blockIsFalling->getSideLength();
+
+		if (_manager->getDirectionBlockMove() == 0)
 		{
-			_manager->_blockIsFalling->setPositionX(newPX);
+			if (touchPos.x < _manager->getBeginTouch().x - sideEachSquare)
+			{
+				_manager->setDirectionBlockMove(PlayManager::typeMove::LEFT);
+			}
+			else if (touchPos.x > _manager->getBeginTouch().x + sideEachSquare)
+			{
+				_manager->moveBlockFalling(PlayManager::typeMove::RIGHT);
+			}
+			_manager->setPreviousTouchMove(touchPos);
+		}
+		else if (_manager->getDirectionBlockMove() == PlayManager::typeMove::LEFT)
+		{
+			if (touchPos.x > _manager->getPreviousTouchMove().x + sideEachSquare)
+			{
+				_manager->moveBlockFalling(PlayManager::typeMove::RIGHT);
+				_manager->setPreviousTouchMove(touchPos);
+			}
+		}
+		else if (_manager->getDirectionBlockMove() == PlayManager::typeMove::RIGHT)
+		{
+			if (touchPos.x < _manager->getPreviousTouchMove().x - sideEachSquare)
+			{
+				_manager->moveBlockFalling(PlayManager::typeMove::LEFT);
+				_manager->setPreviousTouchMove(touchPos);
+			}
 		}
 	}
 }
@@ -79,5 +105,7 @@ void GamePlayScene::onTouchMove(cocos2d::Touch* iTouch, cocos2d::Event* iEvent)
 
 void GamePlayScene::onTouchEnd(cocos2d::Touch* iTouch, cocos2d::Event* iEvent)
 {
-	_manager->setSpaceBeginTouch(Vec2(0.f, 0.f));
+	_manager->setDirectionBlockMove(0);
+	_manager->setPreviousTouchMove(Vec2(-1.f, -1.f));
+	_manager->setBeginTouch(Vec2(0.f,0.f));
 }
