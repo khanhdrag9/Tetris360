@@ -123,8 +123,17 @@ void PlayManager::createBlock()
 void PlayManager::putBlockToList()
 {
 	for (auto x : _blockIsFalling->getListSquare())
-	{
+	{	
+		auto pos = _blockIsFalling->convertToWorldSpace(x->getPosition());
+		
 		_listSquares.push_back(x);
+		x->setPositionWorld(pos);
+	}
+
+	for (int i = _listSquares.size() - 4; i < _listSquares.size(); i++)
+	{
+		auto pos = _listSquares[i]->getPosition();
+		CCLOG("%f - %f", pos.x, pos.y);
 	}
 	_blockIsFalling = nullptr;
 }

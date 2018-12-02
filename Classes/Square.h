@@ -6,9 +6,9 @@ class Square :
 public:
 	Square();
 	virtual ~Square();
-	static Square* createSquare(const char* filePath, cocos2d::Vec2 anchor = cocos2d::Vec2::ANCHOR_MIDDLE);
-	static Square* createSquareWithNameFrame(const char* nameFrame, cocos2d::Vec2 anchor = cocos2d::Vec2::ANCHOR_MIDDLE);
+	static Square* createSquare(const char* filePath, cocos2d::Vec2 pos = cocos2d::Vec2(0.f, 0.f));
+	static Square* createSquareWithNameFrame(const char* nameFrame, cocos2d::Vec2 pos = cocos2d::Vec2(0.f, 0.f));
 
-	CC_SYNTHESIZE(cocos2d::Vec2, _anchorWorldPoint, AnchorWorldPoint);
+	CC_SYNTHESIZE(cocos2d::Vec2, _postionWorld, PositionWorld);
 };
 

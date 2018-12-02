@@ -11,10 +11,8 @@ Block::Block()
 
 Block::~Block()
 {
-	/*for (auto x : _listSquare)
-		if (x)
-			CC_SAFE_DELETE(x);
-	_listSquare.clear();*/
+	CCLOG("Release Block");
+	_listSquare.clear();
 }
 
 
@@ -78,9 +76,9 @@ void Block::createSquares(cocos2d::Vec2* _listVec, int number)
 	{
 		Square* square = Square::createSquare(SQUARE_FILE_PATH);
 
-		auto newAnchor = Vec2(square->getAnchorPoint() - _listVec[i] / 2.f);
-		square->setAnchorPoint(newAnchor);
-		square->setPosition(0, 0);
+	//	auto newAnchor = Vec2(square->getAnchorPoint() - _listVec[i] / 2.f);
+	//	square->setAnchorPoint(newAnchor);
+		square->setPosition(_listVec[i] * _sideLength / 2.f);
 		square->setScale(_sideLength / (float)square->getBoundingBox().size.width);
 
 		_listSquare.push_back(square);
