@@ -79,7 +79,7 @@ void GamePlayScene::onTouchMove(cocos2d::Touch* iTouch, cocos2d::Event* iEvent)
 			}
 			else if (touchPos.x > _manager->getBeginTouch().x + sideEachSquare)
 			{
-				_manager->moveBlockFalling(PlayManager::typeMove::RIGHT);
+				_manager->setDirectionBlockMove(PlayManager::typeMove::RIGHT);
 			}
 			_manager->setPreviousTouchMove(touchPos);
 		}
@@ -87,7 +87,11 @@ void GamePlayScene::onTouchMove(cocos2d::Touch* iTouch, cocos2d::Event* iEvent)
 		{
 			if (touchPos.x > _manager->getPreviousTouchMove().x + sideEachSquare)
 			{
-				_manager->moveBlockFalling(PlayManager::typeMove::RIGHT);
+				_manager->setDirectionBlockMove(PlayManager::typeMove::RIGHT);
+				_manager->setPreviousTouchMove(touchPos);
+			}
+			else if (touchPos.x < _manager->getPreviousTouchMove().x)
+			{
 				_manager->setPreviousTouchMove(touchPos);
 			}
 		}
@@ -95,7 +99,11 @@ void GamePlayScene::onTouchMove(cocos2d::Touch* iTouch, cocos2d::Event* iEvent)
 		{
 			if (touchPos.x < _manager->getPreviousTouchMove().x - sideEachSquare)
 			{
-				_manager->moveBlockFalling(PlayManager::typeMove::LEFT);
+				_manager->setDirectionBlockMove(PlayManager::typeMove::LEFT);
+				_manager->setPreviousTouchMove(touchPos);
+			}
+			else if (touchPos.x > _manager->getPreviousTouchMove().x)
+			{
 				_manager->setPreviousTouchMove(touchPos);
 			}
 		}
@@ -107,5 +115,5 @@ void GamePlayScene::onTouchEnd(cocos2d::Touch* iTouch, cocos2d::Event* iEvent)
 {
 	_manager->setDirectionBlockMove(0);
 	_manager->setPreviousTouchMove(Vec2(-1.f, -1.f));
-	_manager->setBeginTouch(Vec2(0.f,0.f));
+	_manager->setBeginTouch(Vec2(-1.f,-1.f));
 }

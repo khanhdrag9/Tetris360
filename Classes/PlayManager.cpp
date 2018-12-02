@@ -4,7 +4,7 @@
 
 PlayManager* PlayManager::_instance = new PlayManager();
 
-PlayManager::PlayManager():
+PlayManager::PlayManager() :
 	_timeCountRotate(0.0f),
 	_intervalRotate(0.0f),
 	_statusGame(0),
@@ -13,7 +13,9 @@ PlayManager::PlayManager():
 	_speedFall(SPEED_FALL_ORIGN),
 	_currentPosIndex(-1),
 	_beginTouch(Vec2(-1.f, -1.f)),
-	_directionBlockMove(0)
+	_previousTouchMove(Vec2(-1.f, -1.f)),
+	_directionBlockMove(0),
+	_currentLayer(nullptr)
 {
 	
 }
@@ -54,6 +56,8 @@ void PlayManager::update(float dt)
 {
 	if (_blockIsFalling)
 	{
+		moveBlockFalling(_directionBlockMove);
+
 		auto sizeBlockFalling = _blockIsFalling->getSize();
 		auto ratioAnchorBlockFalling = _blockIsFalling->getRatioAnchor();
 
@@ -64,6 +68,19 @@ void PlayManager::update(float dt)
 		if (checkMove == typeCollision::BOTTOM_EDGE)
 		{
 			newPos.y = sizeBlockFalling.height * ratioAnchorBlockFalling.y;
+
+			int checkMoveEdge = canMove(Vec2(newPos.x, newPos.y * 2));
+			if (checkMoveEdge == typeCollision::RIGHT_EDGE)
+			{
+				_blockIsFalling->stopAllActionsByTag(typeMove::MOVE);
+				newPos.x = _listColumn[NUMBER_BLOCK_ROW - 2].x;
+			}
+			else if (checkMoveEdge == typeCollision::LEFT_EDGE)
+			{
+				_blockIsFalling->stopAllActionsByTag(typeMove::MOVE);
+				newPos.x = _listColumn[0].x;
+			}
+
 			_blockIsFalling->setPosition(newPos);
 			putBlockToList();
 			createBlock();
@@ -82,8 +99,7 @@ void PlayManager::update(float dt)
 		{
 			_blockIsFalling->setPosition(newPos);
 		}
-
-		moveBlockFalling(_directionBlockMove);
+		
 	}
 
 	checkCreateBlock();
@@ -224,9 +240,11 @@ void PlayManager::moveBlockFalling(int typeMove, int number)
 		{
 		case typeMove::LEFT:
 			action = MoveBy::create(TIME_MOVE, Vec2(-_lengthEachSquare, 0.f));
+			//_blockIsFalling->setPositionX(_blockIsFalling->getPositionX() - 5);
 			break;
 		case typeMove::RIGHT:
 			action = MoveBy::create(TIME_MOVE, Vec2(_lengthEachSquare, 0.f));
+		//	_blockIsFalling->setPositionX(_blockIsFalling->getPositionX() + 5);
 			break;
 		case typeMove::DOWN:
 			break;
