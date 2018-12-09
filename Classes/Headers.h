@@ -10,6 +10,7 @@ USING_NS_CC;
 #include <array>
 #include <ctime>
 #include <vector>
+#include <list>
 #include <algorithm>
 #include <functional>
 

@@ -14,4 +14,7 @@ public:
 
 private:
 	bool init()		override;
+	void update(float dt);
+
+	void createStartShape();
 };

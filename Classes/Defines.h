@@ -1,11 +1,13 @@
 #pragma once
 
-#define SQUARE_FILE_PATH "title.png"
-#define NUMBER_BLOCK_ROW 10
-#define SPEED_FALL_ORIGN 2.f
-#define TIME_MOVE 0.1
+//system debug
+#define ENABLE_GRID 0
 
+//resoure game
+#define FONT_ARIAL "fonts/arial.ttf"
+#define BLOCK_PATH "title.png"
 
+//define game
 #define MAX_COL 10
 #define MAX_ROW 20
-//#define
+#define ABOVE_ROW 4
