@@ -2,10 +2,12 @@
 #include "Shape.h"
 #include "GridMap.h"
 
-ShapeFactory* ShapeFactory::instance = new ShapeFactory;
+ShapeFactory* ShapeFactory::instance = nullptr;
 
 ShapeFactory* ShapeFactory::getInstance()
 {
+	if (!instance)
+		instance = new ShapeFactory();
 	return instance;
 }
 
@@ -38,7 +40,10 @@ shared_ptr<Shape>& ShapeFactory::createShape()
 	return _shapeIsFalling;
 }
 
-void ShapeFactory::setLayer(Layer* layer)
+void ShapeFactory::setShapePosition(const int& row, const int& col)
 {
-	layer->addChild(_shapeIsFalling->_node);
+	if (_shapeIsFalling)
+	{
+		
+	}
 }

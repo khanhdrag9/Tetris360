@@ -19,5 +19,4 @@ public:
 	void setShapePosition(const int& row, const int& col);
 	
 
-	void setLayer(Layer* layer);
 };

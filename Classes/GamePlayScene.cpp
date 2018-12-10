@@ -56,7 +56,7 @@ bool GamePlayScene::init()
 
 void GamePlayScene::createStartShape()
 {
-	
+	this->addChild(ShapeFactory::getInstance()->createShape()->_node);
 }
 
 void GamePlayScene::update(float dt)
