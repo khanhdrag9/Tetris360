@@ -8,7 +8,7 @@ using Block4 = array<shared_ptr<Block>, 4>;
 struct Coord
 {
 	int cx, cy;
-	Coord(){}
+	Coord(): cx(-1), cy(-1){}
 	Coord(int x, int y): cx(x), cy(y){}
 	void operator=(const Coord& coord)
 	{
@@ -20,6 +20,8 @@ struct Coord
 		return (cx == coord.cx && cy == coord.cy);
 	}
 };
+
+#define COORD_NONE Coord(-1, -1)
 
 class Block
 {

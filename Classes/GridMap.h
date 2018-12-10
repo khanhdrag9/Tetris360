@@ -39,7 +39,7 @@ public:
 
 	void init();
 
-
+	grids_back& getGirdsBack() { return _gridsBack; }
 	const grids_posi& getGirdsPosition() const { return _gridsPosi; }
 	const float& getLengthBlock() const { return _lengthBlock; }
 	//Node* getNode() { return _node; }

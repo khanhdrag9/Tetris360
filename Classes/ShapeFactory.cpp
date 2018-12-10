@@ -44,6 +44,34 @@ void ShapeFactory::setShapePosition(const int& row, const int& col)
 {
 	if (_shapeIsFalling)
 	{
-		
+		for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
+		{
+			//handle old Coord
+			if (!(_shapeIsFalling->_blocks[i]->_coord == COORD_NONE))
+			{
+				int cx = _shapeIsFalling->_blocks[i]->_coord.cx;
+				int cy = _shapeIsFalling->_blocks[i]->_coord.cy;
+
+				if(cx >= 0 && cy >= 0)
+					_tetrisMap->getGirdsBack()[cx][cy] = false;
+			}
+
+			//change to new coord
+			int cx = row + _shapeIsFalling->_detail->referToInitLocationNodeBoard(0, i);
+			int cy = col + _shapeIsFalling->_detail->referToInitLocationNodeBoard(1, i);
+
+			if (cx >= 0 && cy >= 0)
+			{
+				_shapeIsFalling->_blocks[i]->_coord = Coord(cx, cy);
+				_tetrisMap->getGirdsBack()[cx][cy] = true;
+			}
+			else
+			{
+				_shapeIsFalling->_blocks[i]->_coord = COORD_NONE;
+			}
+		}
+
+		Vec2 newPos = _tetrisMap->getGirdsPosition()[row][col];
+		_shapeIsFalling->_node->setPosition(newPos);
 	}
 }

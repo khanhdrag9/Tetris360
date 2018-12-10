@@ -57,6 +57,7 @@ bool GamePlayScene::init()
 void GamePlayScene::createStartShape()
 {
 	this->addChild(ShapeFactory::getInstance()->createShape()->_node);
+	ShapeFactory::getInstance()->setShapePosition(15, 0);
 }
 
 void GamePlayScene::update(float dt)
