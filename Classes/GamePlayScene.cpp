@@ -47,20 +47,72 @@ bool GamePlayScene::init()
 #endif
 
 	createStartShape();
+	createListener();
 
 	this->scheduleUpdate();
 
 	return true;
 }
 
-
 void GamePlayScene::createStartShape()
 {
 	this->addChild(ShapeFactory::getInstance()->createShape()->_node);
-	ShapeFactory::getInstance()->setShapePosition(15, 0);
+	ShapeFactory::getInstance()->setShapePosition(19, 5);
 }
+
+void GamePlayScene::createListener()
+{
+	auto touchListener = EventListenerTouchOneByOne::create();
+	touchListener->onTouchBegan = CC_CALLBACK_2(GamePlayScene::touchBegan, this);
+	touchListener->onTouchMoved = CC_CALLBACK_2(GamePlayScene::touchMoved, this);
+	touchListener->onTouchEnded = CC_CALLBACK_2(GamePlayScene::touchEnded, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+}
+
+bool GamePlayScene::touchBegan(Touch* touch, Event* event)
+{
+
+	return true;
+}
+
+void GamePlayScene::touchMoved(Touch* touch, Event* event)
+{
+
+}
+
+void GamePlayScene::touchEnded(Touch* touch, Event* event)
+{
+
+}
+
+float t = 0.f;
+int i = 3;
 
 void GamePlayScene::update(float dt)
 {
-
+	t += dt;
+	if (dt > 0.2f)
+	{
+		dt = 0.f;
+		
+		if (ShapeFactory::getInstance()->getShapeIsFalling())
+		{
+			auto currentPos = ShapeFactory::getInstance()->getCurrentPos();
+			if (currentPos.row == 1)
+			{
+				ShapeFactory::getInstance()->createShape();
+				ShapeFactory::getInstance()->releaseShape();
+				auto r = ShapeFactory::getInstance()->getTetrisMap()->findRowFull();
+				for (auto i : r)
+					ShapeFactory::getInstance()->getTetrisMap()->deleteRow(i);
+				ShapeFactory::getInstance()->setShapePosition(i, 5);
+				i += 2;
+			}
+			else
+			{
+				ShapeFactory::getInstance()->setShapePosition(currentPos.row - 1, currentPos.col);
+				
+			}
+		}
+	}
 }

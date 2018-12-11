@@ -1,4 +1,5 @@
 #include "GridMap.h"
+#include "Block.h"
 
 GridMap::GridMap():
 	_lengthBlock(0)
@@ -40,4 +41,26 @@ void GridMap::init()
 		pX = 0.f;
 	}
 
+}
+
+vector<int> GridMap::findRowFull()
+{
+	vector<int> rows;
+	for (int row = 0; row < _gridsBack.size(); row++)
+	{
+		bool isFull = all_of(_gridsFont[row].begin(), _gridsFont[row].end(), [](shared_ptr<Block>& b) {
+			return b != nullptr;
+		});
+		rows.push_back(row);
+	}
+	return rows;
+}
+
+void GridMap::deleteRow(const int& row)
+{
+	for (auto& block : _gridsFont[row])
+	{
+		block->_sprite->removeFromParent();
+		block = nullptr;
+	}
 }

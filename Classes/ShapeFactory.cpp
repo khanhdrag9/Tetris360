@@ -1,6 +1,7 @@
 #include "ShapeFactory.h"
 #include "Shape.h"
 #include "GridMap.h"
+#include "BlockManager.h"
 
 ShapeFactory* ShapeFactory::instance = nullptr;
 
@@ -73,5 +74,33 @@ void ShapeFactory::setShapePosition(const int& row, const int& col)
 
 		Vec2 newPos = _tetrisMap->getGirdsPosition()[row][col];
 		_shapeIsFalling->_node->setPosition(newPos);
+		_currentPos = pos(row, col);
+	}
+}
+
+shared_ptr<Shape> ShapeFactory::getShapeIsFalling() const
+{
+	return _shapeIsFalling;
+}
+
+pos ShapeFactory::getCurrentPos() const
+{
+	return _currentPos;
+}
+
+void ShapeFactory::releaseShape()
+{
+	if (_shapeIsFalling)
+	{
+		for (auto& block : _shapeIsFalling->_blocks)
+		{
+			int cx = block->_coord.cx;
+			int cy = block->_coord.cy;
+			
+			_tetrisMap->getFontsBack()[cx][cy] = block;
+			block = nullptr;
+		}
+
+		BlockManager::getInstance()->releaseShape(_shapeIsFalling);
 	}
 }

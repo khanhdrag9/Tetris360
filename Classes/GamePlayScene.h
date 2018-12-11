@@ -17,4 +17,9 @@ private:
 	void update(float dt);
 
 	void createStartShape();
+	void createListener();
+
+	bool touchBegan(Touch* touch, Event* event);
+	void touchMoved(Touch* touch, Event* event);
+	void touchEnded(Touch* touch, Event* event);
 };

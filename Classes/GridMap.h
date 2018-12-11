@@ -40,9 +40,13 @@ public:
 	void init();
 
 	grids_back& getGirdsBack() { return _gridsBack; }
+	grids_font& getFontsBack() { return _gridsFont; }
 	const grids_posi& getGirdsPosition() const { return _gridsPosi; }
 	const float& getLengthBlock() const { return _lengthBlock; }
 	//Node* getNode() { return _node; }
 	
+//private:
+	vector<int> findRowFull();
+	void deleteRow(const int& row);
 
 };
