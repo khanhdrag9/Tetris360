@@ -1,7 +1,7 @@
 #pragma once
 
 //system debug
-#define ENABLE_GRID 0
+#define ENABLE_GRID 1
 
 //resoure game
 #define FONT_ARIAL "fonts/arial.ttf"

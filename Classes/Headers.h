@@ -18,3 +18,4 @@ using namespace std;
 
 //of game
 #include "Defines.h"
+#include "Supports.h"

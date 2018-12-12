@@ -3,6 +3,7 @@
 #include "Block.h"
 #include "Shape.h"
 #include "GridMap.h"
+#include "ManagerLogic.h"
 
 GamePlayScene::GamePlayScene():
 	_direction(0),
@@ -66,6 +67,8 @@ void GamePlayScene::createStartShape()
 	this->addChild(ShapeFactory::getInstance()->createShape()->_node);
 	ShapeFactory::getInstance()->setShapePosition(19, 5);
 	_direction = DOWN;
+
+	ManagerLogic::getInstance()->setGridMap(ShapeFactory::getInstance()->getTetrisMap());
 }
 
 void GamePlayScene::createListener()
@@ -123,22 +126,48 @@ void GamePlayScene::updateShapeIsFalling(float)
 	if (ShapeFactory::getInstance()->getShapeIsFalling())
 	{
 		pos curPos = ShapeFactory::getInstance()->getCurrentPos();
+
+		bool canLeft = true;
+		bool canRight = true;
+		bool canDown = true;
+		bool colBottmEdge = false;
+		auto collision = ManagerLogic::getInstance()->checkCollision(ShapeFactory::getInstance()->getShapeIsFalling());
+		for (auto& c : collision)
+		{
+			if (c == ManagerLogic::collision::LEFT)canLeft = false;
+			else if (c == ManagerLogic::collision::RIGHT)canLeft = false;
+			else if (c == ManagerLogic::collision::BOTTOM)canLeft = false;
+			else if (c == ManagerLogic::collision::BOTTOM_EDGE)
+				colBottmEdge = true;
+		}
+
 		switch (_direction)
 		{
 		case NONE:
 			ShapeFactory::getInstance()->setShapePosition(curPos.row, curPos.col);
 			break;
 		case LEFT:
-			ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col - 1);
+			if(canLeft)
+				ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col - 1);
 			break;
 		case RIGHT:
-			ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col + 1);
+			if(canRight)
+				ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col + 1);
 			break;
 		case DOWN:
-			ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col);
+			if(canRight && !colBottmEdge)
+				ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col);
 			break;
 		default:
 			break;
+		}
+
+		//collision with Edge
+		if (colBottmEdge)
+		{
+			ShapeFactory::getInstance()->releaseShape();
+			ShapeFactory::getInstance()->createShape();
+			ShapeFactory::getInstance()->setShapePosition(19, 6);
 		}
 	}
 }
