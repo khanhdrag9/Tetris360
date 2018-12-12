@@ -4,7 +4,10 @@
 #include "Shape.h"
 #include "GridMap.h"
 
-GamePlayScene::GamePlayScene()
+GamePlayScene::GamePlayScene():
+	_direction(0),
+	_startTime(0.f),
+	_endTime(0.f)
 {
 
 }
@@ -50,14 +53,19 @@ bool GamePlayScene::init()
 	createListener();
 
 	this->scheduleUpdate();
+	this->schedule(schedule_selector(GamePlayScene::updateShapeIsFalling), 0.3);
 
 	return true;
 }
 
 void GamePlayScene::createStartShape()
 {
+	_screenSize = Director::getInstance()->getVisibleSize();
+	_origin = Director::getInstance()->getVisibleOrigin();
+
 	this->addChild(ShapeFactory::getInstance()->createShape()->_node);
 	ShapeFactory::getInstance()->setShapePosition(19, 5);
+	_direction = DOWN;
 }
 
 void GamePlayScene::createListener()
@@ -71,48 +79,66 @@ void GamePlayScene::createListener()
 
 bool GamePlayScene::touchBegan(Touch* touch, Event* event)
 {
-
+	_touchBegin = touch->getLocation();
 	return true;
 }
 
 void GamePlayScene::touchMoved(Touch* touch, Event* event)
 {
-
+	auto shapeFalling = ShapeFactory::getInstance()->getShapeIsFalling();
+	if (shapeFalling)
+	{
+		//calculate touch Pos
+		Vec2 posTouch = touch->getLocation();
+		if (posTouch.x > _touchBegin.x)
+		{
+			_touchDirection = posTouch;
+			_touchBegin = _touchDirection;
+			_direction = RIGHT;
+		}
+		else if (posTouch.x < _touchBegin.x)
+		{
+			_touchDirection = posTouch;
+			_touchBegin = _touchDirection;
+			_direction = LEFT;
+		}
+	}
 }
 
 void GamePlayScene::touchEnded(Touch* touch, Event* event)
 {
-
+	_direction = DOWN;
+	_touchBegin = Vec2(-1.f, -1.f);
+	_touchDirection = Vec2(-1.f, -1.f);
 }
 
-float t = 0.f;
-int i = 3;
 
 void GamePlayScene::update(float dt)
 {
-	t += dt;
-	if (dt > 0.2f)
+	
+}
+
+void GamePlayScene::updateShapeIsFalling(float)
+{
+	if (ShapeFactory::getInstance()->getShapeIsFalling())
 	{
-		dt = 0.f;
-		
-		if (ShapeFactory::getInstance()->getShapeIsFalling())
+		pos curPos = ShapeFactory::getInstance()->getCurrentPos();
+		switch (_direction)
 		{
-			auto currentPos = ShapeFactory::getInstance()->getCurrentPos();
-			if (currentPos.row == 1)
-			{
-				ShapeFactory::getInstance()->createShape();
-				ShapeFactory::getInstance()->releaseShape();
-				auto r = ShapeFactory::getInstance()->getTetrisMap()->findRowFull();
-				for (auto i : r)
-					ShapeFactory::getInstance()->getTetrisMap()->deleteRow(i);
-				ShapeFactory::getInstance()->setShapePosition(i, 5);
-				i += 2;
-			}
-			else
-			{
-				ShapeFactory::getInstance()->setShapePosition(currentPos.row - 1, currentPos.col);
-				
-			}
+		case NONE:
+			ShapeFactory::getInstance()->setShapePosition(curPos.row, curPos.col);
+			break;
+		case LEFT:
+			ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col - 1);
+			break;
+		case RIGHT:
+			ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col + 1);
+			break;
+		case DOWN:
+			ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col);
+			break;
+		default:
+			break;
 		}
 	}
 }

@@ -45,36 +45,47 @@ void ShapeFactory::setShapePosition(const int& row, const int& col)
 {
 	if (_shapeIsFalling)
 	{
+		bool avaiablePos = true;
+
+		//check newPos
+		vector<Coord> newCoord;
 		for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
 		{
-			//handle old Coord
-			if (!(_shapeIsFalling->_blocks[i]->_coord == COORD_NONE))
+			auto& block = _shapeIsFalling->_blocks[i];
+			int cx = _shapeIsFalling->_detail->referToInitLocationNodeBoard(0, i) + row;
+			int cy = _shapeIsFalling->_detail->referToInitLocationNodeBoard(1, i) + col;
+
+			if (cx >= 0 && cy >= 0 && cx < _tetrisMap->getGirdsBack().size() && cy < MAX_COL)
 			{
-				int cx = _shapeIsFalling->_blocks[i]->_coord.cx;
-				int cy = _shapeIsFalling->_blocks[i]->_coord.cy;
-
-				if(cx >= 0 && cy >= 0)
-					_tetrisMap->getGirdsBack()[cx][cy] = false;
-			}
-
-			//change to new coord
-			int cx = row + _shapeIsFalling->_detail->referToInitLocationNodeBoard(0, i);
-			int cy = col + _shapeIsFalling->_detail->referToInitLocationNodeBoard(1, i);
-
-			if (cx >= 0 && cy >= 0)
-			{
-				_shapeIsFalling->_blocks[i]->_coord = Coord(cx, cy);
-				_tetrisMap->getGirdsBack()[cx][cy] = true;
+				newCoord.push_back(Coord(cx, cy));
 			}
 			else
 			{
-				_shapeIsFalling->_blocks[i]->_coord = COORD_NONE;
+				avaiablePos = false;
+				break;
 			}
 		}
 
-		Vec2 newPos = _tetrisMap->getGirdsPosition()[row][col];
-		_shapeIsFalling->_node->setPosition(newPos);
-		_currentPos = pos(row, col);
+		if (avaiablePos)
+		{
+			//set all old pos -> false
+			for (auto& block : _shapeIsFalling->_blocks)
+			{
+				Coord crd = block->_coord;
+				if(!(crd == COORD_NONE))
+					_tetrisMap->getGirdsBack()[crd.cx][crd.cy] = false;
+			}
+
+			for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
+			{
+				_shapeIsFalling->_blocks[i]->_coord = newCoord[i];
+				_tetrisMap->getGirdsBack()[newCoord[i].cx][newCoord[i].cy] = true;
+			}
+
+			Vec2 newPos = _tetrisMap->getGirdsPosition()[row][col];
+			_shapeIsFalling->_node->setPosition(newPos);
+			_currentPos = pos(row, col);
+		}
 	}
 }
 
@@ -97,7 +108,7 @@ void ShapeFactory::releaseShape()
 			int cx = block->_coord.cx;
 			int cy = block->_coord.cy;
 			
-			_tetrisMap->getFontsBack()[cx][cy] = block;
+			_tetrisMap->getGirdsFont()[cx][cy] = block;
 			block = nullptr;
 		}
 
