@@ -34,8 +34,8 @@ bool GamePlayScene::init()
 		return false;
 
 
-#if ENABLE_GRID
 	shared_ptr<GridMap> gridMap = make_shared<GridMap>();
+#if ENABLE_GRID
 	string pnumber;
 	for (int row = 0; row < MAX_ROW; row++)
 	{
@@ -50,6 +50,8 @@ bool GamePlayScene::init()
 	}
 #endif
 
+	ShapeFactory::getInstance()->init(gridMap);
+	ShapeFactory::getInstance()->setLayer(this);
 	createStartShape();
 	createListener();
 
@@ -65,7 +67,7 @@ void GamePlayScene::createStartShape()
 	_origin = Director::getInstance()->getVisibleOrigin();
 
 	this->addChild(ShapeFactory::getInstance()->createShape()->_node);
-	ShapeFactory::getInstance()->setShapePosition(19, 5);
+	ShapeFactory::getInstance()->setShapePosition(5, 5);
 	_direction = DOWN;
 
 	ManagerLogic::getInstance()->setGridMap(ShapeFactory::getInstance()->getTetrisMap());

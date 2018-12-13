@@ -3,41 +3,55 @@
 #include "GridMap.h"
 #include "BlockManager.h"
 
-ShapeFactory* ShapeFactory::instance = nullptr;
+ShapeFactory* ShapeFactory::instance = new ShapeFactory();
 
 ShapeFactory* ShapeFactory::getInstance()
 {
-	if (!instance)
-		instance = new ShapeFactory();
 	return instance;
 }
 
 ShapeFactory::ShapeFactory() :
 	_shapeIsFalling(nullptr)
 {
+	
+}
+
+void ShapeFactory::init()
+{
 	_tetrisMap = make_shared<GridMap>();
+}
+
+void ShapeFactory::init(const shared_ptr<GridMap>& gridMap)
+{
+	_tetrisMap = gridMap;
+}
+
+void ShapeFactory::setLayer(Layer* layer)
+{
+	_currentLayer = layer;
 }
 
 shared_ptr<Shape>& ShapeFactory::createShape()
 {
+	_shapeIsFalling = nullptr;
 	float lenghtBlock = _tetrisMap->getLengthBlock();
-	shared_ptr<Shape> shape = make_shared<Shape>();
-	shape->_detail = make_unique<OShape>();
+	_shapeIsFalling = make_shared<Shape>();
+	_shapeIsFalling->_detail = make_unique<OShape>();
 
-	for (int i = 0; i < shape->_blocks.size(); i++)
+	for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
 	{
-		shape->_blocks[i] = make_shared<Block>(BLOCK_PATH);
-		shape->_blocks[i]->_sprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-		float scale = lenghtBlock / (float)(shape->_blocks[i]->_sprite->getBoundingBox().size.width);
-		shape->_blocks[i]->_sprite->setScale(scale);
+		_shapeIsFalling->_blocks[i] = make_shared<Block>(BLOCK_PATH);
+		_shapeIsFalling->_blocks[i]->_sprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+		float scale = lenghtBlock / (float)(_shapeIsFalling->_blocks[i]->_sprite->getBoundingBox().size.width);
+		_shapeIsFalling->_blocks[i]->_sprite->setScale(scale);
 
-		float px = shape->_detail->referToInitLocationNodeBoard(0, i);
-		float py = shape->_detail->referToInitLocationNodeBoard(1, i);
-		shape->_blocks[i]->_sprite->setPosition(lenghtBlock * px, lenghtBlock * py);
-		shape->_node->addChild(shape->_blocks[i]->_sprite);
+		float px = _shapeIsFalling->_detail->referToInitLocationNodeBoard(0, i);
+		float py = _shapeIsFalling->_detail->referToInitLocationNodeBoard(1, i);
+		_shapeIsFalling->_blocks[i]->_sprite->setPosition(lenghtBlock * px, lenghtBlock * py);
+		_shapeIsFalling->_node->addChild(_shapeIsFalling->_blocks[i]->_sprite);
 	}
 
-	_shapeIsFalling = shape;
+	//_shapeIsFalling = shape;
 	return _shapeIsFalling;
 }
 
@@ -109,7 +123,15 @@ void ShapeFactory::releaseShape()
 			int cy = block->_coord.cy;
 			
 			_tetrisMap->getGirdsFont()[cx][cy] = block;
-			block = nullptr;
+
+			block->_sprite->retain();
+			block->_sprite->removeFromParent();
+			_currentLayer->addChild(block->_sprite);
+			block->_sprite->autorelease();
+
+			block->_sprite->setPosition(_tetrisMap->getGirdsPosition()[cx][cy].x, _tetrisMap->getGirdsPosition()[cx][cy].y);
+
+			//block = nullptr;
 		}
 
 		BlockManager::getInstance()->releaseShape(_shapeIsFalling);

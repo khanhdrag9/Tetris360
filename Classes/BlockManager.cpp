@@ -18,6 +18,7 @@ void BlockManager::releaseShape(shared_ptr<Shape>& shape)
 			BlockPool::getInstance()->collect(block);
 		}
 
+		shape->_node->autorelease();
 		shape = nullptr;
 	}
 }
