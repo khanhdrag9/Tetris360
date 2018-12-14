@@ -67,7 +67,7 @@ void GamePlayScene::createStartShape()
 	_origin = Director::getInstance()->getVisibleOrigin();
 
 	this->addChild(ShapeFactory::getInstance()->createShape()->_node);
-	ShapeFactory::getInstance()->setShapePosition(5, 5);
+	ShapeFactory::getInstance()->setShapePosition(19, 5);
 	_direction = DOWN;
 
 	ManagerLogic::getInstance()->setGridMap(ShapeFactory::getInstance()->getTetrisMap());
@@ -138,7 +138,7 @@ void GamePlayScene::updateShapeIsFalling(float)
 		{
 			if (c == ManagerLogic::collision::LEFT)canLeft = false;
 			else if (c == ManagerLogic::collision::RIGHT)canLeft = false;
-			else if (c == ManagerLogic::collision::BOTTOM)canLeft = false;
+			else if (c == ManagerLogic::collision::BOTTOM)canDown = false;
 			else if (c == ManagerLogic::collision::BOTTOM_EDGE)
 				colBottmEdge = true;
 		}
@@ -157,7 +157,7 @@ void GamePlayScene::updateShapeIsFalling(float)
 				ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col + 1);
 			break;
 		case DOWN:
-			if(canRight && !colBottmEdge)
+			if(canDown && !colBottmEdge)
 				ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col);
 			break;
 		default:
@@ -165,11 +165,11 @@ void GamePlayScene::updateShapeIsFalling(float)
 		}
 
 		//collision with Edge
-		if (colBottmEdge)
+		if (colBottmEdge || !canDown)
 		{
 			ShapeFactory::getInstance()->releaseShape();
 			ShapeFactory::getInstance()->createShape();
-			ShapeFactory::getInstance()->setShapePosition(19, 6);
+			ShapeFactory::getInstance()->setShapePosition(19, 5);
 		}
 	}
 }

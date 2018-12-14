@@ -24,6 +24,7 @@ void ShapeFactory::init()
 void ShapeFactory::init(const shared_ptr<GridMap>& gridMap)
 {
 	_tetrisMap = gridMap;
+	_shapeIsFalling = make_shared<Shape>();
 }
 
 void ShapeFactory::setLayer(Layer* layer)
@@ -33,9 +34,7 @@ void ShapeFactory::setLayer(Layer* layer)
 
 shared_ptr<Shape>& ShapeFactory::createShape()
 {
-	_shapeIsFalling = nullptr;
 	float lenghtBlock = _tetrisMap->getLengthBlock();
-	_shapeIsFalling = make_shared<Shape>();
 	_shapeIsFalling->_detail = make_unique<OShape>();
 
 	for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
@@ -51,7 +50,6 @@ shared_ptr<Shape>& ShapeFactory::createShape()
 		_shapeIsFalling->_node->addChild(_shapeIsFalling->_blocks[i]->_sprite);
 	}
 
-	//_shapeIsFalling = shape;
 	return _shapeIsFalling;
 }
 
@@ -99,6 +97,7 @@ void ShapeFactory::setShapePosition(const int& row, const int& col)
 			Vec2 newPos = _tetrisMap->getGirdsPosition()[row][col];
 			_shapeIsFalling->_node->setPosition(newPos);
 			_currentPos = pos(row, col);
+	
 		}
 	}
 }
@@ -121,7 +120,7 @@ void ShapeFactory::releaseShape()
 		{
 			int cx = block->_coord.cx;
 			int cy = block->_coord.cy;
-			
+
 			_tetrisMap->getGirdsFont()[cx][cy] = block;
 
 			block->_sprite->retain();
@@ -130,8 +129,6 @@ void ShapeFactory::releaseShape()
 			block->_sprite->autorelease();
 
 			block->_sprite->setPosition(_tetrisMap->getGirdsPosition()[cx][cy].x, _tetrisMap->getGirdsPosition()[cx][cy].y);
-
-			//block = nullptr;
 		}
 
 		BlockManager::getInstance()->releaseShape(_shapeIsFalling);
