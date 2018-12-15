@@ -34,6 +34,7 @@ bool GamePlayScene::init()
 	if (!Layer::init())
 		return false;
 
+	srand(time(NULL));
 
 	_gridMap = make_shared<GridMap>();
 #if ENABLE_GRID

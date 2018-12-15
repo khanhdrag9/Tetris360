@@ -3,6 +3,7 @@
 
 class Shape;
 class GridMap;
+class DetailShape;
 
 class ShapeFactory
 {
@@ -15,7 +16,17 @@ class ShapeFactory
 	Layer* _currentLayer;
 
 	ShapeFactory();
+	void getRandomTypeShape(unique_ptr<DetailShape>& detail);
 public:
+	enum typeShape
+	{
+		O,
+		I,
+		L,
+		T,
+		NONE
+	};
+
 	static ShapeFactory* getInstance();
 
 	void init();

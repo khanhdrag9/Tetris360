@@ -33,10 +33,34 @@ void ShapeFactory::setLayer(Layer* layer)
 	_currentLayer = layer;
 }
 
+void ShapeFactory::getRandomTypeShape(unique_ptr<DetailShape>& detail)
+{
+	int ran = rand() % typeShape::NONE;
+	switch (ran)
+	{
+	case typeShape::O :
+		detail = make_unique<OShape>();
+		break;
+	case typeShape::I :
+		detail = make_unique<IShape>();
+		break;
+	case typeShape::L :
+		detail = make_unique<LShape>();
+		break;
+	case typeShape::T :
+		detail = make_unique<TShape>();
+		break;
+
+	default:
+		detail = make_unique<OShape>();
+		break;
+	}
+}
+
 shared_ptr<Shape>& ShapeFactory::createShape()
 {
 	float lenghtBlock = _tetrisMap->getLengthBlock();
-	_shapeIsFalling->_detail = make_unique<OShape>();
+	getRandomTypeShape(_shapeIsFalling->_detail);
 
 	for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
 	{

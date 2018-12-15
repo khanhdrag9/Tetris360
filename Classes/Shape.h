@@ -28,3 +28,24 @@ public:
 	const int& referToInitCoordBoard(const int& row, const int& col) override;
 	const int& referToInitLocationNodeBoard(const int& row, const int& col) override;
 };
+
+class IShape : public DetailShape
+{
+public:
+	const int& referToInitCoordBoard(const int& row, const int& col) override;
+	const int& referToInitLocationNodeBoard(const int& row, const int& col) override;
+};
+
+class LShape : public DetailShape
+{
+public:
+	const int& referToInitCoordBoard(const int& row, const int& col) override;
+	const int& referToInitLocationNodeBoard(const int& row, const int& col) override;
+};
+
+class TShape : public DetailShape
+{
+public:
+	const int& referToInitCoordBoard(const int& row, const int& col) override;
+	const int& referToInitLocationNodeBoard(const int& row, const int& col) override;
+};
