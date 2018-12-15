@@ -16,11 +16,14 @@ class GamePlayScene : public Layer
 	Vec2 _origin;
 
 	Vec2 _touchBegin;
+	Vec2 _touchMove;
 	Vec2 _touchDirection;
 
 	float _startTime;
 	float _endTime;
 public:
+	const Vec2 touchNULL = Vec2(-1.f, -1.f);
+
 	GamePlayScene();
 	virtual ~GamePlayScene();
 
@@ -40,4 +43,5 @@ private:
 	void touchEnded(Touch* touch, Event* event);
 
 	void updateShapeIsFalling(float);
+	void refreshTouch();
 };

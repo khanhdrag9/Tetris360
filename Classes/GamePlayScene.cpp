@@ -90,31 +90,32 @@ bool GamePlayScene::touchBegan(Touch* touch, Event* event)
 
 void GamePlayScene::touchMoved(Touch* touch, Event* event)
 {
-	auto shapeFalling = ShapeFactory::getInstance()->getShapeIsFalling();
-	if (shapeFalling)
-	{
-		//calculate touch Pos
-		Vec2 posTouch = touch->getLocation();
-		if (posTouch.x > _touchBegin.x)
-		{
-			_touchDirection = posTouch;
-			_touchBegin = _touchDirection;
-			_direction = RIGHT;
-		}
-		else if (posTouch.x < _touchBegin.x)
-		{
-			_touchDirection = posTouch;
-			_touchBegin = _touchDirection;
-			_direction = LEFT;
-		}
-	}
+	//auto shapeFalling = ShapeFactory::getInstance()->getShapeIsFalling();
+	//if (shapeFalling)
+	//{
+	//	//calculate touch Pos
+	//	Vec2 posTouch = touch->getLocation();
+	//	if (posTouch.x > _touchBegin.x)
+	//	{
+	//		_touchDirection = posTouch;
+	//		_touchBegin = _touchDirection;
+	//		_direction = RIGHT;
+	//	}
+	//	else if (posTouch.x < _touchBegin.x)
+	//	{
+	//		_touchDirection = posTouch;
+	//		_touchBegin = _touchDirection;
+	//		_direction = LEFT;
+	//	}
+	//}
+	if (_touchBegin == touchNULL)_touchBegin = touch->getLocation();
+	_touchMove = touch->getLocation();
 }
+
 
 void GamePlayScene::touchEnded(Touch* touch, Event* event)
 {
-	_direction = DOWN;
-	_touchBegin = Vec2(-1.f, -1.f);
-	_touchDirection = Vec2(-1.f, -1.f);
+	refreshTouch();
 }
 
 
@@ -131,16 +132,36 @@ void GamePlayScene::updateShapeIsFalling(float)
 
 		bool canLeft = true;
 		bool canRight = true;
+		bool canBLeft = true;
+		bool canBRight = true;
 		bool canDown = true;
 		bool colBottmEdge = false;
 		auto collision = ManagerLogic::getInstance()->checkCollision(ShapeFactory::getInstance()->getShapeIsFalling());
 		for (auto& c : collision)
 		{
 			if (c == ManagerLogic::collision::LEFT)canLeft = false;
-			else if (c == ManagerLogic::collision::RIGHT)canLeft = false;
+			else if (c == ManagerLogic::collision::RIGHT)canRight = false;
 			else if (c == ManagerLogic::collision::BOTTOM)canDown = false;
-			else if (c == ManagerLogic::collision::BOTTOM_EDGE)
-				colBottmEdge = true;
+			else if (c == ManagerLogic::collision::BOTTOM_LEFT)canBLeft = false;
+			else if (c == ManagerLogic::collision::BOTTOM_RIGHT)canBRight = false;
+			else if (c == ManagerLogic::collision::BOTTOM_EDGE)colBottmEdge = true;
+		}
+
+		//calculate direction
+		if (_touchMove != touchNULL && _touchBegin != touchNULL)
+		{
+			if (_touchMove.x > _touchBegin.x)
+			{
+				_touchDirection = _touchMove;
+				_touchBegin = _touchDirection;
+				_direction = RIGHT;
+			}
+			else if (_touchMove.x < _touchBegin.x)
+			{
+				_touchDirection = _touchMove;
+				_touchBegin = _touchDirection;
+				_direction = LEFT;
+			}
 		}
 
 		switch (_direction)
@@ -149,27 +170,48 @@ void GamePlayScene::updateShapeIsFalling(float)
 			ShapeFactory::getInstance()->setShapePosition(curPos.row, curPos.col);
 			break;
 		case LEFT:
-			if(canLeft)
-				ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col - 1);
+			if (canLeft && canDown)
+			{
+				ShapeFactory::getInstance()->setShapePosition(curPos.row, curPos.col - 1);
+			}
 			break;
 		case RIGHT:
-			if(canRight)
-				ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col + 1);
+			if (canRight && canDown)
+			{
+				ShapeFactory::getInstance()->setShapePosition(curPos.row, curPos.col + 1);
+			}
 			break;
 		case DOWN:
-			if(canDown && !colBottmEdge)
-				ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, curPos.col);
 			break;
 		default:
 			break;
 		}
 
+		if(canDown)
+			if ((_direction == LEFT && canLeft && !canBLeft) || (_direction == RIGHT && canRight && !canBRight))
+				canDown = false;
+
+		if (canDown && !colBottmEdge)
+		{
+				ShapeFactory::getInstance()->setShapePosition(curPos.row - 1, ShapeFactory::getInstance()->getCurrentPos().col);
+		}
+
 		//collision with Edge
 		if (colBottmEdge || !canDown)
 		{
+			//create new Shape
 			ShapeFactory::getInstance()->releaseShape();
 			ShapeFactory::getInstance()->createShape();
 			ShapeFactory::getInstance()->setShapePosition(19, 5);
+			refreshTouch();
 		}
 	}
+}
+
+void GamePlayScene::refreshTouch()
+{
+	_direction = DOWN;
+	_touchBegin = touchNULL;
+	_touchDirection = touchNULL;
+	_touchMove = touchNULL;
 }

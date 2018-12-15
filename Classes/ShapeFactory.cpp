@@ -63,13 +63,19 @@ void ShapeFactory::setShapePosition(const int& row, const int& col)
 		vector<Coord> newCoord;
 		for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
 		{
-			auto& block = _shapeIsFalling->_blocks[i];
-			int cx = _shapeIsFalling->_detail->referToInitLocationNodeBoard(0, i) + row;
-			int cy = _shapeIsFalling->_detail->referToInitLocationNodeBoard(1, i) + col;
+			int c = _shapeIsFalling->_detail->referToInitLocationNodeBoard(0, i) + col;
+			int r = _shapeIsFalling->_detail->referToInitLocationNodeBoard(1, i) + row;
 
-			if (cx >= 0 && cy >= 0 && cx < _tetrisMap->getGirdsBack().size() && cy < MAX_COL)
+			if (c >= 0 && r >= 0 && r < _tetrisMap->getGirdsBack().size() && c < MAX_COL)
 			{
-				newCoord.push_back(Coord(cx, cy));
+				if (_tetrisMap->getGirdsFont()[r][c])
+				{
+					avaiablePos = false;
+				}
+				else
+				{
+					newCoord.push_back(Coord(r, c));
+				}
 			}
 			else
 			{
@@ -124,7 +130,7 @@ void ShapeFactory::releaseShape()
 			_tetrisMap->getGirdsFont()[cx][cy] = block;
 
 			block->_sprite->retain();
-			block->_sprite->removeFromParent();
+			block->_sprite->removeFromParentAndCleanup(true);
 			_currentLayer->addChild(block->_sprite);
 			block->_sprite->autorelease();
 
@@ -132,5 +138,6 @@ void ShapeFactory::releaseShape()
 		}
 
 		BlockManager::getInstance()->releaseShape(_shapeIsFalling);
+		_currentPos = pos();
 	}
 }

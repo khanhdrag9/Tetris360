@@ -15,6 +15,8 @@ public:
 		NONE,
 		BOTTOM_EDGE,
 		BOTTOM,
+		BOTTOM_LEFT,
+		BOTTOM_RIGHT,
 		LEFT,
 		RIGHT
 	};

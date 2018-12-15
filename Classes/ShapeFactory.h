@@ -4,19 +4,6 @@
 class Shape;
 class GridMap;
 
-struct pos
-{
-	int row;
-	int col;
-	pos() : row(-1), col(-1) {}
-	pos(int r, int c) : row(r), col(c) {}
-	void operator=(pos& pos)
-	{
-		row = pos.row;
-		col = pos.col;
-	}
-};
-
 class ShapeFactory
 {
 	static ShapeFactory* instance;
