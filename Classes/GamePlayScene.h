@@ -2,6 +2,8 @@
 
 #include "Headers.h"
 
+class GridMap;
+
 class GamePlayScene : public Layer
 {
 	enum direction {
@@ -18,6 +20,10 @@ class GamePlayScene : public Layer
 	Vec2 _touchBegin;
 	Vec2 _touchMove;
 	Vec2 _touchDirection;
+
+	shared_ptr<GridMap> _gridMap;
+
+	list<int> _listRowDeleted;
 
 	float _startTime;
 	float _endTime;
@@ -44,4 +50,6 @@ private:
 
 	void updateShapeIsFalling(float);
 	void refreshTouch();
+	void checkRowFull();
+	bool reSetupBlocksPos(const int& row = -1);
 };

@@ -46,7 +46,7 @@ public:
 	//Node* getNode() { return _node; }
 	
 //private:
-	vector<int> findRowFull();
+	list<int> findRowFull();
 	void deleteRow(const int& row);
 
 };

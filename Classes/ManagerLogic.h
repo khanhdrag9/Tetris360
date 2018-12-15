@@ -3,6 +3,7 @@
 
 class GridMap;
 class Shape;
+class Block;
 
 class ManagerLogic : public Singleton<ManagerLogic>
 {
@@ -23,5 +24,7 @@ public:
 
 	void setGridMap(const shared_ptr<GridMap>& gridMap);
 	list<int> checkCollision(const shared_ptr<Shape>& shape);
+	list<int> checkCollisionBlock(const shared_ptr<Block>& block);
+	bool checkCollisionBottom(const shared_ptr<Block>& block);
 
 };

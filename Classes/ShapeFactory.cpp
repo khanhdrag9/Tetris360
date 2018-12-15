@@ -19,6 +19,7 @@ ShapeFactory::ShapeFactory() :
 void ShapeFactory::init()
 {
 	_tetrisMap = make_shared<GridMap>();
+	_shapeIsFalling = make_shared<Shape>();
 }
 
 void ShapeFactory::init(const shared_ptr<GridMap>& gridMap)

@@ -43,15 +43,16 @@ void GridMap::init()
 
 }
 
-vector<int> GridMap::findRowFull()
+list<int> GridMap::findRowFull()
 {
-	vector<int> rows;
+	list<int> rows;
 	for (int row = 0; row < _gridsBack.size(); row++)
 	{
 		bool isFull = all_of(_gridsFont[row].begin(), _gridsFont[row].end(), [](shared_ptr<Block>& b) {
 			return b != nullptr;
 		});
-		rows.push_back(row);
+		if(isFull)
+			rows.push_back(row);
 	}
 	return rows;
 }

@@ -5,13 +5,15 @@ class Block;
 
 class BlockPool
 {
+	friend class BlockManager;
+
 	BlockPool();
 	static BlockPool* instance;
 
 	list<shared_ptr<Block>> _pool;
-public:
-	static BlockPool* getInstance();
 
 	int size() const;
 	void collect(const shared_ptr<Block>& block);
+public:
+	static BlockPool* getInstance();
 };
