@@ -6,12 +6,6 @@ class GridMap;
 
 class GamePlayScene : public Layer
 {
-	enum direction {
-		NONE,
-		LEFT,
-		RIGHT,
-		DOWN
-	};
 	int _direction;
 
 	Size _screenSize;
@@ -49,6 +43,7 @@ private:
 	void touchEnded(Touch* touch, Event* event);
 
 	void updateShapeIsFalling(float);
+	void rotateShape();
 	void refreshTouch();
 	void checkRowFull();
 	bool reSetupBlocksPos(const int& row = -1);

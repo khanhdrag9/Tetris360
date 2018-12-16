@@ -19,18 +19,18 @@ list<int> ManagerLogic::checkCollision(const shared_ptr<Shape>& shape)
 			for (int ib = 0; ib < shape->_blocks.size(); ib++)
 			{
 				//Coord cor = shape->_blocks[ib]->_coord;
-				//int left = cor.cy - 1;
-				//int right = cor.cy + 1;
-				//int bottom = cor.cx - 1;
+				//int left = cor.col - 1;
+				//int right = cor.col + 1;
+				//int bottom = cor.row - 1;
 				//pos b_left = pos(bottom, left);
 				//pos b_right = pos(bottom, right);
 				//int bottomEdge = 0;
 
 				//if(left < 0)listCollision.push_back(collision::LEFT);
-				//else if (grid[cor.cx][left])listCollision.push_back(collision::LEFT);
+				//else if (grid[cor.row][left])listCollision.push_back(collision::LEFT);
 
 				//if(right > MAX_COL - 1)listCollision.push_back(collision::RIGHT);
-				//else if (grid[cor.cx][right])listCollision.push_back(collision::RIGHT);
+				//else if (grid[cor.row][right])listCollision.push_back(collision::RIGHT);
 
 				//if (b_left.row > 0 && b_left.col > 0)
 				//{
@@ -42,10 +42,10 @@ list<int> ManagerLogic::checkCollision(const shared_ptr<Shape>& shape)
 				//}
 
 				//if(bottom < 0)listCollision.push_back(collision::BOTTOM);
-				//else if (grid[bottom][cor.cy])listCollision.push_back(collision::BOTTOM);
+				//else if (grid[bottom][cor.col])listCollision.push_back(collision::BOTTOM);
 
 				////with bottom edge
-				//if (cor.cx == bottomEdge)listCollision.push_back(collision::BOTTOM_EDGE);
+				//if (cor.row == bottomEdge)listCollision.push_back(collision::BOTTOM_EDGE);
 				
 				auto listCollisionBlock = checkCollisionBlock(shape->_blocks[ib]);
 				for(int col : listCollisionBlock)
@@ -61,19 +61,19 @@ list<int> ManagerLogic::checkCollisionBlock(const shared_ptr<Block>& block)
 	list<int> listCollision;
 	grids_font grid = _gridMap->getGirdsFont();
 
-	Coord cor = block->_coord;
-	int left = cor.cy - 1;
-	int right = cor.cy + 1;
-	int bottom = cor.cx - 1;
+	pos cor = block->_coord;
+	int left = cor.col - 1;
+	int right = cor.col + 1;
+	int bottom = cor.row - 1;
 	pos b_left = pos(bottom, left);
 	pos b_right = pos(bottom, right);
 	int bottomEdge = 0;
 
-	if (left < 0)listCollision.push_back(collision::LEFT);
-	else if (grid[cor.cx][left])listCollision.push_back(collision::LEFT);
+	if (left < 0 && cor.row >= 0)listCollision.push_back(collision::LEFT);
+	else if (cor.row >= 0 && grid[cor.row][left])listCollision.push_back(collision::LEFT);
 
-	if (right > MAX_COL - 1)listCollision.push_back(collision::RIGHT);
-	else if (grid[cor.cx][right])listCollision.push_back(collision::RIGHT);
+	if (right > MAX_COL - 1 && cor.row >= 0)listCollision.push_back(collision::RIGHT);
+	else if (cor.row >= 0 && grid[cor.row][right])listCollision.push_back(collision::RIGHT);
 
 	if (b_left.row > 0 && b_left.col > 0)
 	{
@@ -85,10 +85,10 @@ list<int> ManagerLogic::checkCollisionBlock(const shared_ptr<Block>& block)
 	}
 
 	if (bottom < 0)listCollision.push_back(collision::BOTTOM);
-	else if (grid[bottom][cor.cy])listCollision.push_back(collision::BOTTOM);
+	else if (grid[bottom][cor.col])listCollision.push_back(collision::BOTTOM);
 
 	//with bottom edge
-	if (cor.cx == bottomEdge)listCollision.push_back(collision::BOTTOM_EDGE);
+	if (cor.row == bottomEdge)listCollision.push_back(collision::BOTTOM_EDGE);
 
 	return listCollision;
 }
@@ -97,11 +97,11 @@ bool ManagerLogic::checkCollisionBottom(const shared_ptr<Block>& block)
 {
 	grids_font grid = _gridMap->getGirdsFont();
 
-	Coord cor = block->_coord;
-	int bottom = cor.cx - 1;
+	pos cor = block->_coord;
+	int bottom = cor.row - 1;
 	int bottomEdge = 0;
 
-	bool isCol = (bottom < 0 || cor.cx == bottomEdge || grid[bottom][cor.cy]);
+	bool isCol = (bottom < 0 || cor.row == bottomEdge || grid[bottom][cor.col]);
 
 	return isCol;
 }

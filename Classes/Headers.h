@@ -25,10 +25,23 @@ struct pos
 	int row;
 	int col;
 	pos() : row(-1), col(-1) {}
+	pos(const pos& pos) : row(pos.row), col(pos.col) {}
 	pos(int r, int c) : row(r), col(c) {}
-	void operator=(pos& pos)
+	void operator=(const pos& pos)
 	{
 		row = pos.row;
 		col = pos.col;
 	}
+	bool operator!=(pos& pos)
+	{
+		return (row != pos.row || col != pos.col);
+	}
+};
+#define pos_null pos(-1, -1)
+
+enum direction {
+	NONE,
+	LEFT,
+	RIGHT,
+	DOWN
 };

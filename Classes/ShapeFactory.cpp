@@ -1,9 +1,11 @@
 #include "ShapeFactory.h"
 #include "Shape.h"
 #include "GridMap.h"
+#include "ShapeAction.h"
 #include "BlockManager.h"
 
 ShapeFactory* ShapeFactory::instance = new ShapeFactory();
+pos ShapeFactory::posNull = pos(-1, -1);
 
 ShapeFactory* ShapeFactory::getInstance()
 {
@@ -11,7 +13,10 @@ ShapeFactory* ShapeFactory::getInstance()
 }
 
 ShapeFactory::ShapeFactory() :
-	_shapeIsFalling(nullptr)
+	_shapeIsFalling(nullptr),
+	_currentLayer(nullptr),
+	_toAngle(0.f),
+	_targetAngle(0.f)
 {
 	
 }
@@ -19,12 +24,16 @@ ShapeFactory::ShapeFactory() :
 void ShapeFactory::init()
 {
 	_tetrisMap = make_shared<GridMap>();
+	_shapeAction = make_shared<Fall>();
+	_shapeAction->init(_tetrisMap);
 	_shapeIsFalling = make_shared<Shape>();
 }
 
 void ShapeFactory::init(const shared_ptr<GridMap>& gridMap)
 {
 	_tetrisMap = gridMap;
+	_shapeAction = make_shared<Fall>();
+	_shapeAction->init(_tetrisMap);
 	_shapeIsFalling = make_shared<Shape>();
 }
 
@@ -45,10 +54,10 @@ void ShapeFactory::getRandomTypeShape(unique_ptr<DetailShape>& detail)
 		detail = make_unique<IShape>();
 		break;
 	case typeShape::L :
-		detail = make_unique<LShape>();
+		detail = make_unique<IShape>();
 		break;
 	case typeShape::T :
-		detail = make_unique<TShape>();
+		detail = make_unique<IShape>();
 		break;
 
 	default:
@@ -78,28 +87,47 @@ shared_ptr<Shape>& ShapeFactory::createShape()
 	return _shapeIsFalling;
 }
 
+void ShapeFactory::updateShape()
+{
+	if (_shapeIsFalling && _shapeAction);
+	_shapeAction->run(_shapeIsFalling);
+}
+
 void ShapeFactory::setShapePosition(const int& row, const int& col)
 {
 	if (_shapeIsFalling)
 	{
 		bool avaiablePos = true;
 
+		int increRowValue = row - _shapeIsFalling->_position.row;
+		int increColValue = col - _shapeIsFalling->_position.col;
+
 		//check newPos
-		vector<Coord> newCoord;
+		vector<pos> newCoord;
 		for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
 		{
-			int c = _shapeIsFalling->_detail->referToInitLocationNodeBoard(0, i) + col;
-			int r = _shapeIsFalling->_detail->referToInitLocationNodeBoard(1, i) + row;
+			int c, r;
+			if (_shapeIsFalling->_position != posNull)
+			{
+				c = _shapeIsFalling->_blocks[i]->_coord.col + increColValue;
+				r = _shapeIsFalling->_blocks[i]->_coord.row + increRowValue;
+			}
+			else
+			{
+				c = _shapeIsFalling->_detail->referToInitLocationNodeBoard(0, i) + col;
+				r = _shapeIsFalling->_detail->referToInitLocationNodeBoard(1, i) + row;
+			}
 
 			if (c >= 0 && r >= 0 && r < _tetrisMap->getGirdsBack().size() && c < MAX_COL)
 			{
 				if (_tetrisMap->getGirdsFont()[r][c])
 				{
 					avaiablePos = false;
+					break;
 				}
 				else
 				{
-					newCoord.push_back(Coord(r, c));
+					newCoord.push_back(pos(r, c));
 				}
 			}
 			else
@@ -114,23 +142,45 @@ void ShapeFactory::setShapePosition(const int& row, const int& col)
 			//set all old pos -> false
 			for (auto& block : _shapeIsFalling->_blocks)
 			{
-				Coord crd = block->_coord;
-				if(!(crd == COORD_NONE))
-					_tetrisMap->getGirdsBack()[crd.cx][crd.cy] = false;
+				pos crd = block->_coord;
+				if(crd != pos_null)
+					_tetrisMap->getGirdsBack()[crd.row][crd.col] = false;
 			}
 
 			for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
 			{
 				_shapeIsFalling->_blocks[i]->_coord = newCoord[i];
-				_tetrisMap->getGirdsBack()[newCoord[i].cx][newCoord[i].cy] = true;
+				_tetrisMap->getGirdsBack()[newCoord[i].row][newCoord[i].col] = true;
 			}
 
 			Vec2 newPos = _tetrisMap->getGirdsPosition()[row][col];
 			_shapeIsFalling->_node->setPosition(newPos);
-			_currentPos = pos(row, col);
+			_shapeIsFalling->_position = pos(row, col);
 	
 		}
 	}
+}
+
+void ShapeFactory::setToRotateBlock(const float& angle)
+{
+	if (_shapeIsFalling)
+	{
+		float curRot = _shapeIsFalling->_node->getRotation();
+		if (_targetAngle != curRot)
+		{
+			//_shapeIsFalling->_node->setRotation(_targetAngle);
+		}
+		else
+		{
+			_toAngle = angle;
+			_targetAngle = _shapeIsFalling->_node->getRotation() + _toAngle;
+		}
+	}
+}
+
+void ShapeFactory::rotateBlock()
+{
+	
 }
 
 shared_ptr<Shape> ShapeFactory::getShapeIsFalling() const
@@ -140,17 +190,18 @@ shared_ptr<Shape> ShapeFactory::getShapeIsFalling() const
 
 pos ShapeFactory::getCurrentPos() const
 {
-	return _currentPos;
+	return _shapeIsFalling->_position;
 }
 
 void ShapeFactory::releaseShape()
 {
 	if (_shapeIsFalling)
 	{
+		_shapeIsFalling->_node->setRotation(0.f);
 		for (auto& block : _shapeIsFalling->_blocks)
 		{
-			int cx = block->_coord.cx;
-			int cy = block->_coord.cy;
+			int cx = block->_coord.row;
+			int cy = block->_coord.col;
 
 			_tetrisMap->getGirdsFont()[cx][cy] = block;
 
@@ -163,6 +214,8 @@ void ShapeFactory::releaseShape()
 		}
 
 		BlockManager::getInstance()->releaseShape(_shapeIsFalling);
-		_currentPos = pos();
+		_shapeIsFalling->_position = posNull;
+		_targetAngle = 0.f;
+		_toAngle = 0.f;
 	}
 }
