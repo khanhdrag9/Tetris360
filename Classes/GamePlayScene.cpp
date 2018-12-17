@@ -88,13 +88,28 @@ void GamePlayScene::createListener()
 
 bool GamePlayScene::touchBegan(Touch* touch, Event* event)
 {
-	
+	_touchBegin = touch->getLocation();
 	return true;
 }
 
 void GamePlayScene::touchMoved(Touch* touch, Event* event)
 {
+	Vec2 touchPos = touch->getLocation();
+	float range = touchPos.x - _touchBegin.x;
+	float lenghtBlock = _gridMap->getLengthBlock();
 
+	if (range < 0 && abs(range) >= lenghtBlock)
+	{
+		ShapeFactory::getInstance()->setActionShape(actiontype::SLIDE_LEFT);
+		ShapeFactory::getInstance()->updateShape();
+		_touchBegin = touchPos;
+	}
+	else if (range > 0 && abs(range) >= lenghtBlock)
+	{
+		ShapeFactory::getInstance()->setActionShape(actiontype::SLIDE_RIGHT);
+		ShapeFactory::getInstance()->updateShape();
+		_touchBegin = touchPos;
+	}
 }
 
 
@@ -111,6 +126,7 @@ void GamePlayScene::update(float dt)
 
 void GamePlayScene::updateShapeIsFalling(float)
 {
+	ShapeFactory::getInstance()->setActionShape(actiontype::FALL);
 	ShapeFactory::getInstance()->updateShape();
 }
 
