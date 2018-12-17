@@ -85,10 +85,10 @@ shared_ptr<Shape>& ShapeFactory::createShape()
 	return _shapeIsFalling;
 }
 
-void ShapeFactory::updateShape()
+int ShapeFactory::updateShape()
 {
 	if (_shapeIsFalling && _shapeAction);
-	_shapeAction->run(_shapeIsFalling);
+	return _shapeAction->run(_shapeIsFalling);
 }
 
 bool ShapeFactory::setShapePosition(const pos& position)

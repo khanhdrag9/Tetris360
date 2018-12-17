@@ -53,3 +53,10 @@ enum actiontype {
 	SLIDE_LEFT,
 	SLIDE_RIGHT,
 };
+
+enum actionResult {
+	COL_NONE,
+	COL_LEFT,
+	COL_RIGHT,
+	COL_BOTTOM
+};

@@ -13,7 +13,7 @@ Fall::Fall(const shared_ptr<GridMap>& grid, const int& speed) :
 {
 }
 
-bool Fall::run(shared_ptr<Shape>& shape)
+int Fall::run(shared_ptr<Shape>& shape)
 {
 	if (shape && shape->_position != pos_null &&_gridMap)
 	{	
@@ -27,7 +27,7 @@ bool Fall::run(shared_ptr<Shape>& shape)
 			int nCol = shape->_blocks[i]->_coord.col;
 
 			if (check::checkAvaiablePos(_gridMap, nRow, nCol))posList.push_back(pos(nRow, nCol));
-			else return false;
+			else return actionResult::COL_BOTTOM;
 		}
 
 		check::pushNewPosToBlock4(shape, posList);
@@ -35,11 +35,11 @@ bool Fall::run(shared_ptr<Shape>& shape)
 		pos newPos = pos(shape->_position.row - _speed, shape->_position.col);
 		shape->setPosition(_gridMap, newPos);
 
-		return true;
+		return actionResult::COL_NONE;
 	}
 	else
 	{
-		return false;
+		return actionResult::COL_BOTTOM;
 	}
 }
 
@@ -49,7 +49,7 @@ VerticalSlide::VerticalSlide(const shared_ptr<GridMap>& grid, const int& direct)
 {
 }
 
-bool VerticalSlide::run(shared_ptr<Shape>& shape)
+int VerticalSlide::run(shared_ptr<Shape>& shape)
 {
 	if (shape && shape->_position != pos_null && _gridMap)
 	{
@@ -63,7 +63,11 @@ bool VerticalSlide::run(shared_ptr<Shape>& shape)
 			if (_direction == direction::RIGHT) nCol += 1;
 				
 			if (check::checkAvaiablePos(_gridMap, nRow, nCol))posList.push_back(pos(nRow, nCol));
-			else return false;
+			else
+			{
+				if (_direction == direction::LEFT) return actionResult::COL_LEFT;
+				if (_direction == direction::RIGHT) return actionResult::COL_RIGHT;
+			}
 		}
 
 		check::pushNewPosToBlock4(shape, posList);
@@ -73,9 +77,12 @@ bool VerticalSlide::run(shared_ptr<Shape>& shape)
 		if (_direction == direction::RIGHT) newPos.col += 1;
 		
 		shape->setPosition(_gridMap, newPos);
+
+		return actionResult::COL_NONE;
 	}
 	else
 	{
-		return false;
+		if (_direction == direction::LEFT) return actionResult::COL_LEFT;
+		if (_direction == direction::RIGHT) return actionResult::COL_RIGHT;
 	}
 }

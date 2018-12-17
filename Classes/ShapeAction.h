@@ -11,7 +11,7 @@ protected:
 public:
 	ShapeAction(const shared_ptr<GridMap>& grid);
 	virtual ~ShapeAction(){}
-	virtual bool run(shared_ptr<Shape>& shape) = 0;
+	virtual int run(shared_ptr<Shape>& shape) = 0;
 };
 
 class Fall : public ShapeAction
@@ -19,7 +19,7 @@ class Fall : public ShapeAction
 	int _speed;
 public:
 	Fall(const shared_ptr<GridMap>& grid, const int& speed = 1);
-	bool run(shared_ptr<Shape>& shape) override;
+	int run(shared_ptr<Shape>& shape) override;
 };
 
 class VerticalSlide : public ShapeAction
@@ -27,5 +27,5 @@ class VerticalSlide : public ShapeAction
 	int _direction;
 public:
 	VerticalSlide(const shared_ptr<GridMap>& grid, const int& direct);
-	bool run(shared_ptr<Shape>& shape) override;
+	int run(shared_ptr<Shape>& shape) override;
 };

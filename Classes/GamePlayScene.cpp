@@ -8,7 +8,6 @@
 #include "ShapeAction.h"
 
 GamePlayScene::GamePlayScene():
-	_direction(0),
 	_startTime(0.f),
 	_endTime(0.f)
 {
@@ -72,7 +71,6 @@ void GamePlayScene::createStartShape()
 
 	this->addChild(ShapeFactory::getInstance()->createShape()->_node);
 	ShapeFactory::getInstance()->setShapePosition(pos(19, 5));	//first position
-	_direction = DOWN;
 
 	ManagerLogic::getInstance()->setGridMap(_gridMap);
 }
@@ -127,7 +125,13 @@ void GamePlayScene::update(float dt)
 void GamePlayScene::updateShapeIsFalling(float)
 {
 	ShapeFactory::getInstance()->setActionShape(actiontype::FALL);
-	ShapeFactory::getInstance()->updateShape();
+	if (ShapeFactory::getInstance()->updateShape() == actionResult::COL_BOTTOM)
+	{
+		ShapeFactory::getInstance()->releaseShape();
+		ShapeFactory::getInstance()->createShape();
+		ShapeFactory::getInstance()->setShapePosition(pos(19, 5));
+		checkRowFull();
+	}
 }
 
 void GamePlayScene::rotateShape()
@@ -188,12 +192,4 @@ bool GamePlayScene::reSetupBlocksPos(const int& row)
 	}
 
 	return false;
-}
-
-void GamePlayScene::refreshTouch()
-{
-	_direction = DOWN;
-	_touchBegin = touchNULL;
-	_touchDirection = touchNULL;
-	_touchMove = touchNULL;
 }

@@ -39,7 +39,7 @@ public:
 	void init(const shared_ptr<GridMap>& gridMap);
 	void setLayer(Layer* layer);
 	shared_ptr<Shape>& createShape();
-	void updateShape();
+	int updateShape();
 	bool setShapePosition(const pos& position);
 	void setActionShape(const int& type = actiontype::FALL);
 	void setToRotateBlock(const float& angle);

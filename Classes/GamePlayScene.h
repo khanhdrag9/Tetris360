@@ -6,14 +6,10 @@ class GridMap;
 
 class GamePlayScene : public Layer
 {
-	int _direction;
-
 	Size _screenSize;
 	Vec2 _origin;
 
 	Vec2 _touchBegin;
-	Vec2 _touchMove;
-	Vec2 _touchDirection;
 
 	shared_ptr<GridMap> _gridMap;
 
