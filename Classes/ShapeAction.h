@@ -29,3 +29,11 @@ public:
 	VerticalSlide(const shared_ptr<GridMap>& grid, const int& direct);
 	int run(shared_ptr<Shape>& shape) override;
 };
+
+class Rotate : public ShapeAction
+{
+	float _angle;
+public:
+	Rotate(const shared_ptr<GridMap>& grid, const float& angle);
+	int run(shared_ptr<Shape>& shape) override;
+};

@@ -52,10 +52,12 @@ enum actiontype {
 	FALL,
 	SLIDE_LEFT,
 	SLIDE_RIGHT,
+	ROTATE
 };
 
 enum actionResult {
 	COL_NONE,
+	COL_HAS,
 	COL_LEFT,
 	COL_RIGHT,
 	COL_BOTTOM

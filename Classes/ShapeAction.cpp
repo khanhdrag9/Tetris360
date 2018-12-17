@@ -86,3 +86,14 @@ int VerticalSlide::run(shared_ptr<Shape>& shape)
 		if (_direction == direction::RIGHT) return actionResult::COL_RIGHT;
 	}
 }
+
+Rotate::Rotate(const shared_ptr<GridMap>& grid, const float& angle) :
+	ShapeAction(grid),
+	_angle(angle)
+{
+}
+
+int Rotate::run(shared_ptr<Shape>& shape)
+{
+	return 0;
+}
