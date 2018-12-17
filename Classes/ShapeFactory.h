@@ -16,13 +16,13 @@ class ShapeFactory
 	float _targetAngle;
 
 	shared_ptr<GridMap> _tetrisMap;
-	//shared_ptr<ShapeAction> _shapeAction;
+	unique_ptr<ShapeAction> _shapeAction;
 	Layer* _currentLayer;
 
 	ShapeFactory();
 	void getRandomTypeShape(unique_ptr<DetailShape>& detail);
 public:
-	shared_ptr<ShapeAction> _shapeAction;
+	
 	enum typeShape
 	{
 		O,
@@ -40,7 +40,8 @@ public:
 	void setLayer(Layer* layer);
 	shared_ptr<Shape>& createShape();
 	void updateShape();
-	void setShapePosition(const int& row, const int& col);
+	bool setShapePosition(const pos& position);
+	void setActionShape(const int& type = actiontype::FALL);
 	void setToRotateBlock(const float& angle);
 	void rotateBlock();
 	shared_ptr<GridMap> getTetrisMap() const { return _tetrisMap; }

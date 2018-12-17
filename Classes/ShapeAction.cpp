@@ -7,17 +7,23 @@ ShapeAction::ShapeAction(const shared_ptr<GridMap>& grid) :
 {
 }
 
-Fall::Fall(const shared_ptr<GridMap>& grid) : ShapeAction(grid){}
+Fall::Fall(const shared_ptr<GridMap>& grid, const int& speed) :
+	ShapeAction(grid),
+	_speed(speed)
+{
+}
 
 bool Fall::run(shared_ptr<Shape>& shape)
 {
 	if (shape && shape->_position != pos_null &&_gridMap)
 	{	
+		if (_speed == 0)return true;
+
 		list<pos> posList;
 
 		for (int i = 0; i < shape->_blocks.size(); i++)
 		{
-			int nRow = shape->_blocks[i]->_coord.row - 1;
+			int nRow = shape->_blocks[i]->_coord.row - _speed;
 			int nCol = shape->_blocks[i]->_coord.col;
 
 			if (check::checkAvaiablePos(_gridMap, nRow, nCol))posList.push_back(pos(nRow, nCol));
@@ -26,7 +32,7 @@ bool Fall::run(shared_ptr<Shape>& shape)
 
 		check::pushNewPosToBlock4(shape, posList);
 
-		pos newPos = pos(shape->_position.row - 1, shape->_position.col);
+		pos newPos = pos(shape->_position.row - _speed, shape->_position.col);
 		shape->setPosition(_gridMap, newPos);
 
 		return true;

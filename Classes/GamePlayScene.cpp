@@ -71,7 +71,7 @@ void GamePlayScene::createStartShape()
 	_origin = Director::getInstance()->getVisibleOrigin();
 
 	this->addChild(ShapeFactory::getInstance()->createShape()->_node);
-	ShapeFactory::getInstance()->setShapePosition(19, 5);	//first position
+	ShapeFactory::getInstance()->setShapePosition(pos(19, 5));	//first position
 	_direction = DOWN;
 
 	ManagerLogic::getInstance()->setGridMap(_gridMap);

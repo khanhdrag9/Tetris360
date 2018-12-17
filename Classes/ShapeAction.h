@@ -16,8 +16,9 @@ public:
 
 class Fall : public ShapeAction
 {
+	int _speed;
 public:
-	Fall(const shared_ptr<GridMap>& grid);
+	Fall(const shared_ptr<GridMap>& grid, const int& speed = 1);
 	bool run(shared_ptr<Shape>& shape) override;
 };
 

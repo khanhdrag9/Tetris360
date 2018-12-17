@@ -46,3 +46,10 @@ enum direction {
 	RIGHT,
 	DOWN
 };
+
+enum actiontype {
+	STAND,
+	FALL,
+	SLIDE_LEFT,
+	SLIDE_RIGHT,
+};
