@@ -19,6 +19,7 @@ using namespace std;
 //of game
 #include "Defines.h"
 #include "Supports.h"
+#include "Template.h"
 
 struct pos
 {

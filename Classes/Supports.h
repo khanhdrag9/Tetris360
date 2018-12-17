@@ -1,13 +1,13 @@
 #pragma once
+#include "Headers.h"
 
-template <class T> 
-class Singleton
+class Shape;
+class GridMap;
+struct pos;
+
+class check
 {
 public:
-	static T* getInstance()
-	{
-		static T* instance{ new T() };
-		return instance;
-	}
-
+	static bool checkAvaiablePos(const shared_ptr<GridMap>& grid, const int& row, const int& col);
+	static void pushNewPosToBlock4(const shared_ptr<Shape>& shape, list<pos>& posList);
 };
