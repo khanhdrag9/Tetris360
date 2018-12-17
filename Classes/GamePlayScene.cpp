@@ -59,7 +59,7 @@ bool GamePlayScene::init()
 	createListener();
 
 	this->scheduleUpdate();
-	this->schedule(schedule_selector(GamePlayScene::updateShapeIsFalling), 0.3);
+	this->schedule(schedule_selector(GamePlayScene::updateShapeIsFalling), 0.5);
 
 	return true;
 }
@@ -113,7 +113,8 @@ void GamePlayScene::touchMoved(Touch* touch, Event* event)
 
 void GamePlayScene::touchEnded(Touch* touch, Event* event)
 {
-	
+	ShapeFactory::getInstance()->setActionShape(actiontype::ROTATE);
+	ShapeFactory::getInstance()->updateShape();
 }
 
 

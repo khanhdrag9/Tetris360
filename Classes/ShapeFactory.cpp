@@ -52,10 +52,10 @@ void ShapeFactory::getRandomTypeShape(unique_ptr<DetailShape>& detail)
 		detail = make_unique<IShape>();
 		break;
 	case typeShape::L :
-		detail = make_unique<LShape>();
+		detail = make_unique<IShape>();
 		break;
 	case typeShape::T :
-		detail = make_unique<TShape>();
+		detail = make_unique<IShape>();
 		break;
 
 	default:
@@ -139,7 +139,7 @@ void ShapeFactory::setActionShape(const int& type)
 		_shapeAction = make_unique<Fall>(_tetrisMap, 0);
 		break;
 	case actiontype::ROTATE:
-		_shapeAction = make_unique<Fall>(_tetrisMap, 0);
+		_shapeAction = make_unique<Rotate>(_tetrisMap, 90);
 		break;
 	default:
 		_shapeAction = make_unique<Fall>(_tetrisMap, 0);
