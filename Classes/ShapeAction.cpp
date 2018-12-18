@@ -121,9 +121,7 @@ int Rotate::run(shared_ptr<Shape>& shape)
 		}
 
 		check::pushNewPosToBlock4(shape, posList);
-		
-		shape->_node->setRotation(newRot);
-		
+		shape->_node->setRotation(newRot);	
 
 		return actionResult::COL_NONE;
 	}

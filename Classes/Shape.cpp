@@ -29,7 +29,7 @@ const int& IShape::referToRotate(const int& row, const int& col) { return rot::I
 LShape::LShape() { _maxAngle = 360.f; }
 const int& LShape::referToInitCoordBoard(const int& row, const int& col) { return crd::O[row][col]; }
 const int& LShape::referToInitLocationNodeBoard(const int& row, const int& col) { return loc::L[row][col]; }
-const int& LShape::referToRotate(const int& row, const int& col) { return rot::O[row][col]; }
+const int& LShape::referToRotate(const int& row, const int& col) { return rot::L[row][col]; }
 
 // T
 TShape::TShape() { _maxAngle = 360.f; }
