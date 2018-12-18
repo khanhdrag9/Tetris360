@@ -11,7 +11,10 @@ protected:
 public:
 	ShapeAction(const shared_ptr<GridMap>& grid);
 	virtual ~ShapeAction(){}
-	virtual int run(shared_ptr<Shape>& shape) = 0;
+	int run(shared_ptr<Shape>& shape);
+
+protected:
+	virtual int runAction(shared_ptr<Shape>& shape);
 };
 
 class Fall : public ShapeAction
@@ -19,7 +22,8 @@ class Fall : public ShapeAction
 	int _speed;
 public:
 	Fall(const shared_ptr<GridMap>& grid, const int& speed = 1);
-	int run(shared_ptr<Shape>& shape) override;
+private:
+	int runAction(shared_ptr<Shape>& shape) override;
 };
 
 class VerticalSlide : public ShapeAction
@@ -27,7 +31,8 @@ class VerticalSlide : public ShapeAction
 	int _direction;
 public:
 	VerticalSlide(const shared_ptr<GridMap>& grid, const int& direct);
-	int run(shared_ptr<Shape>& shape) override;
+private:
+	int runAction(shared_ptr<Shape>& shape) override;
 };
 
 class Rotate : public ShapeAction
@@ -35,5 +40,6 @@ class Rotate : public ShapeAction
 	float _angle;
 public:
 	Rotate(const shared_ptr<GridMap>& grid, const float& angle);
-	int run(shared_ptr<Shape>& shape) override;
+private:
+	int runAction(shared_ptr<Shape>& shape) override;
 };

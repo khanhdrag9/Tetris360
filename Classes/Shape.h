@@ -13,6 +13,7 @@ public:
 	unique_ptr<DetailShape> _detail;
 
 	pos _position;
+	bool _running;
 
 	void setPosition(const shared_ptr<GridMap>& grid, const pos& newPos);
 };

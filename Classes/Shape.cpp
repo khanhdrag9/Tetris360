@@ -2,7 +2,7 @@
 #include "ConfigDetailShape.h"
 #include "GridMap.h"
 
-Shape::Shape()
+Shape::Shape():_running(false)
 {
 	_node = Node::create();
 }

@@ -7,13 +7,30 @@ ShapeAction::ShapeAction(const shared_ptr<GridMap>& grid) :
 {
 }
 
+int ShapeAction::run(shared_ptr<Shape>& shape)
+{
+	if (shape->_running == false)
+	{
+		shape->_running = true;
+		int result = runAction(shape);
+		shape->_running = false;
+		return result;
+	}
+	return actionResult::COL_NONE;
+}
+
+int ShapeAction::runAction(shared_ptr<Shape>& shape)
+{
+	return actionResult::COL_NONE;
+}
+
 Fall::Fall(const shared_ptr<GridMap>& grid, const int& speed) :
 	ShapeAction(grid),
 	_speed(speed)
 {
 }
 
-int Fall::run(shared_ptr<Shape>& shape)
+int Fall::runAction(shared_ptr<Shape>& shape)
 {
 	if (shape && shape->_position != pos_null &&_gridMap)
 	{	
@@ -49,7 +66,7 @@ VerticalSlide::VerticalSlide(const shared_ptr<GridMap>& grid, const int& direct)
 {
 }
 
-int VerticalSlide::run(shared_ptr<Shape>& shape)
+int VerticalSlide::runAction(shared_ptr<Shape>& shape)
 {
 	if (shape && shape->_position != pos_null && _gridMap)
 	{
@@ -93,7 +110,7 @@ Rotate::Rotate(const shared_ptr<GridMap>& grid, const float& angle) :
 {
 }
 
-int Rotate::run(shared_ptr<Shape>& shape)
+int Rotate::runAction(shared_ptr<Shape>& shape)
 {
 	if (shape && shape->_position != pos_null && _gridMap)
 	{
