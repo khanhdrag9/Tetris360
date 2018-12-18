@@ -35,4 +35,4 @@ const int& LShape::referToRotate(const int& row, const int& col) { return rot::L
 TShape::TShape() { _maxAngle = 360.f; }
 const int& TShape::referToInitCoordBoard(const int& row, const int& col) { return crd::O[row][col]; }
 const int& TShape::referToInitLocationNodeBoard(const int& row, const int& col) { return loc::T[row][col]; }
-const int& TShape::referToRotate(const int& row, const int& col) { return rot::O[row][col]; }
+const int& TShape::referToRotate(const int& row, const int& col) { return rot::T[row][col]; }
