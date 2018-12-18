@@ -139,18 +139,19 @@ void GamePlayScene::update(float dt)
 
 void GamePlayScene::updateShapeIsFalling(float)
 {
+	if (_checkRow)
+	{
+		ShapeFactory::getInstance()->releaseShape();
+		ShapeFactory::getInstance()->createShape();
+		ShapeFactory::getInstance()->setShapePosition(pos(19, 5));
+		checkRowFull();
+		_checkRow = false;
+	}
+
 	ShapeFactory::getInstance()->setActionShape(actiontype::FALL);
 	if (ShapeFactory::getInstance()->updateShape() == actionResult::COL_BOTTOM)
 	{
-		if (_checkRow)
-		{
-			ShapeFactory::getInstance()->releaseShape();
-			ShapeFactory::getInstance()->createShape();
-			ShapeFactory::getInstance()->setShapePosition(pos(19, 5));
-			checkRowFull();
-			_checkRow = false;
-		}
-		_checkRow = true;
+		_checkRow = true;	
 	}
 }
 
