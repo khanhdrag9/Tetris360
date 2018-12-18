@@ -7,9 +7,12 @@
 #include "BlockManager.h"
 #include "ShapeAction.h"
 
-GamePlayScene::GamePlayScene():
+GamePlayScene::GamePlayScene() :
 	_startTime(0.f),
-	_endTime(0.f)
+	_endTime(0.f),
+	_speedFall(0.3f),
+	_checkRow(false),
+	_gridMap(nullptr)
 {
 
 }
@@ -59,7 +62,7 @@ bool GamePlayScene::init()
 	createListener();
 
 	this->scheduleUpdate();
-	this->schedule(schedule_selector(GamePlayScene::updateShapeIsFalling), 0.5);
+	this->schedule(schedule_selector(GamePlayScene::updateShapeIsFalling), _speedFall);
 
 	return true;
 }
@@ -87,6 +90,7 @@ void GamePlayScene::createListener()
 bool GamePlayScene::touchBegan(Touch* touch, Event* event)
 {
 	_touchBegin = touch->getLocation();
+	_touchRelease = touch->getLocation();
 	return true;
 }
 
@@ -113,8 +117,18 @@ void GamePlayScene::touchMoved(Touch* touch, Event* event)
 
 void GamePlayScene::touchEnded(Touch* touch, Event* event)
 {
-	ShapeFactory::getInstance()->setActionShape(actiontype::ROTATE);
-	ShapeFactory::getInstance()->updateShape();
+	Vec2 touchPos = touch->getLocation();
+	float rangeW = abs(touchPos.x - _touchRelease.x);
+	float rangeH = abs(touchPos.y - _touchRelease.y);
+	float lenghtBlock = _gridMap->getLengthBlock();
+
+	if (rangeW <= lenghtBlock * 0.75f && rangeH <= lenghtBlock * 0.75f)
+	{
+		ShapeFactory::getInstance()->setActionShape(actiontype::ROTATE);
+		ShapeFactory::getInstance()->updateShape();
+	}
+
+	_touchRelease = Vec2();
 }
 
 
@@ -128,10 +142,15 @@ void GamePlayScene::updateShapeIsFalling(float)
 	ShapeFactory::getInstance()->setActionShape(actiontype::FALL);
 	if (ShapeFactory::getInstance()->updateShape() == actionResult::COL_BOTTOM)
 	{
-		ShapeFactory::getInstance()->releaseShape();
-		ShapeFactory::getInstance()->createShape();
-		ShapeFactory::getInstance()->setShapePosition(pos(19, 5));
-		checkRowFull();
+		if (_checkRow)
+		{
+			ShapeFactory::getInstance()->releaseShape();
+			ShapeFactory::getInstance()->createShape();
+			ShapeFactory::getInstance()->setShapePosition(pos(19, 5));
+			checkRowFull();
+			_checkRow = false;
+		}
+		_checkRow = true;
 	}
 }
 

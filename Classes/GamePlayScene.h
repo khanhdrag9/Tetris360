@@ -10,11 +10,14 @@ class GamePlayScene : public Layer
 	Vec2 _origin;
 
 	Vec2 _touchBegin;
+	Vec2 _touchRelease;
 
 	shared_ptr<GridMap> _gridMap;
 
 	list<int> _listRowDeleted;
 
+	bool _checkRow;
+	float _speedFall;
 	float _startTime;
 	float _endTime;
 public:
