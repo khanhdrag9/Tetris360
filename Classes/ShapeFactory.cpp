@@ -43,7 +43,7 @@ void ShapeFactory::setLayer(Layer* layer)
 void ShapeFactory::getRandomTypeShape(unique_ptr<DetailShape>& detail)
 {
 	int ran = rand() % typeShape::NONE;
-	ran = typeShape::Z;
+	//ran = typeShape::Z;
 	switch (ran)
 	{
 	case typeShape::O :

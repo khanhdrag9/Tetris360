@@ -128,17 +128,20 @@ int Rotate::runAction(shared_ptr<Shape>& shape)
 {
 	if (shape && shape->_position != pos_null && _gridMap)
 	{
+		float rotAngle = _angle;
 		float p = shape->_node->getRotation();
 		float curRot = (float)(int(p) % 360);
+		int quotient = ceil(curRot / 90);
+
 		if (curRot >= shape->_detail->getMaxAngle())
 		{
-			shape->_node->setRotation(0.f);
-			return actionResult::COL_NONE;
+		/*	shape->_node->setRotation(0.f);
+			return actionResult::COL_NONE;*/
+			rotAngle *= -1; 
 		}
 		
-		int quotient = ceil(curRot / 90);
 		int numberBlock = shape->_blocks.size();
-		float newRot = curRot + _angle;
+		float newRot = curRot + rotAngle;
 
 		list<pos> posList;
 

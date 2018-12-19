@@ -44,13 +44,13 @@ const int& JShape::referToInitLocationNodeBoard(const int& row, const int& col) 
 const int& JShape::referToRotate(const int& row, const int& col) { return rot::J[row][col]; }
 
 // S
-SShape::SShape() { _maxAngle = 360.f; }
+SShape::SShape() { _maxAngle = 90.f; }
 const int& SShape::referToInitCoordBoard(const int& row, const int& col) { return crd::O[row][col]; }
 const int& SShape::referToInitLocationNodeBoard(const int& row, const int& col) { return loc::S[row][col]; }
 const int& SShape::referToRotate(const int& row, const int& col) { return rot::S[row][col]; }
 
 // Z
-ZShape::ZShape() { _maxAngle = 360.f; }
+ZShape::ZShape() { _maxAngle = 90.f; }
 const int& ZShape::referToInitCoordBoard(const int& row, const int& col) { return crd::O[row][col]; }
 const int& ZShape::referToInitLocationNodeBoard(const int& row, const int& col) { return loc::Z[row][col]; }
 const int& ZShape::referToRotate(const int& row, const int& col) { return rot::Z[row][col]; }

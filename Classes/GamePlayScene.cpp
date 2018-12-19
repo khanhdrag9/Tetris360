@@ -161,7 +161,7 @@ void GamePlayScene::updateShapeIsFalling(float)
 		}
 	}
 
-	if (ShapeFactory::getInstance()->getShapeIsFalling())
+	//if (ShapeFactory::getInstance()->getShapeIsFalling())
 	{
 		/*if(ShapeFactory::getInstance()->getShapeIsFalling()->_running)
 		{ 
