@@ -10,6 +10,7 @@ class ShapeFactory
 {
 	static ShapeFactory* instance;
 
+	mutex mtx;
 	shared_ptr<Shape> _shapeIsFalling;
 	pos _currentPos;
 	float _toAngle;

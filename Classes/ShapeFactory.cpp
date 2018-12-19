@@ -96,8 +96,14 @@ shared_ptr<Shape>& ShapeFactory::createShape()
 
 int ShapeFactory::updateShape()
 {
+	mtx.lock();
+
 	if (_shapeIsFalling && _shapeAction);
-	return _shapeAction->run(_shapeIsFalling);
+	int result = _shapeAction->run(_shapeIsFalling);
+
+	mtx.unlock();
+
+	return result;
 }
 
 bool ShapeFactory::setShapePosition(const pos& position)

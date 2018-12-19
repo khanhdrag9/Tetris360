@@ -16,6 +16,7 @@ int ShapeAction::run(shared_ptr<Shape>& shape)
 		shape->_running = false;
 		return result;
 	}
+
 	return actionResult::COL_NONE;
 }
 
