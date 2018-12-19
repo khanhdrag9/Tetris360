@@ -133,11 +133,15 @@ int Rotate::runAction(shared_ptr<Shape>& shape)
 		float curRot = (float)(int(p) % 360);
 		int quotient = ceil(curRot / 90);
 
-		if (curRot >= shape->_detail->getMaxAngle())
+		if (curRot >= shape->_detail->getMaxAngle() && curRot != 0.f)
 		{
 		/*	shape->_node->setRotation(0.f);
 			return actionResult::COL_NONE;*/
 			rotAngle *= -1; 
+		}
+		else if (curRot >= shape->_detail->getMaxAngle() && curRot == 0.f)
+		{
+			return actionResult::COL_NONE;
 		}
 		
 		int numberBlock = shape->_blocks.size();
