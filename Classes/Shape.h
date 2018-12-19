@@ -83,3 +83,12 @@ public:
 	const int& referToInitLocationNodeBoard(const int& row, const int& col) override;
 	const int& referToRotate(const int& row, const int& col) override;
 };
+
+class ZShape : public DetailShape
+{
+public:
+	ZShape();
+	const int& referToInitCoordBoard(const int& row, const int& col) override;
+	const int& referToInitLocationNodeBoard(const int& row, const int& col) override;
+	const int& referToRotate(const int& row, const int& col) override;
+};

@@ -31,6 +31,7 @@ public:
 		T,
 		J,
 		S,
+		Z,
 		NONE
 	};
 	static pos posNull;

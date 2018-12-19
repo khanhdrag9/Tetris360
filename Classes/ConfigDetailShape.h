@@ -9,17 +9,18 @@ namespace crd
 	
 }
 
-namespace loc
+namespace loc	//col -> row
 {
 	const int O[][4] = { {-1, 0, 0, -1} , {-1, -1, 0, 0} };
 	const int I[][4] = { {0, 0, 0, 0} , {-2, -1, 0, 1} };
 	const int L[][4] = { {-1, 0, -1, -1} , {-1, -1, 0, 1} };
 	const int T[][4] = { {0, 1, 0, -1} , {-1, 0, 0, 0} };
-	const int J[][4] = { {} ,{} };
-	const int S[][4] = { {} ,{} };
+	const int J[][4] = { {-1, 0, 0, 0} ,{-1, -1, 0, 1} };
+	const int S[][4] = { {-1, 0, 1, 0} ,{-1, -1, 0, 0} };
+	const int Z[][4] = { {-1, 0, -1, -2} ,{-1, -1, 0, 0} };
 }
 
-namespace rot
+namespace rot	//row -> col
 {
 	const int O[][1] = { {0} , {0} };
 	const int I[][16] = {
@@ -39,6 +40,10 @@ namespace rot
 		{}
 	};
 	const int S[][16] = {
+		{},
+		{}
+	};
+	const int Z[][16] = {
 		{},
 		{}
 	};
