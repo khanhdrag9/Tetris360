@@ -47,12 +47,17 @@ int Fall::runAction(shared_ptr<Shape>& shape)
 			else return actionResult::COL_BOTTOM;
 		}
 
-		check::pushNewPosToBlock4(shape, posList);
-
 		pos newPos = pos(shape->_position.row - _speed, shape->_position.col);
-		shape->setPosition(_gridMap, newPos);
-
-		return actionResult::COL_NONE;
+		if (check::checkAvaiablePos(_gridMap, newPos.row, newPos.col))
+		{
+			check::pushNewPosToBlock4(shape, posList);
+			shape->setPosition(_gridMap, newPos);
+			return actionResult::COL_NONE;
+		}
+		else
+		{
+			return actionResult::COL_HAS;
+		}
 	}
 	else
 	{
@@ -87,21 +92,30 @@ int VerticalSlide::runAction(shared_ptr<Shape>& shape)
 			}
 		}
 
-		check::pushNewPosToBlock4(shape, posList);
-
 		pos newPos = pos(shape->_position.row, shape->_position.col);
 		if (_direction == direction::LEFT) newPos.col -= 1;
 		if (_direction == direction::RIGHT) newPos.col += 1;
-		
-		shape->setPosition(_gridMap, newPos);
 
-		return actionResult::COL_NONE;
+		if (check::checkAvaiablePos(_gridMap, newPos.row, newPos.col))
+		{
+			check::pushNewPosToBlock4(shape, posList);
+			shape->setPosition(_gridMap, newPos);
+			return actionResult::COL_NONE;
+		}
+		else
+		{ 
+			if (_direction == direction::LEFT) return actionResult::COL_LEFT;
+			if (_direction == direction::RIGHT) return actionResult::COL_RIGHT;
+			return actionResult::COL_HAS;
+		}
 	}
 	else
 	{
 		if (_direction == direction::LEFT) return actionResult::COL_LEFT;
 		if (_direction == direction::RIGHT) return actionResult::COL_RIGHT;
 	}
+
+	return actionResult::COL_NONE;
 }
 
 Rotate::Rotate(const shared_ptr<GridMap>& grid, const float& angle) :
