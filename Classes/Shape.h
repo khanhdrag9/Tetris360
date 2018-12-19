@@ -65,3 +65,21 @@ public:
 	const int& referToInitLocationNodeBoard(const int& row, const int& col) override;
 	const int& referToRotate(const int& row, const int& col) override;
 };
+
+class JShape : public DetailShape
+{
+public:
+	JShape();
+	const int& referToInitCoordBoard(const int& row, const int& col) override;
+	const int& referToInitLocationNodeBoard(const int& row, const int& col) override;
+	const int& referToRotate(const int& row, const int& col) override;
+};
+
+class SShape : public DetailShape
+{
+public:
+	SShape();
+	const int& referToInitCoordBoard(const int& row, const int& col) override;
+	const int& referToInitLocationNodeBoard(const int& row, const int& col) override;
+	const int& referToRotate(const int& row, const int& col) override;
+};

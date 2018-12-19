@@ -36,3 +36,15 @@ TShape::TShape() { _maxAngle = 360.f; }
 const int& TShape::referToInitCoordBoard(const int& row, const int& col) { return crd::O[row][col]; }
 const int& TShape::referToInitLocationNodeBoard(const int& row, const int& col) { return loc::T[row][col]; }
 const int& TShape::referToRotate(const int& row, const int& col) { return rot::T[row][col]; }
+
+// J
+JShape::JShape() { _maxAngle = 360.f; }
+const int& JShape::referToInitCoordBoard(const int& row, const int& col) { return crd::O[row][col]; }
+const int& JShape::referToInitLocationNodeBoard(const int& row, const int& col) { return loc::J[row][col]; }
+const int& JShape::referToRotate(const int& row, const int& col) { return rot::J[row][col]; }
+
+// S
+SShape::SShape() { _maxAngle = 360.f; }
+const int& SShape::referToInitCoordBoard(const int& row, const int& col) { return crd::O[row][col]; }
+const int& SShape::referToInitLocationNodeBoard(const int& row, const int& col) { return loc::S[row][col]; }
+const int& SShape::referToRotate(const int& row, const int& col) { return rot::S[row][col]; }

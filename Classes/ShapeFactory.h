@@ -29,6 +29,8 @@ public:
 		I,
 		L,
 		T,
+		J,
+		S,
 		NONE
 	};
 	static pos posNull;

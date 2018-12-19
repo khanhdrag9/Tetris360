@@ -58,7 +58,12 @@ void ShapeFactory::getRandomTypeShape(unique_ptr<DetailShape>& detail)
 	case typeShape::T :
 		detail = make_unique<TShape>();
 		break;
-
+	case typeShape::J:
+		detail = make_unique<JShape>();
+		break;
+	case typeShape::S:
+		detail = make_unique<SShape>();
+		break;
 	default:
 		detail = make_unique<OShape>();
 		break;
