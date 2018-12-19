@@ -55,6 +55,16 @@ bool GamePlayScene::init()
 	}
 #endif
 
+	_screenSize = Director::getInstance()->getVisibleSize();
+	_origin = Director::getInstance()->getVisibleOrigin();
+	float boardLen = _gridMap->getLengthBlock() * MAX_COL;
+	if (boardLen <= _screenSize.width)
+	{
+		float rangeFrom0 = (_screenSize.width - boardLen) * 0.5f;
+
+		this->setPosition(rangeFrom0, 0);
+	}
+
 	BlockManager::getInstance()->init(_gridMap);
 	ShapeFactory::getInstance()->init(_gridMap);
 	ShapeFactory::getInstance()->setLayer(this);
@@ -69,8 +79,7 @@ bool GamePlayScene::init()
 
 void GamePlayScene::createStartShape()
 {
-	_screenSize = Director::getInstance()->getVisibleSize();
-	_origin = Director::getInstance()->getVisibleOrigin();
+	
 
 	this->addChild(ShapeFactory::getInstance()->createShape()->_node);
 	ShapeFactory::getInstance()->setShapePosition(pos(19, 5));	//first position
