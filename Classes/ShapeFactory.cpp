@@ -139,6 +139,7 @@ bool ShapeFactory::setShapePosition(const pos& position)
 
 void ShapeFactory::setActionShape(const int& type)
 {
+	mtx.lock();
 	switch (type)
 	{
 	case actiontype::SLIDE_LEFT:
@@ -160,6 +161,7 @@ void ShapeFactory::setActionShape(const int& type)
 		_shapeAction = make_unique<Fall>(_tetrisMap, 0);
 		break;
 	}
+	mtx.unlock();
 }
 
 void ShapeFactory::setToRotateBlock(const float& angle)

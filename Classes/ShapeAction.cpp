@@ -74,6 +74,7 @@ VerticalSlide::VerticalSlide(const shared_ptr<GridMap>& grid, const int& direct)
 
 int VerticalSlide::runAction(shared_ptr<Shape>& shape)
 {
+	int direct = _direction;
 	if (shape && shape->_position != pos_null && _gridMap)
 	{
 		list<pos> posList;
@@ -82,20 +83,20 @@ int VerticalSlide::runAction(shared_ptr<Shape>& shape)
 		{
 			int nRow = shape->_blocks[i]->_coord.row;
 			int nCol = shape->_blocks[i]->_coord.col;
-			if (_direction == direction::LEFT) nCol -= 1;
-			if (_direction == direction::RIGHT) nCol += 1;
+			if (direct == direction::LEFT) nCol -= 1;
+			if (direct == direction::RIGHT) nCol += 1;
 				
 			if (check::checkAvaiablePos(_gridMap, nRow, nCol))posList.push_back(pos(nRow, nCol));
 			else
 			{
-				if (_direction == direction::LEFT) return actionResult::COL_LEFT;
-				if (_direction == direction::RIGHT) return actionResult::COL_RIGHT;
+				if (direct == direction::LEFT) return actionResult::COL_LEFT;
+				if (direct == direction::RIGHT) return actionResult::COL_RIGHT;
 			}
 		}
 
 		pos newPos = pos(shape->_position.row, shape->_position.col);
-		if (_direction == direction::LEFT) newPos.col -= 1;
-		if (_direction == direction::RIGHT) newPos.col += 1;
+		if (direct == direction::LEFT) newPos.col -= 1;
+		if (direct == direction::RIGHT) newPos.col += 1;
 
 		if (check::checkAvaiablePos(_gridMap, newPos.row, newPos.col))
 		{
@@ -105,15 +106,15 @@ int VerticalSlide::runAction(shared_ptr<Shape>& shape)
 		}
 		else
 		{ 
-			if (_direction == direction::LEFT) return actionResult::COL_LEFT;
-			if (_direction == direction::RIGHT) return actionResult::COL_RIGHT;
+			if (direct == direction::LEFT) return actionResult::COL_LEFT;
+			if (direct == direction::RIGHT) return actionResult::COL_RIGHT;
 			return actionResult::COL_HAS;
 		}
 	}
 	else
 	{
-		if (_direction == direction::LEFT) return actionResult::COL_LEFT;
-		if (_direction == direction::RIGHT) return actionResult::COL_RIGHT;
+		if (direct == direction::LEFT) return actionResult::COL_LEFT;
+		if (direct == direction::RIGHT) return actionResult::COL_RIGHT;
 	}
 
 	return actionResult::COL_NONE;
