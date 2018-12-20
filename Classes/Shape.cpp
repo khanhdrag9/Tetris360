@@ -20,7 +20,7 @@ const int& OShape::referToInitLocationNodeBoard(const int& row, const int& col) 
 const int& OShape::referToRotate(const int& row, const int& col) { return rot::O[row][col]; }
 
 // I
-IShape::IShape() { _maxAngle = 360.f; }
+IShape::IShape() { _maxAngle = 90.f; }
 const int& IShape::referToInitCoordBoard(const int& row, const int& col) { return crd::O[row][col]; }
 const int& IShape::referToInitLocationNodeBoard(const int& row, const int& col) { return loc::I[row][col]; }
 const int& IShape::referToRotate(const int& row, const int& col) { return rot::I[row][col]; }

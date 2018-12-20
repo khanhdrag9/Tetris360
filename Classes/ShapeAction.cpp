@@ -133,28 +133,21 @@ int Rotate::runAction(shared_ptr<Shape>& shape)
 		float rotAngle = _angle;
 		float p = shape->_node->getRotation();
 		float curRot = (float)(int(p) % 360);
-		int quotient = ceil(curRot / 90);
+		if (curRot >= shape->_detail->getMaxAngle())
+		{
+			rotAngle *= -1;
+		}
 
-		if (curRot >= shape->_detail->getMaxAngle() && curRot != 0.f)
-		{
-		/*	shape->_node->setRotation(0.f);
-			return actionResult::COL_NONE;*/
-			rotAngle *= -1; 
-		}
-		else if (curRot >= shape->_detail->getMaxAngle() && curRot == 0.f)
-		{
-			return actionResult::COL_NONE;
-		}
-		
-		int numberBlock = shape->_blocks.size();
 		float newRot = curRot + rotAngle;
+		int quotient = ceil(newRot / 90.0);
 
+		int numberBlock = shape->_blocks.size();
 		list<pos> posList;
 
 		for (int i = 0; i < numberBlock; i++)
 		{
-			int nRow = shape->_blocks[i]->_coord.row + shape->_detail->referToRotate(0, quotient * numberBlock + i);
-			int nCol = shape->_blocks[i]->_coord.col + shape->_detail->referToRotate(1, quotient * numberBlock + i);
+			int nRow = shape->_position.row + shape->_detail->referToRotate(0, quotient * numberBlock + i);
+			int nCol = shape->_position.col + shape->_detail->referToRotate(1, quotient * numberBlock + i);
 
 			if (check::checkAvaiablePos(_gridMap, nRow, nCol)) posList.push_back(pos(nRow, nCol));
 			else return actionResult::COL_HAS;

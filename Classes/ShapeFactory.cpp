@@ -43,7 +43,7 @@ void ShapeFactory::setLayer(Layer* layer)
 void ShapeFactory::getRandomTypeShape(unique_ptr<DetailShape>& detail)
 {
 	int ran = rand() % typeShape::NONE;
-	//ran = typeShape::Z;
+	ran = typeShape::T;
 	switch (ran)
 	{
 	case typeShape::O :
@@ -188,6 +188,9 @@ void ShapeFactory::releaseShape()
 {
 	if (_shapeIsFalling)
 	{
+		if (_shapeIsFalling->_running)
+			releaseShape();
+
 		_shapeIsFalling->_node->setRotation(0.f);
 		for (auto& block : _shapeIsFalling->_blocks)
 		{
