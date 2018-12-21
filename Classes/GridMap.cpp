@@ -24,8 +24,8 @@ void GridMap::init()
 
 	_lengthBlock = sizeForW < sizeForH ? sizeForW : sizeForH;
 
-	float pX = 0.f;
-	float pY = 0.f;
+	float pX = _lengthBlock * 0.5f;
+	float pY = _lengthBlock * 0.5f;
 	float increValue = _lengthBlock;
 	for (int row = 0; row < MAX_ROW + ABOVE_ROW; row++)
 	{
@@ -38,7 +38,7 @@ void GridMap::init()
 			pX += increValue;
 		}
 		pY += increValue;
-		pX = 0.f;
+		pX = _lengthBlock * 0.5f;
 	}
 
 }

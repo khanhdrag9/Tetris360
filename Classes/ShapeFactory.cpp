@@ -43,7 +43,7 @@ void ShapeFactory::setLayer(Layer* layer)
 void ShapeFactory::getRandomTypeShape(unique_ptr<DetailShape>& detail)
 {
 	int ran = rand() % typeShape::NONE;
-	ran = typeShape::T;
+//	ran = typeShape::Z;
 	switch (ran)
 	{
 	case typeShape::O :
@@ -81,7 +81,7 @@ shared_ptr<Shape>& ShapeFactory::createShape()
 	for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
 	{
 		_shapeIsFalling->_blocks[i] = make_shared<Block>(BLOCK_PATH);
-		_shapeIsFalling->_blocks[i]->_sprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+		//_shapeIsFalling->_blocks[i]->_sprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 		float scale = lenghtBlock / (float)(_shapeIsFalling->_blocks[i]->_sprite->getBoundingBox().size.width);
 		_shapeIsFalling->_blocks[i]->_sprite->setScale(scale);
 

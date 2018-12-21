@@ -139,6 +139,7 @@ int Rotate::runAction(shared_ptr<Shape>& shape)
 		}
 
 		float newRot = curRot + rotAngle;
+		newRot = (float)(int(newRot) % 360);
 		int quotient = ceil(newRot / 90.0);
 
 		int numberBlock = shape->_blocks.size();
