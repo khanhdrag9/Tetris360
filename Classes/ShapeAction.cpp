@@ -130,6 +130,8 @@ int Rotate::runAction(shared_ptr<Shape>& shape)
 {
 	if (shape && shape->_position != pos_null && _gridMap)
 	{
+		if (shape->_detail->getMaxAngle() == 0.f)return actionResult::COL_NONE;
+
 		float rotAngle = _angle;
 		float p = shape->_node->getRotation();
 		float curRot = (float)(int(p) % 360);

@@ -11,7 +11,7 @@ namespace crd
 
 namespace loc	//col -> row
 {
-	const int O[][4] = { {-1, 0, 0, -1} , {-1, -1, 0, 0} };
+	const int O[][4] = { {0, 1, 1, 0} , {0, 0, 1, 1} };
 	const int I[][4] = { {0, 0, 0, 0} , {-1, 0, 1, 2} };
 	const int L[][4] = { {0, 1, 0, 0} , {0, 0, 1, 2} };
 	const int T[][4] = { {0, 1, 0, -1} , {-1, 0, 0, 0} };
