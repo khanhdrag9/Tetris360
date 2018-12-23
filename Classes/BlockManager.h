@@ -16,6 +16,6 @@ public:
 
 	void init(const shared_ptr<GridMap> gridMap);
 	void releaseShape(shared_ptr<Shape>& shape);
-	void moveBlock(shared_ptr<Block>& block ,const pos& newPos);
+	void moveBlock(shared_ptr<Block> block ,const pos& newPos);
 
 };

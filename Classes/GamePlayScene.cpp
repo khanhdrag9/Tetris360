@@ -11,6 +11,7 @@ GamePlayScene::GamePlayScene() :
 	_startTime(0.f),
 	_endTime(0.f),
 	_speedFall(0.3f),
+    _numRowFall(0),
 	_checkRow(false),
 	_gridMap(nullptr)
 {
@@ -162,29 +163,35 @@ void GamePlayScene::updateShapeIsFalling(float)
 
 }
 
-void GamePlayScene::rotateShape()
-{
-	
-}
-
 void GamePlayScene::checkRowFull()
 {
 	_listRowDeleted = _gridMap->findRowFull();
-	if (_listRowDeleted.size() <= 0)return;
+	if (_listRowDeleted.size() <= 0)
+    {
+        if(_numRowFall > 0)
+        {
+
+            _numRowFall = 0;
+        }
+        
+        return;
+    }
 
 	while (_listRowDeleted.size() > 0)
 	{
 		int row = *(_listRowDeleted.begin());
 		_gridMap->deleteRow(row);
-		if (reSetupBlocksPos(row))
-		{
-			_listRowDeleted.pop_front();
-			bool avableDrop = all_of(_listRowDeleted.begin(), _listRowDeleted.end(), [](int& row) {
-				row--;
-				return row >= 0;
-			});
-			if (!avableDrop)break;
-		}
+        if (reSetupBlocksPos(row))
+        {
+            _listRowDeleted.pop_front();
+            bool avableDrop = all_of(_listRowDeleted.begin(), _listRowDeleted.end(), [](int& row) {
+                row--;
+                return row >= 0;
+            });
+            if (!avableDrop)break;
+        }
+        
+        _numRowFall++;
 	}
 
 	checkRowFull();
@@ -210,8 +217,9 @@ bool GamePlayScene::reSetupBlocksPos(const int& row)
 			{
 				if (block)
 				{
-					pos newPos = pos(block->_coord.row - 1, block->_coord.col);
-					BlockManager::getInstance()->moveBlock(block, newPos);
+                    pos newPos = pos(block->_coord.row - 1, block->_coord.col);
+                    BlockManager::getInstance()->moveBlock(block, newPos);
+                    
 				}
 			}
 			aboveRow++;

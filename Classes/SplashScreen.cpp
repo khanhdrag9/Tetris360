@@ -16,6 +16,7 @@ bool SplashScreen::init()
         return false;
 
     cocos2d::Size sc = cocos2d::Director::getInstance()->getVisibleSize();
+    cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
     auto background = cocos2d::Sprite::create(SPLASH);
 
 	auto sizeImg = background->getContentSize();
@@ -23,7 +24,7 @@ bool SplashScreen::init()
 
 	background->setScale(scaleSide / sizeImg.width);
 
-    background->setPosition(sc * 0.5f);
+    background->setPosition(origin + sc * 0.5f);
     this->addChild(background);
 	schedule(schedule_selector(SplashScreen::changeScene), TIME_SPLASH);
 

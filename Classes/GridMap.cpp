@@ -19,13 +19,13 @@ void GridMap::init()
 
 	//_node = Node::create();
 
-	float sizeForW = float(_screenSize.width + _origin.x) / (float)(MAX_COL);
-	float sizeForH = float(_screenSize.height + _origin.x) / (float)(MAX_ROW);
+	float sizeForW = float(_screenSize.width) / (float)(MAX_COL);
+	float sizeForH = float(_screenSize.height) / (float)(MAX_ROW);
 
 	_lengthBlock = sizeForW < sizeForH ? sizeForW : sizeForH;
 
-	float pX = _lengthBlock * 0.5f;
-	float pY = _lengthBlock * 0.5f;
+	float pX = _lengthBlock * 0.5f  + _origin.x;
+	float pY = _lengthBlock * 0.5f + _origin.y;
 	float increValue = _lengthBlock;
 	for (int row = 0; row < MAX_ROW + ABOVE_ROW; row++)
 	{
@@ -38,7 +38,7 @@ void GridMap::init()
 			pX += increValue;
 		}
 		pY += increValue;
-		pX = _lengthBlock * 0.5f;
+		pX = _lengthBlock * 0.5f + _origin.x;
 	}
 
 }

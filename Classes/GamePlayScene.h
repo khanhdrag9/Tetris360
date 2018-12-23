@@ -16,6 +16,7 @@ class GamePlayScene : public Layer
 
 	list<int> _listRowDeleted;
 
+    int _numRowFall;
 	bool _checkRow;
 	float _speedFall;
 	float _startTime;
@@ -32,7 +33,7 @@ public:
 
 private:
 	bool init()		override;
-	void update(float dt);
+	void update(float dt);      override
 
 	void createStartShape();
 	void createListener();
