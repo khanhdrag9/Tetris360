@@ -42,4 +42,6 @@ public:
 	Rotate(const shared_ptr<GridMap>& grid, const float& angle);
 private:
 	int runAction(shared_ptr<Shape>& shape) override;
+    list<pos> canRotateInAroudPos(shared_ptr<Shape>& shape, const int& quotient);
+    list<pos> canRotate(const shared_ptr<Shape>& shape, const pos& p, const int& quotient);
 };

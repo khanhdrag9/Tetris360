@@ -12,7 +12,6 @@ GamePlayScene::GamePlayScene() :
 	_endTime(0.f),
 	_speedFall(0.3f),
     _numRowFall(0),
-	_checkRow(false),
 	_gridMap(nullptr)
 {
 
@@ -37,8 +36,6 @@ bool GamePlayScene::init()
 {
 	if (!Layer::init())
 		return false;
-
-	srand(time(0));
 
 	_gridMap = make_shared<GridMap>();
 #if ENABLE_GRID
@@ -110,13 +107,13 @@ void GamePlayScene::touchMoved(Touch* touch, Event* event)
 	float range = touchPos.x - _touchBegin.x;
 	float lenghtBlock = _gridMap->getLengthBlock();
 
-	if (range < 0 && abs(range) >= lenghtBlock)
+	if (range < 0 && abs(range) >= lenghtBlock * 0.75f)
 	{
 		ShapeFactory::getInstance()->setActionShape(actiontype::SLIDE_LEFT);
 		ShapeFactory::getInstance()->updateShape();
 		_touchBegin = touchPos;
 	}
-	else if (range > 0 && abs(range) >= lenghtBlock)
+	else if (range > 0 && abs(range) >= lenghtBlock * 0.75f)
 	{
 		ShapeFactory::getInstance()->setActionShape(actiontype::SLIDE_RIGHT);
 		ShapeFactory::getInstance()->updateShape();
@@ -152,13 +149,12 @@ void GamePlayScene::updateShapeIsFalling(float)
 	ShapeFactory::getInstance()->setActionShape(actiontype::FALL);
 	if (ShapeFactory::getInstance()->updateShape() == actionResult::COL_BOTTOM)
 	{
-		//_checkRow = true;
 		ShapeFactory::getInstance()->releaseShape();
 		checkRowFull();
 
 		ShapeFactory::getInstance()->createShape();
 		ShapeFactory::getInstance()->setShapePosition(pos(19, 5));
-	//	_checkRow = false;
+
 	}
 
 }

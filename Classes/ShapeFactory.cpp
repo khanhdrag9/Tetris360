@@ -42,7 +42,8 @@ void ShapeFactory::setLayer(Layer* layer)
 
 void ShapeFactory::getRandomTypeShape(unique_ptr<DetailShape>& detail)
 {
-	int ran = rand() % typeShape::NONE;
+    int ran = check::getRandom(0, typeShape::NONE);
+    CCLOG("%d", ran);
 //    ran = typeShape::O;
 	switch (ran)
 	{
@@ -68,7 +69,7 @@ void ShapeFactory::getRandomTypeShape(unique_ptr<DetailShape>& detail)
 		detail = make_unique<ZShape>();
 		break;
 	default:
-		detail = make_unique<OShape>();
+		detail = make_unique<TShape>();
 		break;
 	}
 }

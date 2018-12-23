@@ -8,7 +8,6 @@ USING_NS_CC;
 #include <iostream>
 
 #include <array>
-#include <ctime>
 #include <vector>
 #include <list>
 #include <algorithm>

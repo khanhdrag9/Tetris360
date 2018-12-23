@@ -145,19 +145,23 @@ int Rotate::runAction(shared_ptr<Shape>& shape)
 		int quotient = ceil(newRot / 90.0);
 
 		int numberBlock = shape->_blocks.size();
-		list<pos> posList;
+        list<pos> posList = canRotateInAroudPos(shape, quotient);
 
-		for (int i = 0; i < numberBlock; i++)
-		{
-			int nRow = shape->_position.row + shape->_detail->referToRotate(0, quotient * numberBlock + i);
-			int nCol = shape->_position.col + shape->_detail->referToRotate(1, quotient * numberBlock + i);
-
-			if (check::checkAvaiablePos(_gridMap, nRow, nCol)) posList.push_back(pos(nRow, nCol));
-			else return actionResult::COL_HAS;
-		}
-
+        //bool bfP = false;   //break find avaible pos to rotate
+        
+//        for (int i = 0; i < numberBlock; i++)
+//        {
+//            int nRow = shape->_position.row + shape->_detail->referToRotate(0, quotient * numberBlock + i);
+//            int nCol = shape->_position.col + shape->_detail->referToRotate(1, quotient * numberBlock + i);
+//
+//            if (check::checkAvaiablePos(_gridMap, nRow, nCol)) posList.push_back(pos(nRow, nCol));
+//            else return actionResult::COL_HAS;
+//        }
+        if(posList.size() <=1 )return actionResult::COL_HAS;
+        
 		check::pushNewPosToBlock4(shape, posList);
-		shape->_node->setRotation(newRot);	
+		shape->_node->setRotation(newRot);
+        shape->setPosition(_gridMap, posList.front());
 
 		return actionResult::COL_NONE;
 	}
@@ -165,4 +169,56 @@ int Rotate::runAction(shared_ptr<Shape>& shape)
 	{
 		return actionResult::COL_HAS;
 	}
+}
+
+list<pos> Rotate::canRotateInAroudPos(shared_ptr<Shape>& shape, const int& quotient)
+{
+    list<pos> result;
+    
+    pos curPos = shape->_position;
+    vector<pos> aroud = {
+        curPos,
+        pos(curPos.row + 1, curPos.col),
+        pos(curPos.row + 1, curPos.col - 1),
+        pos(curPos.row + 1, curPos.col + 1),
+        pos(curPos.row, curPos.col - 1),
+        pos(curPos.row, curPos.col + 1),
+        pos(curPos.row, curPos.col - 2),
+        pos(curPos.row, curPos.col + 2),
+        pos(curPos.row + 1, curPos.col - 2),
+        pos(curPos.row + 1, curPos.col + 2),
+    };
+    int index = -1;
+
+    
+    while (result.size() == 0)
+    {
+        if(++index >= aroud.size())break;
+        result = canRotate(shape, aroud[index], quotient);
+    }
+    
+    result.push_back(aroud[index]);
+    
+    return result;
+}
+
+list<pos> Rotate::canRotate(const shared_ptr<Shape>& shape, const pos& p, const int& quotient)
+{
+    list<pos> listPos;
+    int numberBlock = shape->_blocks.size();
+    
+    for (int i = 0; i < numberBlock; i++)
+    {
+        int nRow = p.row + shape->_detail->referToRotate(0, quotient * numberBlock + i);
+        int nCol = p.col + shape->_detail->referToRotate(1, quotient * numberBlock + i);
+        
+        if (check::checkAvaiablePos(_gridMap, nRow, nCol))listPos.emplace_back(nRow, nCol);
+        else
+        {
+            listPos.clear();
+            break;
+        }
+    }
+    
+    return listPos;
 }
