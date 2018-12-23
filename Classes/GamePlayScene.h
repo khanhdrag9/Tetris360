@@ -33,7 +33,7 @@ public:
 
 private:
 	bool init()		override;
-	void update(float dt);      override
+    void update(float dt)      override;
 
 	void createStartShape();
 	void createListener();

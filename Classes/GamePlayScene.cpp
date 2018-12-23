@@ -38,7 +38,7 @@ bool GamePlayScene::init()
 	if (!Layer::init())
 		return false;
 
-	srand(time(NULL));
+	srand(time(0));
 
 	_gridMap = make_shared<GridMap>();
 #if ENABLE_GRID
@@ -72,7 +72,7 @@ bool GamePlayScene::init()
 	createStartShape();
 	createListener();
 
-	this->scheduleUpdate();
+    this->scheduleUpdate();
 	this->schedule(schedule_selector(GamePlayScene::updateShapeIsFalling), _speedFall);
 
 	return true;
@@ -80,12 +80,12 @@ bool GamePlayScene::init()
 
 void GamePlayScene::createStartShape()
 {
-	
-
-	this->addChild(ShapeFactory::getInstance()->createShape()->_node);
+    auto shapeFalling = ShapeFactory::getInstance()->createShape();
+	this->addChild(shapeFalling->_node);
 	ShapeFactory::getInstance()->setShapePosition(pos(19, 5));	//first position
 
 	ManagerLogic::getInstance()->setGridMap(_gridMap);
+
 }
 
 void GamePlayScene::createListener()

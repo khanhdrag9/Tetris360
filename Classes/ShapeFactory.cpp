@@ -133,8 +133,10 @@ bool ShapeFactory::setShapePosition(const pos& position)
 		check::pushNewPosToBlock4(_shapeIsFalling, posList);
 
 		_shapeIsFalling->setPosition(_tetrisMap, position);
-	
+	    return true;
 	}
+
+    return false;
 }
 
 void ShapeFactory::setActionShape(const int& type)
