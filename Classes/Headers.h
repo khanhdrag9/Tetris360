@@ -33,7 +33,7 @@ struct pos
 		row = pos.row;
 		col = pos.col;
 	}
-	bool operator!=(pos& pos)
+	bool operator!=(const pos& pos)
 	{
 		return (row != pos.row || col != pos.col);
 	}
