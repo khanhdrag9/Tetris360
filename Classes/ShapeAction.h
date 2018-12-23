@@ -26,6 +26,14 @@ private:
 	int runAction(shared_ptr<Shape>& shape) override;
 };
 
+class FallImmediately : public ShapeAction
+{
+public:
+    FallImmediately(const shared_ptr<GridMap>& grid);
+private:
+    int runAction(shared_ptr<Shape>& shape) override;
+};
+
 class VerticalSlide : public ShapeAction
 {
 	int _direction;

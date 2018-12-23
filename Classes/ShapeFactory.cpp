@@ -160,6 +160,9 @@ void ShapeFactory::setActionShape(const int& type)
 	case actiontype::ROTATE:
 		_shapeAction = make_unique<Rotate>(_tetrisMap, 90);
 		break;
+    case actiontype::FALLNOW:
+        _shapeAction = make_unique<FallImmediately>(_tetrisMap);
+        break;
 	default:
 		_shapeAction = make_unique<Fall>(_tetrisMap, 0);
 		break;

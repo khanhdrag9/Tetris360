@@ -66,6 +66,63 @@ int Fall::runAction(shared_ptr<Shape>& shape)
 	}
 }
 
+FallImmediately::FallImmediately(const shared_ptr<GridMap>& grid) :
+ShapeAction(grid)
+{
+}
+
+int FallImmediately::runAction(shared_ptr<Shape>& shape)
+{
+    if (shape && shape->_position != pos_null &&_gridMap)
+    {
+        list<pos> posList;
+        list<pos> temp;
+        
+        int intfall = -1;
+        bool stop = false;
+        while (!stop)
+        {
+            posList.swap(temp);
+            temp.clear();
+            intfall++;
+            for (int i = 0; i < shape->_blocks.size(); i++)
+            {
+                int nRow = shape->_blocks[i]->_coord.row - intfall;
+                int nCol = shape->_blocks[i]->_coord.col;
+                
+                if (check::checkAvaiablePos(_gridMap, nRow, nCol))
+                {
+                    temp.push_back(pos(nRow, nCol));
+                }
+                else
+                {
+                    stop = true;
+                    break;
+                };
+            }
+            
+        }
+        
+        pos newPos = pos(shape->_position.row - intfall +1, shape->_position.col);
+        if (check::checkAvaiablePos(_gridMap, newPos.row, newPos.col))
+        {
+            check::pushNewPosToBlock4(shape, posList);
+            shape->setPosition(_gridMap, newPos);
+            return actionResult::COL_BOTTOM;
+        }
+        else
+        {
+            return actionResult::COL_HAS;
+        }
+        
+    }
+    else
+    {
+        return actionResult::COL_BOTTOM;
+    }
+}
+
+
 VerticalSlide::VerticalSlide(const shared_ptr<GridMap>& grid, const int& direct) :
 	ShapeAction(grid),
 	_direction(direct)

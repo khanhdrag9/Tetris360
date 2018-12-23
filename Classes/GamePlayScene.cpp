@@ -8,8 +8,6 @@
 #include "ShapeAction.h"
 
 GamePlayScene::GamePlayScene() :
-	_startTime(0.f),
-	_endTime(0.f),
 	_speedFall(0.3f),
     _numRowFall(0),
 	_gridMap(nullptr)
@@ -98,6 +96,7 @@ bool GamePlayScene::touchBegan(Touch* touch, Event* event)
 {
 	_touchBegin = touch->getLocation();
 	_touchRelease = touch->getLocation();
+    _startTime = chrono::high_resolution_clock::now();
 	return true;
 }
 
@@ -129,12 +128,22 @@ void GamePlayScene::touchEnded(Touch* touch, Event* event)
 	float rangeH = abs(touchPos.y - _touchRelease.y);
 	float lenghtBlock = _gridMap->getLengthBlock();
 
+    _endTime = chrono::high_resolution_clock::now();
+    
+    float coutTime = chrono::duration_cast<chrono::milliseconds>(_endTime - _startTime).count();
+    CCLOG("coutime on release touch : %f", coutTime);
+    
 	if (rangeW <= lenghtBlock * 0.75f && rangeH <= lenghtBlock * 0.75f)
 	{
 		ShapeFactory::getInstance()->setActionShape(actiontype::ROTATE);
 		ShapeFactory::getInstance()->updateShape();
 	}
-
+    else if(coutTime <= 700.f && rangeH > lenghtBlock * 1.5)
+    {
+        ShapeFactory::getInstance()->setActionShape(actiontype::FALLNOW);
+        ShapeFactory::getInstance()->updateShape();
+    }
+    
 	_touchRelease = Vec2();
 }
 

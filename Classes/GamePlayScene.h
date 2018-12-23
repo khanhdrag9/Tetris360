@@ -19,8 +19,9 @@ class GamePlayScene : public Layer
     int _numRowFall;
 	bool _checkRow;
 	float _speedFall;
-	float _startTime;
-	float _endTime;
+    
+    chrono::steady_clock::time_point _startTime;
+    chrono::steady_clock::time_point _endTime;
 public:
 	const Vec2 touchNULL = Vec2(-1.f, -1.f);
 

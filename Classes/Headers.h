@@ -12,6 +12,7 @@ USING_NS_CC;
 #include <list>
 #include <algorithm>
 #include <functional>
+#include <chrono>
 
 using namespace std;
 
@@ -51,7 +52,8 @@ enum actiontype {
 	FALL,
 	SLIDE_LEFT,
 	SLIDE_RIGHT,
-	ROTATE
+	ROTATE,
+    FALLNOW
 };
 
 enum actionResult {
