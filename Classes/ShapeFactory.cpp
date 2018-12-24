@@ -89,6 +89,7 @@ shared_ptr<Shape>& ShapeFactory::createShape()
 		float px = _shapeIsFalling->_detail->referToInitLocationNodeBoard(0, i);
 		float py = _shapeIsFalling->_detail->referToInitLocationNodeBoard(1, i);
 		_shapeIsFalling->_blocks[i]->_sprite->setPosition(lenghtBlock * px, lenghtBlock * py);
+        _shapeIsFalling->_blocks[i]->_sprite->setVisible(false);
 		_shapeIsFalling->_node->addChild(_shapeIsFalling->_blocks[i]->_sprite);
 	}
 
@@ -99,8 +100,24 @@ int ShapeFactory::updateShape()
 {
 	mtx.lock();
 
-	if (_shapeIsFalling && _shapeAction);
-	int result = _shapeAction->run(_shapeIsFalling);
+    int result = actionResult::COL_NONE;
+	if (_shapeIsFalling && _shapeAction)
+    {
+        result = _shapeAction->run(_shapeIsFalling);
+        for(auto& block : _shapeIsFalling->_blocks)
+        {
+            int row = block->_coord.row;
+            if(row >= MAX_ROW || row < 0)
+            {
+                block->_sprite->setVisible(false);
+            }
+            else
+            {
+                if(!block->_sprite->isVisible())
+                    block->_sprite->setVisible(true);
+            }
+        }
+    }
 
 	mtx.unlock();
 

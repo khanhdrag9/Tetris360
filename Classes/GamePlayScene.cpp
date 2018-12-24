@@ -6,9 +6,12 @@
 #include "ManagerLogic.h"
 #include "BlockManager.h"
 #include "ShapeAction.h"
+#include "BackgrourdLayer.h"
+
+const pos GamePlayScene::_createPos = pos(MAX_ROW, MAX_COL / 2);
 
 GamePlayScene::GamePlayScene() :
-	_speedFall(0.7f),
+    _speedFall(0.5f),
     _numRowFall(0),
 	_gridMap(nullptr)
 {
@@ -23,16 +26,18 @@ GamePlayScene::~GamePlayScene()
 Scene* GamePlayScene::createScene()
 {
 	Scene* scene = Scene::create();
-	Layer* layer = GamePlayScene::create();
+    LayerColor* bg = BackgrourdLayer::create();
+	auto layer = GamePlayScene::create();
 	
-	scene->addChild(layer);
+    scene->addChild(bg, 0);
+	scene->addChild(layer, 1);
 
 	return scene;
 }
 
 bool GamePlayScene::init()
 {
-	if (!Layer::init())
+    if (!LayerColor::initWithColor(Color4B::BLACK))
 		return false;
 
 	_gridMap = make_shared<GridMap>();
@@ -44,22 +49,13 @@ bool GamePlayScene::init()
 		{
 			pnumber = to_string(row) + to_string(col);
 			auto label = Label::createWithTTF(pnumber, FONT_ARIAL, 20);
-			label->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
 			label->setPosition(_gridMap->getGirdsPosition()[row][col]);
 			this->addChild(label);
 		}
 	}
 #endif
-
-	_screenSize = Director::getInstance()->getVisibleSize();
-	_origin = Director::getInstance()->getVisibleOrigin();
-	float boardLen = _gridMap->getLengthBlock() * MAX_COL;
-	if (boardLen <= _screenSize.width)
-	{
-		float rangeFrom0 = (_screenSize.width - boardLen) * 0.5f;
-
-		this->setPosition(rangeFrom0, 0);
-	}
+    
+    setPositionLayer();
 
 	BlockManager::getInstance()->init(_gridMap);
 	ShapeFactory::getInstance()->init(_gridMap);
@@ -73,11 +69,43 @@ bool GamePlayScene::init()
 	return true;
 }
 
+void GamePlayScene::setPositionLayer()
+{
+    _screenSize = Director::getInstance()->getVisibleSize();
+    _origin = Director::getInstance()->getVisibleOrigin();
+    float boardLenW = _gridMap->getLengthBlock() * MAX_COL;
+    float boardLenH = _gridMap->getLengthBlock() * MAX_ROW;
+    float px = 0.f, py = 0.f;
+    if (boardLenW <= _screenSize.width)
+    {
+        px = (_screenSize.width - boardLenW) * 0.5f;
+    }
+    if (boardLenH <= _screenSize.height)
+    {
+        py = (_screenSize.height - boardLenH) * 0.5f;
+    }
+    this->setPosition(px, py);
+    
+    _boardSize = Size(boardLenW, boardLenH);
+    _posBoard = Vec2(px, py);
+    
+    this->setContentSize(Size(_boardSize.width + _origin.x, _boardSize.height + _origin.y));
+    //set background gameplay
+//    Sprite* bg = Sprite::create(BG_PATH, Rect(0, 0, boardLenW, boardLenH));
+//    float ratioX = _boardSize.width / (float) bg->getBoundingBox().size.width;
+//    float ratioY = _boardSize.height / (float) bg->getBoundingBox().size.height;
+//    bg->setScale(ratioX, ratioY);
+//
+//    bg->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+//    bg->setPosition(0, 0);
+   // this->addChild(bg, 0);
+}
+
 void GamePlayScene::createStartShape()
 {
     auto shapeFalling = ShapeFactory::getInstance()->createShape();
 	this->addChild(shapeFalling->_node);
-	ShapeFactory::getInstance()->setShapePosition(pos(19, 5));	//first position
+	ShapeFactory::getInstance()->setShapePosition(_createPos);	//first position
 
 	ManagerLogic::getInstance()->setGridMap(_gridMap);
 
@@ -138,7 +166,7 @@ void GamePlayScene::touchEnded(Touch* touch, Event* event)
 		ShapeFactory::getInstance()->setActionShape(actiontype::ROTATE);
 		ShapeFactory::getInstance()->updateShape();
 	}
-    else if(coutTime <= 300.f && rangeH > lenghtBlock * 2.f && rangeW < lenghtBlock * 0.75)
+    else if(coutTime <= 400.f && rangeH > lenghtBlock * 2.f && rangeW < lenghtBlock * 0.75)
     {
         ShapeFactory::getInstance()->setActionShape(actiontype::FALLNOW);
         ShapeFactory::getInstance()->updateShape();
@@ -162,7 +190,7 @@ void GamePlayScene::updateShapeIsFalling(float)
 		checkRowFull();
 
 		ShapeFactory::getInstance()->createShape();
-		ShapeFactory::getInstance()->setShapePosition(pos(19, 5));
+		ShapeFactory::getInstance()->setShapePosition(_createPos);
 
 	}
 

@@ -4,10 +4,12 @@
 
 class GridMap;
 
-class GamePlayScene : public Layer
+class GamePlayScene : public LayerColor
 {
 	Size _screenSize;
 	Vec2 _origin;
+    Size _boardSize;
+    Vec2 _posBoard;
 
 	Vec2 _touchBegin;
 	Vec2 _touchRelease;
@@ -17,7 +19,6 @@ class GamePlayScene : public Layer
 	list<int> _listRowDeleted;
 
     int _numRowFall;
-	bool _checkRow;
 	float _speedFall;
     
     chrono::steady_clock::time_point _startTime;
@@ -33,9 +34,13 @@ public:
 	CREATE_FUNC(GamePlayScene);
 
 private:
+    static const pos _createPos;
+    
+    
 	bool init()		override;
     void update(float dt)      override;
 
+    void setPositionLayer();
 	void createStartShape();
 	void createListener();
 
