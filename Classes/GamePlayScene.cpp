@@ -6,7 +6,7 @@
 #include "ManagerLogic.h"
 #include "BlockManager.h"
 #include "ShapeAction.h"
-#include "BackgrourdLayer.h"
+#include "BackgroundLayer.h"
 
 const pos GamePlayScene::_createPos = pos(MAX_ROW, MAX_COL / 2);
 
@@ -26,10 +26,11 @@ GamePlayScene::~GamePlayScene()
 Scene* GamePlayScene::createScene()
 {
 	Scene* scene = Scene::create();
-    LayerColor* bg = BackgrourdLayer::create();
 	auto layer = GamePlayScene::create();
+    layer->_bgLayer = BackgroundLayer::create();
+    layer->setupForBgLayer();
 	
-    scene->addChild(bg, 0);
+    scene->addChild(layer->_bgLayer, 0);
 	scene->addChild(layer, 1);
 
 	return scene;
@@ -56,7 +57,6 @@ bool GamePlayScene::init()
 #endif
     
     setPositionLayer();
-
 	BlockManager::getInstance()->init(_gridMap);
 	ShapeFactory::getInstance()->init(_gridMap);
 	ShapeFactory::getInstance()->setLayer(this);
@@ -101,13 +101,17 @@ void GamePlayScene::setPositionLayer()
    // this->addChild(bg, 0);
 }
 
+void GamePlayScene::setupForBgLayer()
+{
+    Vec2 posScore = Vec2(_screenSize.width * 0.5f + _origin.x, _screenSize.height - 40);
+    ManagerLogic::getInstance()->initScore(_bgLayer, posScore, 75.f, Color3B::RED);
+}
+
 void GamePlayScene::createStartShape()
 {
     auto shapeFalling = ShapeFactory::getInstance()->createShape();
 	this->addChild(shapeFalling->_node);
 	ShapeFactory::getInstance()->setShapePosition(_createPos);	//first position
-
-	ManagerLogic::getInstance()->setGridMap(_gridMap);
 
 }
 
@@ -214,6 +218,9 @@ void GamePlayScene::checkRowFull()
 	{
 		int row = *(_listRowDeleted.begin());
 		_gridMap->deleteRow(row);
+        
+        ManagerLogic::getInstance()->increScore(1);
+        
         if (reSetupBlocksPos(row))
         {
             _listRowDeleted.pop_front();

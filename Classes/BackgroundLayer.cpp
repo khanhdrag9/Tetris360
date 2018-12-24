@@ -1,6 +1,6 @@
-#include "BackgrourdLayer.h"
+#include "BackgroundLayer.h"
 
-bool BackgrourdLayer::init()
+bool BackgroundLayer::init()
 {
     if(!LayerColor::initWithColor(Color4B::WHITE))
         return false;

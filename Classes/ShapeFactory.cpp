@@ -44,7 +44,7 @@ void ShapeFactory::getRandomTypeShape(unique_ptr<DetailShape>& detail)
 {
     int ran = check::getRandom(0, typeShape::NONE);
     CCLOG("%d", ran);
-    ran = typeShape::J;
+   // ran = typeShape::J;
 	switch (ran)
 	{
 	case typeShape::O :

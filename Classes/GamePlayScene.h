@@ -3,9 +3,12 @@
 #include "Headers.h"
 
 class GridMap;
+class BackgroundLayer;
 
 class GamePlayScene : public LayerColor
 {
+    BackgroundLayer* _bgLayer;
+    
 	Size _screenSize;
 	Vec2 _origin;
     Size _boardSize;
@@ -36,10 +39,11 @@ public:
 private:
     static const pos _createPos;
     
-    
 	bool init()		override;
     void update(float dt)      override;
 
+    void setupForBgLayer();
+    
     void setPositionLayer();
 	void createStartShape();
 	void createListener();
