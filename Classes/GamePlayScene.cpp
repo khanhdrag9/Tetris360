@@ -8,7 +8,7 @@
 #include "ShapeAction.h"
 
 GamePlayScene::GamePlayScene() :
-	_speedFall(0.3f),
+	_speedFall(0.7f),
     _numRowFall(0),
 	_gridMap(nullptr)
 {
@@ -138,7 +138,7 @@ void GamePlayScene::touchEnded(Touch* touch, Event* event)
 		ShapeFactory::getInstance()->setActionShape(actiontype::ROTATE);
 		ShapeFactory::getInstance()->updateShape();
 	}
-    else if(coutTime <= 300.f && rangeH > lenghtBlock * 2.f && rangeH > rangeW * 2)
+    else if(coutTime <= 300.f && rangeH > lenghtBlock * 2.f && rangeW < lenghtBlock * 0.75)
     {
         ShapeFactory::getInstance()->setActionShape(actiontype::FALLNOW);
         ShapeFactory::getInstance()->updateShape();
