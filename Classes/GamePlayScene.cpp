@@ -138,7 +138,7 @@ void GamePlayScene::touchEnded(Touch* touch, Event* event)
 		ShapeFactory::getInstance()->setActionShape(actiontype::ROTATE);
 		ShapeFactory::getInstance()->updateShape();
 	}
-    else if(coutTime <= 700.f && rangeH > lenghtBlock * 1.5)
+    else if(coutTime <= 300.f && rangeH > lenghtBlock * 2.f && rangeH > rangeW * 2)
     {
         ShapeFactory::getInstance()->setActionShape(actiontype::FALLNOW);
         ShapeFactory::getInstance()->updateShape();
