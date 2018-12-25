@@ -22,7 +22,16 @@ void GridMap::init()
 	float sizeForW = float(_screenSize.width) / (float)(MAX_COL);
 	float sizeForH = float(_screenSize.height) / (float)(MAX_ROW);
 
-	_lengthBlock = sizeForW < sizeForH ? sizeForW : sizeForH;
+    if(sizeForW < sizeForW)
+    {
+        _lengthBlock = sizeForW;
+        _isVertical = false;
+    }
+    else if(sizeForW >= sizeForH)
+    {
+        _lengthBlock = sizeForH;
+        _isVertical = true;
+    }
 
 //    float pX = _lengthBlock * 0.5f  + _origin.x;
 //    float pY = _lengthBlock * 0.5f + _origin.y;

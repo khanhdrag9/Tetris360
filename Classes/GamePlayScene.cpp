@@ -90,6 +90,7 @@ void GamePlayScene::setPositionLayer()
     _posBoard = Vec2(px, py);
     
     this->setContentSize(Size(_boardSize.width, _boardSize.height));
+    this->setScale(0.9f);
     //set background gameplay
 //    Sprite* bg = Sprite::create(BG_PATH, Rect(0, 0, boardLenW, boardLenH));
 //    float ratioX = _boardSize.width / (float) bg->getBoundingBox().size.width;
@@ -103,7 +104,13 @@ void GamePlayScene::setPositionLayer()
 
 void GamePlayScene::setupForBgLayer()
 {
-    Vec2 posScore = Vec2(_screenSize.width * 0.5f + _origin.x, _screenSize.height - 40);
+    Vec2 posScore;
+    if(_gridMap->isVertical())
+        posScore = Vec2(40 + _origin.x, _screenSize.height * 0.5f + _origin.y);
+    else
+        posScore = Vec2(_screenSize.width * 0.5f + _origin.x, _screenSize.height - 40 + _origin.y);
+        
+        
     ManagerLogic::getInstance()->initScore(_bgLayer, posScore, 75.f, Color3B::RED);
 }
 
