@@ -8,7 +8,7 @@
 #include "ShapeAction.h"
 #include "BackgroundLayer.h"
 
-const pos GamePlayScene::_createPos = pos(MAX_ROW, MAX_COL / 2);
+const pos GamePlayScene::_createPos = pos(MAX_ROW - 1, MAX_COL / 2);
 
 GamePlayScene::GamePlayScene() :
     _speedFall(0.5f),
@@ -49,7 +49,7 @@ bool GamePlayScene::init()
 		for (int col = 0; col < MAX_COL; col++)
 		{
 			pnumber = to_string(row) + to_string(col);
-			auto label = Label::createWithTTF(pnumber, FONT_ARIAL, 20);
+			auto label = Label::createWithTTF(pnumber, FONT_ARIAL, 13);
 			label->setPosition(_gridMap->getGirdsPosition()[row][col]);
 			this->addChild(label);
 		}
@@ -84,12 +84,12 @@ void GamePlayScene::setPositionLayer()
     {
         py = (_screenSize.height - boardLenH) * 0.5f;
     }
-    this->setPosition(px, py);
+    this->setPosition(px + _origin.x, py + _origin.y);
     
     _boardSize = Size(boardLenW, boardLenH);
     _posBoard = Vec2(px, py);
     
-    this->setContentSize(Size(_boardSize.width + _origin.x, _boardSize.height + _origin.y));
+    this->setContentSize(Size(_boardSize.width, _boardSize.height));
     //set background gameplay
 //    Sprite* bg = Sprite::create(BG_PATH, Rect(0, 0, boardLenW, boardLenH));
 //    float ratioX = _boardSize.width / (float) bg->getBoundingBox().size.width;
@@ -170,7 +170,7 @@ void GamePlayScene::touchEnded(Touch* touch, Event* event)
 		ShapeFactory::getInstance()->setActionShape(actiontype::ROTATE);
 		ShapeFactory::getInstance()->updateShape();
 	}
-    else if(coutTime <= 400.f && rangeH > lenghtBlock * 2.f && rangeW < lenghtBlock * 0.75)
+    else if(coutTime <= 700.f && rangeH > lenghtBlock * 2.f && rangeW < lenghtBlock * 0.75)
     {
         ShapeFactory::getInstance()->setActionShape(actiontype::FALLNOW);
         ShapeFactory::getInstance()->updateShape();
