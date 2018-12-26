@@ -4,10 +4,30 @@
 
 class Block;
 
-using grids_back = array<array<bool, MAX_COL>, MAX_ROW + ABOVE_ROW>;
-using grids_font = array<array<shared_ptr<Block>, MAX_COL>, MAX_ROW + ABOVE_ROW>;
-using grids_posi = array<array<Vec2, MAX_COL>, MAX_ROW + ABOVE_ROW>;
+//using grids_back = array<array<bool, MAX_COL>, MAX_ROW + ABOVE_ROW>;
+//using grids_font = array<array<shared_ptr<Block>, MAX_COL>, MAX_ROW + ABOVE_ROW>;
+//using grids_posi = array<array<Vec2, MAX_COL>, MAX_ROW + ABOVE_ROW>;
 
+class grids_back : public grid<bool>
+{
+public:
+    grids_back(){}
+    void init(const int& row, const int& col);
+};
+
+class grids_font : public grid<shared_ptr<Block>>
+{
+public:
+    grids_font(){}
+    void init(const int& row, const int& col);
+};
+
+class grids_posi : public grid<Vec2>
+{
+public:
+    grids_posi(){}
+    void init(const int& row, const int& col);
+};
 
 //struct boardGame
 //{
@@ -34,6 +54,14 @@ class GridMap
 	//Node* _node;
     bool _isVertical;
 	int _directionFall;
+    
+    int _row;
+    int _col;
+    
+private:
+    void initGirds(const int& row, const int& col);
+    void rotateBoard();
+    
 public:
 	GridMap();
 	virtual ~GridMap();

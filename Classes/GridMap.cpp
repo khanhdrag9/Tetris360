@@ -1,6 +1,31 @@
 #include "GridMap.h"
 #include "Block.h"
 
+//grids
+void grids_back::init(const int& row, const int& col)
+{
+    vector<bool> vec;
+    vec.resize(col, false);
+    _grids.resize(row, vec);
+    vec.clear();
+}
+void grids_font::init(const int& row, const int& col)
+{
+    vector<shared_ptr<Block>> vec;
+    vec.resize(col, nullptr);
+    _grids.resize(row, vec);
+    vec.clear();
+}
+void grids_posi::init(const int& row, const int& col)
+{
+    vector<Vec2> vec;
+    vec.resize(col, Vec2(-1.f, -1.f));
+    _grids.resize(row, vec);
+    vec.clear();
+}
+
+
+//map
 GridMap::GridMap() :
 	_lengthBlock(0),
 	_directionFall(direction::DOWN)
@@ -18,8 +43,12 @@ void GridMap::init()
 	_screenSize = Director::getInstance()->getVisibleSize();
 	_origin = Director::getInstance()->getVisibleOrigin();
 
+    _row = MAX_ROW;
+    _col = MAX_COL;
 	//_node = Node::create();
-
+    initGirds(_row + ABOVE_ROW, _col);
+    
+    
 	float sizeForW = float(_screenSize.width) / (float)(MAX_COL);
 	float sizeForH = float(_screenSize.height) / (float)(MAX_ROW);
 
@@ -45,8 +74,8 @@ void GridMap::init()
 	{
 		for (int col = 0; col < MAX_COL; col++)
 		{
-			_gridsBack[row][col] = false;
-			_gridsFont[row][col] = nullptr;
+			//_gridsBack[row][col] = false;
+			//_gridsFont[row][col] = nullptr;
 			_gridsPosi[row][col] = Vec2(pX, pY);
 
 			pX += increValue;
@@ -56,6 +85,13 @@ void GridMap::init()
         pX = _lengthBlock * 0.5f;
 	}
 
+}
+
+void GridMap::initGirds(const int& row, const int& col)
+{
+    _gridsBack.init(row, col);
+    _gridsFont.init(row, col);
+    _gridsPosi.init(row, col);
 }
 
 list<int> GridMap::findRowFull()
@@ -114,6 +150,8 @@ void GridMap::deleteRow(const int& row)
 
 void GridMap::setDirectionFall(const int& direct)
 {
+    if(_directionFall == direct)
+        return;
 	switch (direct)
 	{
 	case direction::DOWN:
@@ -128,4 +166,27 @@ void GridMap::setDirectionFall(const int& direct)
 	default:
 		break;
 	}
+    
+    rotateBoard();
+}
+
+void GridMap::rotateBoard()
+{
+    std::swap(_row, _col);
+    if(_directionFall == direction::DOWN)
+    {
+        auto cBack = _gridsBack.cloneGrid();
+        auto cFont = _gridsFont.cloneGrid();
+        auto cPosi = _gridsPosi.cloneGrid();
+        
+        initGirds(_row + ABOVE_ROW, _col);
+    }
+    else if(_directionFall == direction::LEFT)
+    {
+        
+    }
+    else if(_directionFall == direction::RIGHT)
+    {
+        
+    }
 }

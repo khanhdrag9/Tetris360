@@ -63,3 +63,37 @@ enum actionResult {
 	COL_RIGHT,
 	COL_BOTTOM
 };
+
+template <typename T>
+class grid
+{
+protected:
+    vector<vector<T>> _grids;
+    
+public:
+    vector<T>& operator[](const int& index)
+    {
+        return _grids[index];
+    }
+    
+    const vector<T>& operator[](const int& index) const
+    {
+        return _grids[index];
+    }
+    
+    size_t size() const //number row
+    {
+        return _grids.size();
+    }
+    
+    size_t numberCol() const
+    {
+        return _grids[0].size();
+    }
+    
+    vector<vector<T>> cloneGrid()
+    {
+        auto clone(_grids);
+        return clone;
+    }
+};
