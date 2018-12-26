@@ -33,6 +33,7 @@ class GridMap
 	//boardGame _board;
 	//Node* _node;
     bool _isVertical;
+	int _directionFall;
 public:
 	GridMap();
 	virtual ~GridMap();
@@ -49,4 +50,6 @@ public:
 	list<int> findRowFull();
 	void deleteRow(const int& row);
     bool isVertical() const {return _isVertical; }
+	inline int getDirectionFall() const { return _directionFall; }
+	void setDirectionFall(const int& direct);
 };

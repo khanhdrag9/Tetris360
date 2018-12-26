@@ -1,8 +1,9 @@
 #include "GridMap.h"
 #include "Block.h"
 
-GridMap::GridMap():
-	_lengthBlock(0)
+GridMap::GridMap() :
+	_lengthBlock(0),
+	_directionFall(direction::DOWN)
 {
 	init();
 }
@@ -60,22 +61,71 @@ void GridMap::init()
 list<int> GridMap::findRowFull()
 {
 	list<int> rows;
-	for (int row = 0; row < _gridsBack.size(); row++)
+	if (_directionFall == direction::DOWN)
 	{
-		bool isFull = all_of(_gridsFont[row].begin(), _gridsFont[row].end(), [](shared_ptr<Block>& b) {
-			return b != nullptr;
-		});
-		if(isFull)
-			rows.push_back(row);
+		for (int row = 0; row < _gridsBack.size(); row++)
+		{
+			bool isFull = all_of(_gridsFont[row].begin(), _gridsFont[row].end(), [](shared_ptr<Block>& b) {
+				return b != nullptr;
+			});
+			if (isFull)
+				rows.push_back(row);
+		}
 	}
+	else // if hozi
+	{
+		for (int row = 0; row < MAX_COL; row++)
+		{
+			bool isFull = true;
+			for (int col = 0; col < MAX_ROW; col++)
+			{
+				if (_gridsFont[row][col] == nullptr)
+				{
+					isFull = false;
+					break;
+				}
+			}
+			if (isFull)rows.push_back(row);
+		}
+	}
+
 	return rows;
 }
 
 void GridMap::deleteRow(const int& row)
 {
-	for (auto& block : _gridsFont[row])
+	if (_directionFall == direction::DOWN)
 	{
-		block->_sprite->removeFromParent();
-		block = nullptr;
+		for (auto& block : _gridsFont[row])
+		{
+			block->_sprite->removeFromParent();
+			block = nullptr;
+		}
+	}
+	else
+	{
+		for (int i = 0; i < MAX_ROW; i++)
+		{
+			_gridsFont[row][i]->_sprite->removeFromParent();
+			_gridsFont[row][i] = nullptr;
+		}
+	}
+}
+
+void GridMap::setDirectionFall(const int& direct)
+{
+	switch (direct)
+	{
+	case direction::DOWN:
+		_directionFall = direction::DOWN;
+		break;
+	case direction::LEFT:
+		_directionFall = direction::LEFT;
+		break;
+	case direction::RIGHT:
+		_directionFall = direction::RIGHT;
+		break;
+	default:
+		break;
 	}
 }
