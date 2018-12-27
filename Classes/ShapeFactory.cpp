@@ -79,8 +79,8 @@ shared_ptr<Shape>& ShapeFactory::createShape()
 	float lenghtBlock = _tetrisMap->getLengthBlock();
 	getRandomTypeShape(_shapeIsFalling->_detail);
 
-    auto listI = _tetrisMap->getNumberDirect();
-    
+    //auto listI = _tetrisMap->getNumberDirect();
+    array<int, 2> listI{0, 1};
 	for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
 	{
 		_shapeIsFalling->_blocks[i] = make_shared<Block>(BLOCK_PATH);

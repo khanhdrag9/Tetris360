@@ -145,7 +145,15 @@ bool GamePlayScene::touchBegan(Touch* touch, Event* event)
 void GamePlayScene::touchMoved(Touch* touch, Event* event)
 {
 	Vec2 touchPos = touch->getLocation();
-	float range = touchPos.x - _touchBegin.x;
+	float range;
+    if(_gridMap->getDirectionFall() == direction::DOWN)
+    {
+        range = touchPos.x - _touchBegin.x;
+    }
+    else
+    {
+        range = touchPos.y - _touchBegin.y;
+    }
 	float lenghtBlock = _gridMap->getLengthBlock();
 
 	if (range < 0 && abs(range) >= lenghtBlock * _ratioMove)
@@ -168,6 +176,11 @@ void GamePlayScene::touchEnded(Touch* touch, Event* event)
 	Vec2 touchPos = touch->getLocation();
 	float rangeW = abs(touchPos.x - _touchRelease.x);
 	float rangeH = abs(touchPos.y - _touchRelease.y);
+    if(_gridMap->getDirectionFall() != direction::DOWN)
+    {
+        std::swap(rangeW, rangeH);
+    }
+    
 	float lenghtBlock = _gridMap->getLengthBlock();
 
     _endTime = chrono::high_resolution_clock::now();
