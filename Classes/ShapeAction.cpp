@@ -201,7 +201,7 @@ int Rotate::runAction(shared_ptr<Shape>& shape)
 		newRot = (float)(int(newRot) % 360);
 		int quotient = ceil(newRot / 90.0);
 
-		int numberBlock = shape->_blocks.size();
+		int numberBlock = (int)shape->_blocks.size();
         list<pos> posList = canRotateInAroudPos(shape, quotient);
 
         //bool bfP = false;   //break find avaible pos to rotate
@@ -262,7 +262,7 @@ list<pos> Rotate::canRotateInAroudPos(shared_ptr<Shape>& shape, const int& quoti
 list<pos> Rotate::canRotate(const shared_ptr<Shape>& shape, const pos& p, const int& quotient)
 {
     list<pos> listPos;
-    int numberBlock = shape->_blocks.size();
+    int numberBlock = (int)shape->_blocks.size();
     
     for (int i = 0; i < numberBlock; i++)
     {

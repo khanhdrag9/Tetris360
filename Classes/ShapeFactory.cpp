@@ -79,6 +79,8 @@ shared_ptr<Shape>& ShapeFactory::createShape()
 	float lenghtBlock = _tetrisMap->getLengthBlock();
 	getRandomTypeShape(_shapeIsFalling->_detail);
 
+    auto listI = _tetrisMap->getNumberDirect();
+    
 	for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
 	{
 		_shapeIsFalling->_blocks[i] = make_shared<Block>(BLOCK_PATH);
@@ -86,8 +88,8 @@ shared_ptr<Shape>& ShapeFactory::createShape()
 		float scale = lenghtBlock / (float)(_shapeIsFalling->_blocks[i]->_sprite->getBoundingBox().size.width);
 		_shapeIsFalling->_blocks[i]->_sprite->setScale(scale);
 
-		float px = _shapeIsFalling->_detail->referToInitLocationNodeBoard(0, i);
-		float py = _shapeIsFalling->_detail->referToInitLocationNodeBoard(1, i);
+		float px = _shapeIsFalling->_detail->referToInitLocationNodeBoard(listI[0], i);
+		float py = _shapeIsFalling->_detail->referToInitLocationNodeBoard(listI[1], i);
 		_shapeIsFalling->_blocks[i]->_sprite->setPosition(lenghtBlock * px, lenghtBlock * py);
         _shapeIsFalling->_blocks[i]->_sprite->setVisible(false);
 		_shapeIsFalling->_node->addChild(_shapeIsFalling->_blocks[i]->_sprite);
@@ -107,7 +109,7 @@ int ShapeFactory::updateShape()
         for(auto& block : _shapeIsFalling->_blocks)
         {
             int row = block->_coord.row;
-            if(row >= MAX_ROW || row < 0)
+            if(row >= _tetrisMap->getSize().row || row < 0)
             {
                 block->_sprite->setVisible(false);
             }
@@ -130,11 +132,13 @@ bool ShapeFactory::setShapePosition(const pos& position)
 	{
 		//check newPos
 		list<pos> posList;
+        auto listI = _tetrisMap->getNumberDirect();
+        //array<int, 2> listI{0, 1};
 		for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
 		{
 			int c, r;
-			c = _shapeIsFalling->_detail->referToInitLocationNodeBoard(0, i) + position.col;
-			r = _shapeIsFalling->_detail->referToInitLocationNodeBoard(1, i) + position.row;
+			c = _shapeIsFalling->_detail->referToInitLocationNodeBoard(listI[0], i) + position.col;
+			r = _shapeIsFalling->_detail->referToInitLocationNodeBoard(listI[1], i) + position.row;
 
 			if (check::checkAvaiablePos(_tetrisMap, r, c)) posList.push_back(pos(r, c));
 			else return false;

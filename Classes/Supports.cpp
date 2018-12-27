@@ -5,7 +5,7 @@
 
 bool check::checkAvaiablePos(const shared_ptr<GridMap>& grid, const int& row, const int& col)
 {
-	if (row >= 0 && row < grid->getGirdsBack().size() && col >= 0 && col < MAX_COL)
+	if (row >= 0 && row < grid->getGirdsBack().size() && col >= 0 && col < grid->getSize().col)
 	{
 		if (grid->getGirdsFont()[row][col])
 			return false;

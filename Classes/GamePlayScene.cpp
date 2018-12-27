@@ -42,11 +42,12 @@ bool GamePlayScene::init()
 		return false;
 
 	_gridMap = make_shared<GridMap>();
+    _gridMap->setDirectionFall(direction::LEFT);
 #if ENABLE_GRID
 	string pnumber;
-	for (int row = 0; row < MAX_ROW; row++)
+	for (int row = 0; row < _gridMap->getSize().row; row++)
 	{
-		for (int col = 0; col < MAX_COL; col++)
+		for (int col = 0; col < _gridMap->getSize().col; col++)
 		{
 			pnumber = to_string(row) + to_string(col);
 			auto label = Label::createWithTTF(pnumber, FONT_ARIAL, 13);
@@ -260,7 +261,7 @@ bool GamePlayScene::reSetupBlocksPos(const int& row)
 	else if(row >= 0)
 	{
 		int aboveRow = row + 1;
-		while (aboveRow <= MAX_ROW)
+		while (aboveRow <= _gridMap->getSize().row)
 		{
 			for (auto& block : _gridMap->getGirdsFont()[aboveRow])
 			{

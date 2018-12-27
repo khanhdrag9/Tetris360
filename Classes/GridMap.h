@@ -4,9 +4,6 @@
 
 class Block;
 
-//using grids_back = array<array<bool, MAX_COL>, MAX_ROW + ABOVE_ROW>;
-//using grids_font = array<array<shared_ptr<Block>, MAX_COL>, MAX_ROW + ABOVE_ROW>;
-//using grids_posi = array<array<Vec2, MAX_COL>, MAX_ROW + ABOVE_ROW>;
 
 class grids_back : public grid<bool>
 {
@@ -81,4 +78,5 @@ public:
 	inline int getDirectionFall() const { return _directionFall; }
 	void setDirectionFall(const int& direct);
 	const pos getSize() const { return pos(_row, _col); }
+    const array<int, 2> getNumberDirect() const;
 };
