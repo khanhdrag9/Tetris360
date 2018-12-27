@@ -173,17 +173,26 @@ void GridMap::setDirectionFall(const int& direct)
 void GridMap::rotateBoard()
 {
     std::swap(_row, _col);
+	auto cBack = _gridsBack.cloneGrid();
+	auto cFont = _gridsFont.cloneGrid();
+	auto cPosi = _gridsPosi.cloneGrid();
+
+	int readlOldRow = cBack.size();
+	int oldRow = cBack.size() - ABOVE_ROW;
+	int oldCol = cBack[0].size();
+
+	initGirds(_row + ABOVE_ROW, _col);
+	int realNewRow = _row + ABOVE_ROW;
+
     if(_directionFall == direction::DOWN)
     {
-        auto cBack = _gridsBack.cloneGrid();
-        auto cFont = _gridsFont.cloneGrid();
-        auto cPosi = _gridsPosi.cloneGrid();
-        
-        initGirds(_row + ABOVE_ROW, _col);
+		
+
     }
     else if(_directionFall == direction::LEFT)
     {
-        
+		
+
     }
     else if(_directionFall == direction::RIGHT)
     {

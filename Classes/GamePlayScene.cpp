@@ -8,7 +8,7 @@
 #include "ShapeAction.h"
 #include "BackgroundLayer.h"
 
-const pos GamePlayScene::_createPos = pos(MAX_ROW - 1, MAX_COL / 2);
+const float GamePlayScene::_ratioMove = 0.85f;
 
 GamePlayScene::GamePlayScene() :
     _speedFall(0.5f),
@@ -116,6 +116,8 @@ void GamePlayScene::setupForBgLayer()
 
 void GamePlayScene::createStartShape()
 {
+	auto sboard = _gridMap->getSize();
+	_createPos = pos(sboard.row - 1, sboard.col / 2);
     auto shapeFalling = ShapeFactory::getInstance()->createShape();
 	this->addChild(shapeFalling->_node);
 	ShapeFactory::getInstance()->setShapePosition(_createPos);	//first position
@@ -145,13 +147,13 @@ void GamePlayScene::touchMoved(Touch* touch, Event* event)
 	float range = touchPos.x - _touchBegin.x;
 	float lenghtBlock = _gridMap->getLengthBlock();
 
-	if (range < 0 && abs(range) >= lenghtBlock * 0.75f)
+	if (range < 0 && abs(range) >= lenghtBlock * _ratioMove)
 	{
 		ShapeFactory::getInstance()->setActionShape(actiontype::SLIDE_LEFT);
 		ShapeFactory::getInstance()->updateShape();
 		_touchBegin = touchPos;
 	}
-	else if (range > 0 && abs(range) >= lenghtBlock * 0.75f)
+	else if (range > 0 && abs(range) >= lenghtBlock * _ratioMove)
 	{
 		ShapeFactory::getInstance()->setActionShape(actiontype::SLIDE_RIGHT);
 		ShapeFactory::getInstance()->updateShape();
@@ -172,12 +174,12 @@ void GamePlayScene::touchEnded(Touch* touch, Event* event)
     float coutTime = chrono::duration_cast<chrono::milliseconds>(_endTime - _startTime).count();
     CCLOG("coutime on release touch : %f", coutTime);
     
-	if (rangeW <= lenghtBlock * 0.75f && rangeH <= lenghtBlock * 0.75f)
+	if (rangeW <= lenghtBlock * _ratioMove && rangeH <= lenghtBlock * _ratioMove)
 	{
 		ShapeFactory::getInstance()->setActionShape(actiontype::ROTATE);
 		ShapeFactory::getInstance()->updateShape();
 	}
-    else if(coutTime <= 700.f && rangeH > lenghtBlock * 2.f && rangeW < lenghtBlock * 0.75)
+    else if(coutTime <= 700.f && rangeH > lenghtBlock * 2.f && rangeW < lenghtBlock * _ratioMove)
     {
         ShapeFactory::getInstance()->setActionShape(actiontype::FALLNOW);
         ShapeFactory::getInstance()->updateShape();

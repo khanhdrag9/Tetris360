@@ -37,7 +37,8 @@ public:
 	CREATE_FUNC(GamePlayScene);
 
 private:
-    static const pos _createPos;
+    pos _createPos;
+	static const float _ratioMove;
     
 	bool init()		override;
     void update(float dt)      override;

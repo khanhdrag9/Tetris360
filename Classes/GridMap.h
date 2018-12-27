@@ -80,4 +80,5 @@ public:
     bool isVertical() const {return _isVertical; }
 	inline int getDirectionFall() const { return _directionFall; }
 	void setDirectionFall(const int& direct);
+	const pos getSize() const { return pos(_row, _col); }
 };
