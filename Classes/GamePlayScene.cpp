@@ -42,7 +42,7 @@ bool GamePlayScene::init()
 		return false;
 
 	_gridMap = make_shared<GridMap>();
-    _gridMap->setDirectionFall(direction::LEFT);
+ //   _gridMap->setDirectionFall(direction::LEFT);
 #if ENABLE_GRID
 	string pnumber;
 	for (int row = 0; row < _gridMap->getSize().row; row++)

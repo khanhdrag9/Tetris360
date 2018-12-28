@@ -79,7 +79,6 @@ shared_ptr<Shape>& ShapeFactory::createShape()
 	float lenghtBlock = _tetrisMap->getLengthBlock();
 	getRandomTypeShape(_shapeIsFalling->_detail);
 
-    //auto listI = _tetrisMap->getNumberDirect();
     array<int, 2> listI{0, 1};
 	for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
 	{
@@ -132,8 +131,7 @@ bool ShapeFactory::setShapePosition(const pos& position)
 	{
 		//check newPos
 		list<pos> posList;
-        auto listI = _tetrisMap->getNumberDirect();
-        //array<int, 2> listI{0, 1};
+        array<int, 2> listI{0, 1};
 		for (int i = 0; i < _shapeIsFalling->_blocks.size(); i++)
 		{
 			int c, r;

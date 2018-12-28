@@ -78,5 +78,6 @@ public:
 	inline int getDirectionFall() const { return _directionFall; }
 	void setDirectionFall(const int& direct);
 	const pos getSize() const { return pos(_row, _col); }
-    const array<int, 2> getNumberDirect() const;
+
+	static int _bottom;
 };
