@@ -9,7 +9,7 @@
 #define BG_PATH "bg.jpg"
 
 //define game
-#define MAX_COL 10
+#define MAX_COL 11
 #define MAX_ROW 25
 #define ABOVE_ROW 4
 

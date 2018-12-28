@@ -80,4 +80,6 @@ public:
 	const pos getSize() const { return pos(_row, _col); }
 
 	static int _bottom;
+	static int _left;
+	static int _right;
 };

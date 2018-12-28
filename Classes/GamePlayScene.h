@@ -54,8 +54,7 @@ private:
 	void touchEnded(Touch* touch, Event* event);
 
 	void updateShapeIsFalling(float);
-	void rotateShape();
-	void refreshTouch();
 	void checkRowFull();
 	bool reSetupBlocksPos(const int& row = -1);
+	void rotateBoard(float);
 };

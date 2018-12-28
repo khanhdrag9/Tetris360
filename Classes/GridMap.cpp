@@ -32,7 +32,9 @@ void grids_posi::init(const int& row, const int& col)
 
 
 //map
-int GridMap::_bottom = 4;
+int GridMap::_bottom = 10;
+int GridMap::_left = 0;
+int GridMap::_right = MAX_COL - 1;
 
 GridMap::GridMap() :
 	_lengthBlock(0),
@@ -152,5 +154,16 @@ void GridMap::setDirectionFall(const int& direct)
 
 void GridMap::rotateBoard()
 {
-	
+	short axis = _col / 2;
+
+	for (int i = 0; i < _row; i++)
+	{
+		for (auto& block : _gridsFont[i])
+		{
+			pos oldCrd = pos(block->_coord);
+			//code something...
+
+			
+		}
+	}
 }
