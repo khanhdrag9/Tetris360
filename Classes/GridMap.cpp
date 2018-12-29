@@ -1,5 +1,7 @@
 #include "GridMap.h"
 #include "Block.h"
+#include "BlockManager.h"
+#include "ShapeFactory.h"
 
 //grids
 void grids_back::init(const int& row, const int& col)
@@ -108,7 +110,7 @@ void GridMap::initGirds(const int& row, const int& col)
 list<int> GridMap::findRowFull()
 {
 	list<int> rows;
-	for (int row = 0; row < _gridsBack.size(); row++)
+	for (int row = 0; row < _row; row++)
 	{
 		bool isFull = all_of(_gridsFont[row].begin(), _gridsFont[row].end(), [](shared_ptr<Block>& b) {
 			return b != nullptr;
@@ -154,16 +156,34 @@ void GridMap::setDirectionFall(const int& direct)
 
 void GridMap::rotateBoard()
 {
-	short axis = _col / 2;
+    ShapeFactory::_pause = true;
+    
+    pos axis = pos(GridMap::_bottom, _col / 2);
 
-	for (int i = 0; i < _row; i++)
+    _gridsFont.init(_row + ABOVE_ROW, _col);
+    
+    for (auto& block : BlockManager::getInstance()->getBlockPool())
 	{
-		for (auto& block : _gridsFont[i])
-		{
-			pos oldCrd = pos(block->_coord);
-			//code something...
-
+        if(block)
+        {
+            pos range = pos(abs(block->_coord.row - axis.row), abs(block->_coord.col - axis.col));
+            pos newCoord = pos(axis.row + range.col, axis.col + range.row);
+            
+            block->_coord = newCoord;
+            Vec2 realPos = _gridsPosi[newCoord.row][newCoord.col];
+            if (newCoord.row >= GridMap::_bottom && newCoord.row < _row && newCoord.col >= GridMap::_left && newCoord.col <= GridMap::_right)
+            {
+                //block->_sprite->setPosition(realPos);
+                block->_sprite->runAction(MoveTo::create(0.5f, realPos));
+                
+                _gridsFont[newCoord.row][newCoord.col] = block;
+                _gridsBack[newCoord.row][newCoord.col] = true;
+            }
+            else
+            {
+                block->_sprite->setVisible(false);
+            }
+        }
 			
-		}
 	}
 }

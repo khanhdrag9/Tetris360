@@ -57,13 +57,14 @@ class GridMap
     
 private:
     void initGirds(const int& row, const int& col);
-    void rotateBoard();
+    
     
 public:
 	GridMap();
 	virtual ~GridMap();
 
 	void init();
+    void rotateBoard();
 
 	grids_back& getGirdsBack() { return _gridsBack; }
 	grids_font& getGirdsFont() { return _gridsFont; }

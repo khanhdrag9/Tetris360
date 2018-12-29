@@ -5,7 +5,8 @@
 #include "BlockManager.h"
 
 ShapeFactory* ShapeFactory::instance = new ShapeFactory();
-pos ShapeFactory::posNull = pos(-1, -1);
+const pos ShapeFactory::posNull = pos(-1, -1);
+bool ShapeFactory::_pause = true;
 
 ShapeFactory* ShapeFactory::getInstance()
 {
@@ -26,6 +27,7 @@ void ShapeFactory::init()
 	_tetrisMap = make_shared<GridMap>();
 	_shapeAction = make_unique<Fall>(_tetrisMap, 1);
 	_shapeIsFalling = make_shared<Shape>();
+    _pause = false;
 }
 
 void ShapeFactory::init(const shared_ptr<GridMap>& gridMap)
@@ -33,6 +35,7 @@ void ShapeFactory::init(const shared_ptr<GridMap>& gridMap)
 	_tetrisMap = gridMap;
 	_shapeAction = make_unique<Fall>(_tetrisMap);
 	_shapeIsFalling = make_shared<Shape>();
+    _pause = false;
 }
 
 void ShapeFactory::setLayer(Layer* layer)
@@ -99,6 +102,8 @@ shared_ptr<Shape>& ShapeFactory::createShape()
 
 int ShapeFactory::updateShape()
 {
+    if(ShapeFactory::_pause)return actionResult::COL_NONE;
+    
 	mtx.lock();
 
     int result = actionResult::COL_NONE;

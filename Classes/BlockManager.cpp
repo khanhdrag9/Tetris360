@@ -27,6 +27,11 @@ void BlockManager::releaseShape(shared_ptr<Shape>& shape)
 	}
 }
 
+list<shared_ptr<Block>>& BlockManager::getBlockPool()
+{
+    return BlockPool::getInstance()->_pool;
+}
+
 void BlockManager::moveBlock(shared_ptr<Block> block, const pos& newPos)
 {
 	pos oldPos = pos(block->_coord);

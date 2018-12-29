@@ -13,7 +13,7 @@ BlockPool::BlockPool()
  
 int BlockPool::size() const
 {
-	return _pool.size();
+	return (int)_pool.size();
 }
 
 void BlockPool::collect(const shared_ptr<Block>& block)

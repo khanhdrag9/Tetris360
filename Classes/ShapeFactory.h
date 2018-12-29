@@ -35,7 +35,8 @@ public:
 		Z,
 		NONE
 	};
-	static pos posNull;
+	static const pos posNull;
+    static bool _pause;
 
 	static ShapeFactory* getInstance();
 

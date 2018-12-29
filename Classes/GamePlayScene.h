@@ -26,6 +26,8 @@ class GamePlayScene : public LayerColor
     
     chrono::steady_clock::time_point _startTime;
     chrono::steady_clock::time_point _endTime;
+    
+    
 public:
 	const Vec2 touchNULL = Vec2(-1.f, -1.f);
 

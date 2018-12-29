@@ -10,6 +10,7 @@
 
 const float GamePlayScene::_ratioMove = 0.85f;
 
+
 GamePlayScene::GamePlayScene() :
     _speedFall(0.5f),
     _numRowFall(0),
@@ -67,7 +68,7 @@ bool GamePlayScene::init()
     this->scheduleUpdate();
 	this->schedule(schedule_selector(GamePlayScene::updateShapeIsFalling), _speedFall);
 	
-	this->scheduleOnce(schedule_selector(GamePlayScene::rotateBoard), 30);
+	this->scheduleOnce(schedule_selector(GamePlayScene::rotateBoard), 10);
 
 	return true;
 }
@@ -297,5 +298,5 @@ bool GamePlayScene::reSetupBlocksPos(const int& row)
 
 void GamePlayScene::rotateBoard(float)
 {
-
+    _gridMap->rotateBoard();
 }
