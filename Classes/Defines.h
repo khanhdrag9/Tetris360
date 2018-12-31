@@ -13,3 +13,9 @@
 #define MAX_ROW 25
 #define ABOVE_ROW 4
 
+enum z
+{
+    background,
+    scene,
+    item
+};

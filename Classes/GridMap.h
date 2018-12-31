@@ -40,6 +40,7 @@ class GridMap
 {
 	Size _screenSize;
 	Vec2 _origin;
+    pos _axis;
 
 	float _lengthBlock;
 
@@ -48,36 +49,34 @@ class GridMap
 	grids_posi _gridsPosi;
 
 	//boardGame _board;
-	//Node* _node;
+    Node* _currentLayer;
+	Node* _node;
     bool _isVertical;
-	int _directionFall;
     
     int _row;
     int _col;
     
 private:
     void initGirds(const int& row, const int& col);
-    
+    void releaseSpriteInNode();
     
 public:
 	GridMap();
 	virtual ~GridMap();
 
 	void init();
-    void rotateBoard();
+    void rotateBoard(Node* layer);
 
 	grids_back& getGirdsBack() { return _gridsBack; }
 	grids_font& getGirdsFont() { return _gridsFont; }
 	const grids_posi& getGirdsPosition() const { return _gridsPosi; }
 	const float& getLengthBlock() const { return _lengthBlock; }
-	//Node* getNode() { return _node; }
+	Node* getNode() { return _node; }
 	
 //private:
 	list<int> findRowFull();
 	void deleteRow(const int& row);
     bool isVertical() const {return _isVertical; }
-	inline int getDirectionFall() const { return _directionFall; }
-	void setDirectionFall(const int& direct);
 	const pos getSize() const { return pos(_row, _col); }
 
 	static int _bottom;

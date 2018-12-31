@@ -31,8 +31,8 @@ Scene* GamePlayScene::createScene()
     layer->_bgLayer = BackgroundLayer::create();
     layer->setupForBgLayer();
 	
-    scene->addChild(layer->_bgLayer, 0);
-	scene->addChild(layer, 1);
+    scene->addChild(layer->_bgLayer, z::background);
+    scene->addChild(layer, z::scene);
 
 	return scene;
 }
@@ -43,6 +43,7 @@ bool GamePlayScene::init()
 		return false;
 
 	_gridMap = make_shared<GridMap>();
+    this->addChild(_gridMap->getNode(), z::item);
  //   _gridMap->setDirectionFall(direction::LEFT);
 #if ENABLE_GRID
 	string pnumber;
@@ -68,7 +69,7 @@ bool GamePlayScene::init()
     this->scheduleUpdate();
 	this->schedule(schedule_selector(GamePlayScene::updateShapeIsFalling), _speedFall);
 	
-	this->scheduleOnce(schedule_selector(GamePlayScene::rotateBoard), 10);
+	this->schedule(schedule_selector(GamePlayScene::rotateBoard), 7);
 
 	return true;
 }
@@ -123,7 +124,7 @@ void GamePlayScene::createStartShape()
 	auto sboard = _gridMap->getSize();
 	_createPos = pos(sboard.row - 1, sboard.col / 2);
     auto shapeFalling = ShapeFactory::getInstance()->createShape();
-	this->addChild(shapeFalling->_node);
+	this->addChild(shapeFalling->_node, z::item);
 	ShapeFactory::getInstance()->setShapePosition(_createPos);	//first position
 
 }
@@ -148,15 +149,7 @@ bool GamePlayScene::touchBegan(Touch* touch, Event* event)
 void GamePlayScene::touchMoved(Touch* touch, Event* event)
 {
 	Vec2 touchPos = touch->getLocation();
-	float range;
-    if(_gridMap->getDirectionFall() == direction::DOWN)
-    {
-        range = touchPos.x - _touchBegin.x;
-    }
-    else
-    {
-        range = touchPos.y - _touchBegin.y;
-    }
+	float range = touchPos.x - _touchBegin.x;
 	float lenghtBlock = _gridMap->getLengthBlock();
 
 	if (range < 0 && abs(range) >= lenghtBlock * _ratioMove)
@@ -179,10 +172,6 @@ void GamePlayScene::touchEnded(Touch* touch, Event* event)
 	Vec2 touchPos = touch->getLocation();
 	float rangeW = abs(touchPos.x - _touchRelease.x);
 	float rangeH = abs(touchPos.y - _touchRelease.y);
-    if(_gridMap->getDirectionFall() != direction::DOWN)
-    {
-        std::swap(rangeW, rangeH);
-    }
     
 	float lenghtBlock = _gridMap->getLengthBlock();
 
@@ -298,5 +287,5 @@ bool GamePlayScene::reSetupBlocksPos(const int& row)
 
 void GamePlayScene::rotateBoard(float)
 {
-    _gridMap->rotateBoard();
+    _gridMap->rotateBoard(this);
 }

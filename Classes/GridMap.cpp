@@ -40,8 +40,7 @@ int GridMap::_right = MAX_COL - 1;
 
 GridMap::GridMap() :
 	_lengthBlock(0),
-
-	_directionFall(direction::DOWN)
+    _currentLayer(nullptr)
 {
 	init();
 }
@@ -58,7 +57,9 @@ void GridMap::init()
 
     _row = MAX_ROW;
     _col = MAX_COL;
-	//_node = Node::create();
+	_node = Node::create();
+    _axis = pos(GridMap::_bottom, _col / 2);
+    
     initGirds(_row + ABOVE_ROW, _col);
     
     
@@ -98,6 +99,7 @@ void GridMap::init()
         pX = _lengthBlock * 0.5f;
 	}
 
+    _node->setPosition(_gridsPosi[_axis.row][_axis.col]);
 }
 
 void GridMap::initGirds(const int& row, const int& col)
@@ -132,58 +134,68 @@ void GridMap::deleteRow(const int& row)
 	}
 }
 
-void GridMap::setDirectionFall(const int& direct)
+
+pos handleRotate(const pos& oldPos, const pos& axis)
 {
-    if(_directionFall == direct)
-        return;
-	switch (direct)
-	{
-	case direction::DOWN:
-		_directionFall = direction::DOWN;
-		break;
-	case direction::LEFT:
-		_directionFall = direction::LEFT;
-		break;
-	case direction::RIGHT:
-		_directionFall = direction::RIGHT;
-		break;
-	default:
-		break;
-	}
+    pos p = pos(oldPos.row - axis.row, oldPos.col - axis.col);
     
-    rotateBoard();
+    pos result = pos(axis.row - p.col, axis.col + p.row);
+
+    return result;
 }
 
-void GridMap::rotateBoard()
+void GridMap::rotateBoard(Node* layer)
 {
+    _currentLayer = layer;
     ShapeFactory::_pause = true;
-    
-    pos axis = pos(GridMap::_bottom, _col / 2);
 
     _gridsFont.init(_row + ABOVE_ROW, _col);
     
+    Vec2 _axisPos = _node->getPosition();
     for (auto& block : BlockManager::getInstance()->getBlockPool())
 	{
         if(block)
         {
-            pos range = pos(abs(block->_coord.row - axis.row), abs(block->_coord.col - axis.col));
-            pos newCoord = pos(axis.row + range.col, axis.col + range.row);
+            //calculate new pos
+            Vec2 oldPos = _gridsPosi[block->_coord.row][block->_coord.col];
+            Vec2 posInNode = Vec2(oldPos - _axisPos);
+            block->_coord = handleRotate(block->_coord, _axis);
+            _gridsFont[block->_coord.row][block->_coord.col] = block;
             
-            block->_coord = newCoord;
-            Vec2 realPos = _gridsPosi[newCoord.row][newCoord.col];
-            if (newCoord.row >= GridMap::_bottom && newCoord.row < _row && newCoord.col >= GridMap::_left && newCoord.col <= GridMap::_right)
+            block->_sprite->retain();
+            block->_sprite->removeFromParentAndCleanup(true);
+            block->_sprite->setPosition(posInNode);
+            _node->addChild(block->_sprite);
+            block->_sprite->autorelease();
+            
+        }
+	}
+    
+    auto cb = CallFunc::create([this](){
+        for (auto& block : BlockManager::getInstance()->getBlockPool())
+        {
+            if(block)
             {
-                //block->_sprite->setPosition(realPos);
-                block->_sprite->runAction(MoveTo::create(0.5f, realPos));
+                //calculate new pos
+                Vec2 realPos = _gridsPosi[block->_coord.row][block->_coord.col];
                 
-                _gridsFont[newCoord.row][newCoord.col] = block;
-                _gridsBack[newCoord.row][newCoord.col] = true;
-            }
-            else
-            {
-                block->_sprite->setVisible(false);
+                block->_sprite->retain();
+                block->_sprite->removeFromParentAndCleanup(true);
+                block->_sprite->setPosition(realPos);
+                _currentLayer->addChild(block->_sprite);
+                block->_sprite->autorelease();
+                
             }
         }
-			
-	}
+        
+        _node->setRotation(0.f);
+    });
+    
+    auto sequence = Sequence::createWithTwoActions(RotateBy::create(0.5f, 90.f), cb);
+    _node->runAction(sequence);
+}
+
+void GridMap::releaseSpriteInNode()
+{
+    
 }
