@@ -58,6 +58,8 @@ bool GamePlayScene::init()
 		}
 	}
 #endif
+    _screenSize = Director::getInstance()->getVisibleSize();
+    _origin = Director::getInstance()->getVisibleOrigin();
     
     setPositionLayer();
 	BlockManager::getInstance()->init(_gridMap);
@@ -69,15 +71,13 @@ bool GamePlayScene::init()
     this->scheduleUpdate();
 	this->schedule(schedule_selector(GamePlayScene::updateShapeIsFalling), _speedFall);
 	
-	this->schedule(schedule_selector(GamePlayScene::rotateBoard), 7);
+	this->schedule(schedule_selector(GamePlayScene::rotateBoard), 30.f);
 
 	return true;
 }
 
 void GamePlayScene::setPositionLayer()
 {
-    _screenSize = Director::getInstance()->getVisibleSize();
-    _origin = Director::getInstance()->getVisibleOrigin();
     float boardLenW = _gridMap->getLengthBlock() * MAX_COL;
     float boardLenH = _gridMap->getLengthBlock() * MAX_ROW;
     float px = 0.f, py = 0.f;
@@ -91,11 +91,13 @@ void GamePlayScene::setPositionLayer()
     }
     this->setPosition(px + _origin.x, py + _origin.y);
     
-    _boardSize = Size(boardLenW, boardLenH);
+    _boardSize = Rect(px + _origin.x, py + _origin.y, boardLenW, boardLenH);
+    //_boardSize = Size(boardLenW, boardLenH);
     _posBoard = Vec2(px, py);
     
-    this->setContentSize(Size(_boardSize.width, _boardSize.height));
+    this->setContentSize(Size(_boardSize.size.width, _boardSize.size.height));
     this->setScale(0.9f);
+    
     //set background gameplay
 //    Sprite* bg = Sprite::create(BG_PATH, Rect(0, 0, boardLenW, boardLenH));
 //    float ratioX = _boardSize.width / (float) bg->getBoundingBox().size.width;
@@ -178,7 +180,7 @@ void GamePlayScene::touchEnded(Touch* touch, Event* event)
     _endTime = chrono::high_resolution_clock::now();
     
     float coutTime = chrono::duration_cast<chrono::milliseconds>(_endTime - _startTime).count();
-    CCLOG("coutime on release touch : %f", coutTime);
+    //CCLOG("coutime on release touch : %f", coutTime);
     
 	if (rangeW <= lenghtBlock * _ratioMove && rangeH <= lenghtBlock * _ratioMove)
 	{
@@ -197,7 +199,17 @@ void GamePlayScene::touchEnded(Touch* touch, Event* event)
 
 void GamePlayScene::update(float dt)
 {
-	
+    if(ShapeFactory::_pause)
+    {
+        for(auto& block : BlockManager::getInstance()->getBlockPool())
+        {
+            auto pos = _gridMap->getNode()->convertToWorldSpace(block->_sprite->getPosition());
+            if(!_boardSize.containsPoint(pos))
+                block->_sprite->setVisible(false);
+            else
+                block->_sprite->setVisible(true);
+        }
+    }
 }
 
 void GamePlayScene::updateShapeIsFalling(float)
@@ -210,7 +222,7 @@ void GamePlayScene::updateShapeIsFalling(float)
 
 		ShapeFactory::getInstance()->createShape();
 		ShapeFactory::getInstance()->setShapePosition(_createPos);
-
+        
 	}
 
 }
@@ -222,7 +234,7 @@ void GamePlayScene::checkRowFull()
     {
         if(_numRowFall > 0)
         {
-
+             BlockManager::getInstance()->refreshPool();
             _numRowFall = 0;
         }
         
@@ -288,4 +300,5 @@ bool GamePlayScene::reSetupBlocksPos(const int& row)
 void GamePlayScene::rotateBoard(float)
 {
     _gridMap->rotateBoard(this);
+    
 }

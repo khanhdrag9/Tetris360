@@ -27,7 +27,7 @@ void BlockManager::releaseShape(shared_ptr<Shape>& shape)
 	}
 }
 
-list<shared_ptr<Block>>& BlockManager::getBlockPool()
+vector<shared_ptr<Block>>& BlockManager::getBlockPool()
 {
     return BlockPool::getInstance()->_pool;
 }
@@ -49,4 +49,9 @@ void BlockManager::moveBlock(shared_ptr<Block> block, const pos& newPos)
 	//handle old pos on gird
 	_gridMap->getGirdsFont()[oldPos.row][oldPos.col] = nullptr;
 	_gridMap->getGirdsBack()[oldPos.row][oldPos.col] = false;
+}
+
+void BlockManager::refreshPool()
+{
+    BlockPool::getInstance()->refresh();
 }

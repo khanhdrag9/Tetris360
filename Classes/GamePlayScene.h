@@ -11,7 +11,8 @@ class GamePlayScene : public LayerColor
     
 	Size _screenSize;
 	Vec2 _origin;
-    Size _boardSize;
+   // Size _boardSize;
+    Rect _boardSize;
     Vec2 _posBoard;
 
 	Vec2 _touchBegin;

@@ -10,10 +10,11 @@ class BlockPool
 	BlockPool();
 	static BlockPool* instance;
 
-	list<shared_ptr<Block>> _pool;
+	vector<shared_ptr<Block>> _pool;
 
 	int size() const;
 	void collect(const shared_ptr<Block>& block);
+    void refresh();
 public:
 	static BlockPool* getInstance();
 };

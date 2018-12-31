@@ -26,15 +26,27 @@ public:
     void init(const int& row, const int& col);
 };
 
-//struct boardGame
-//{
-//	float minX;
-//	float minY;
-//	float maxX;
-//	float maxY;
-//	float width;
-//	float height;
-//};
+struct boardGame
+{
+    float minX;
+    float minY;
+    float maxX;
+    float maxY;
+    float width;
+    float height;
+    
+    boardGame(){}
+    boardGame(float iminX, float iminY, float imaxX, float imaxY, float iwidth, float iheight):
+        minX(iminX),
+        minY(iminY),
+        maxX(imaxX),
+        maxY(imaxY),
+        width(iwidth),
+        height(iheight)
+    {
+        
+    }
+};
 
 class GridMap
 {
@@ -48,7 +60,7 @@ class GridMap
 	grids_font _gridsFont;
 	grids_posi _gridsPosi;
 
-	//boardGame _board;
+	unique_ptr<boardGame> _board;
     Node* _currentLayer;
 	Node* _node;
     bool _isVertical;
@@ -78,6 +90,7 @@ public:
 	void deleteRow(const int& row);
     bool isVertical() const {return _isVertical; }
 	const pos getSize() const { return pos(_row, _col); }
+    unique_ptr<boardGame>& getBoard(){return _board;}
 
 	static int _bottom;
 	static int _left;

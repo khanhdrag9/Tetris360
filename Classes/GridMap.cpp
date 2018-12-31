@@ -57,11 +57,14 @@ void GridMap::init()
 
     _row = MAX_ROW;
     _col = MAX_COL;
+    
 	_node = Node::create();
     _axis = pos(GridMap::_bottom, _col / 2);
     
     initGirds(_row + ABOVE_ROW, _col);
     
+//    GridMap::_left = 0;
+//    GridMap::_right = _col - 1;
     
 	float sizeForW = float(_screenSize.width) / (float)(MAX_COL);
 	float sizeForH = float(_screenSize.height) / (float)(MAX_ROW);
@@ -84,9 +87,9 @@ void GridMap::init()
     float pY = _lengthBlock * 0.5f;
     
 	float increValue = _lengthBlock;
-	for (int row = 0; row < MAX_ROW + ABOVE_ROW; row++)
+	for (int row = 0; row < _row + ABOVE_ROW; row++)
 	{
-		for (int col = 0; col < MAX_COL; col++)
+		for (int col = 0; col < _col; col++)
 		{
 			//_gridsBack[row][col] = false;
 			//_gridsFont[row][col] = nullptr;
@@ -130,6 +133,7 @@ void GridMap::deleteRow(const int& row)
 	for (auto& block : _gridsFont[row])
 	{
 		block->_sprite->removeFromParent();
+        block->_sprite = nullptr;
 		block = nullptr;
 	}
 }
@@ -147,7 +151,6 @@ pos handleRotate(const pos& oldPos, const pos& axis)
 void GridMap::rotateBoard(Node* layer)
 {
     _currentLayer = layer;
-    ShapeFactory::_pause = true;
 
     _gridsFont.init(_row + ABOVE_ROW, _col);
     
@@ -156,17 +159,25 @@ void GridMap::rotateBoard(Node* layer)
 	{
         if(block)
         {
+           // if(block->_sprite)
+            {
             //calculate new pos
-            Vec2 oldPos = _gridsPosi[block->_coord.row][block->_coord.col];
+            //Vec2 oldPos = _gridsPosi[block->_coord.row][block->_coord.col];
+            Vec2 oldPos = block->_sprite->getPosition();
             Vec2 posInNode = Vec2(oldPos - _axisPos);
-            block->_coord = handleRotate(block->_coord, _axis);
-            _gridsFont[block->_coord.row][block->_coord.col] = block;
             
+            pos newPos = handleRotate(block->_coord, _axis);
+            block->_coord = newPos;
+            if(newPos.row >= 0 && newPos.row < _row + ABOVE_ROW && newPos.col >= 0 && newPos.col <= _col - 1)
+            {
+                _gridsFont[block->_coord.row][block->_coord.col] = block;
+            }
+            block->_sprite->setPosition(posInNode);
             block->_sprite->retain();
             block->_sprite->removeFromParentAndCleanup(true);
-            block->_sprite->setPosition(posInNode);
             _node->addChild(block->_sprite);
             block->_sprite->autorelease();
+            }
             
         }
 	}
@@ -177,7 +188,19 @@ void GridMap::rotateBoard(Node* layer)
             if(block)
             {
                 //calculate new pos
-                Vec2 realPos = _gridsPosi[block->_coord.row][block->_coord.col];
+                Vec2 realPos;
+                
+                pos crd = block->_coord;
+                if(crd.row >= 0 && crd.row < _row + ABOVE_ROW && crd.col >= 0 && crd.col <= _col - 1)
+                {
+                    realPos = _gridsPosi[block->_coord.row][block->_coord.col];
+                    block->_sprite->setVisible(true);
+                }
+                else
+                {
+                    block->_sprite->setVisible(false);
+                }
+                
                 
                 block->_sprite->retain();
                 block->_sprite->removeFromParentAndCleanup(true);
@@ -189,10 +212,12 @@ void GridMap::rotateBoard(Node* layer)
         }
         
         _node->setRotation(0.f);
+        ShapeFactory::_pause = false;
     });
     
     auto sequence = Sequence::createWithTwoActions(RotateBy::create(0.5f, 90.f), cb);
     _node->runAction(sequence);
+    ShapeFactory::_pause = true;
 }
 
 void GridMap::releaseSpriteInNode()
