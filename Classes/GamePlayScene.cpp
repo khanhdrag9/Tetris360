@@ -200,17 +200,17 @@ void GamePlayScene::touchEnded(Touch* touch, Event* event)
 
 void GamePlayScene::update(float dt)
 {
-    if(ShapeFactory::_pause)
-    {
-        for(auto& block : BlockManager::getInstance()->getBlockPool())
-        {
-            auto pos = _gridMap->getNode()->convertToWorldSpace(block->_sprite->getPosition());
-            if(!_boardSize.containsPoint(pos))
-                block->_sprite->setVisible(false);
-            else
-                block->_sprite->setVisible(true);
-        }
-    }
+//    if(ShapeFactory::_pause)
+//    {
+//        for(auto& block : BlockManager::getInstance()->getBlockPool())
+//        {
+//            auto pos = _gridMap->getNode()->convertToWorldSpace(block->_sprite->getPosition());
+//            if(!_boardSize.containsPoint(pos))
+//                block->_sprite->setVisible(false);
+//            else
+//                block->_sprite->setVisible(true);
+//        }
+//    }
 }
 
 void GamePlayScene::updateShapeIsFalling(float)

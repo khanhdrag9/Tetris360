@@ -2,6 +2,7 @@
 #include "Block.h"
 #include "BlockManager.h"
 #include "ShapeFactory.h"
+#include "ManagerLogic.h"
 
 //grids
 void grids_back::init(const int& row, const int& col)
@@ -194,11 +195,11 @@ void GridMap::rotateBoard(Node* layer)
                 if(crd.row >= 0 && crd.row < _row + ABOVE_ROW && crd.col >= 0 && crd.col <= _col - 1)
                 {
                     realPos = _gridsPosi[block->_coord.row][block->_coord.col];
-                    block->_sprite->setVisible(true);
+                   // block->_sprite->setVisible(true);
                 }
                 else
                 {
-                    block->_sprite->setVisible(false);
+                    //block->_sprite->setVisible(false);
                 }
                 
                 
@@ -214,7 +215,7 @@ void GridMap::rotateBoard(Node* layer)
         _node->setRotation(0.f);
         ShapeFactory::_pause = false;
 
-        //auto listRowDeleted = findRowFull();
+        ManagerLogic::getInstance()->checkRowFull(*this);
 
     });
     
