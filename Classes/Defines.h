@@ -6,7 +6,7 @@
 //resoure game
 #define FONT_ARIAL "fonts/arial.ttf"
 #define BLOCK_PATH "title.png"
-#define BG_PATH "bg.jpg"
+#define BGPLAY_PATH "BGPlay.png"
 
 //define game
 #define MAX_COL 11
@@ -15,6 +15,7 @@
 
 enum z
 {
+
     background,
     scene,
     item

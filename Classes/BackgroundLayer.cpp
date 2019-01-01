@@ -2,8 +2,17 @@
 
 bool BackgroundLayer::init()
 {
-    if(!LayerColor::initWithColor(Color4B::WHITE))
+    if(!Layer::init())
         return false;
     
     return true;
+}
+
+void BackgroundLayer::initSoild(const Rect& boardRect)
+{
+    Size sc = Director::getInstance()->getVisibleSize();
+    
+    Sprite* bg = Sprite::create(BGPLAY_PATH);
+    bg->setPosition(sc * 0.5f);
+    this->addChild(bg);
 }

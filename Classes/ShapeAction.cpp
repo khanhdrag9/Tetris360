@@ -201,7 +201,6 @@ int Rotate::runAction(shared_ptr<Shape>& shape)
 		newRot = (float)(int(newRot) % 360);
 		int quotient = ceil(newRot / 90.0);
 
-		int numberBlock = (int)shape->_blocks.size();
         list<pos> posList = canRotateInAroudPos(shape, quotient);
 
         //bool bfP = false;   //break find avaible pos to rotate

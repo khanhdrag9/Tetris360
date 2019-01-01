@@ -31,8 +31,8 @@ Scene* GamePlayScene::createScene()
     layer->_bgLayer = BackgroundLayer::create();
     layer->setupForBgLayer();
 	
-    scene->addChild(layer->_bgLayer, z::background);
     scene->addChild(layer, z::scene);
+    scene->addChild(layer->_bgLayer, z::background);
 
 	return scene;
 }
@@ -111,14 +111,16 @@ void GamePlayScene::setPositionLayer()
 
 void GamePlayScene::setupForBgLayer()
 {
-    Vec2 posScore;
-    if(_gridMap->isVertical())
-        posScore = Vec2(40 + _origin.x, _screenSize.height * 0.5f + _origin.y);
-    else
-        posScore = Vec2(_screenSize.width * 0.5f + _origin.x, _screenSize.height - 40 + _origin.y);
-        
-        
-    ManagerLogic::getInstance()->initScore(_bgLayer, posScore, 75.f, Color3B::RED);
+//    Vec2 posScore;
+//    if(_gridMap->isVertical())
+//        posScore = Vec2(40 + _origin.x, _screenSize.height * 0.5f + _origin.y);
+//    else
+//        posScore = Vec2(_screenSize.width * 0.5f + _origin.x, _screenSize.height - 40 + _origin.y);
+//        
+//        
+//    ManagerLogic::getInstance()->initScore(_bgLayer, posScore, 75.f, Color3B::RED);
+    
+    _bgLayer->initSoild(_boardSize);
 }
 
 void GamePlayScene::createStartShape()

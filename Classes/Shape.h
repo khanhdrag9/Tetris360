@@ -25,9 +25,9 @@ protected:
 public:
 	virtual ~DetailShape(){}
 	float& getMaxAngle() { return _maxAngle; }
-	virtual const int& referToInitCoordBoard(const int& row, const int& col) { return NULL; };
-	virtual const int& referToInitLocationNodeBoard(const int& row, const int& col) { return NULL; };
-	virtual const int& referToRotate(const int& row, const int& col) { return NULL; };
+	virtual const int& referToInitCoordBoard(const int& row, const int& col) { return 0; };
+	virtual const int& referToInitLocationNodeBoard(const int& row, const int& col) { return 0; };
+	virtual const int& referToRotate(const int& row, const int& col) { return 0; };
 };
 
 class OShape : public DetailShape
