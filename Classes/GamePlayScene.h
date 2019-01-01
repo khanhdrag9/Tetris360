@@ -20,9 +20,6 @@ class GamePlayScene : public LayerColor
 
 	shared_ptr<GridMap> _gridMap;
 
-	list<int> _listRowDeleted;
-
-    int _numRowFall;
 	float _speedFall;
     
     chrono::steady_clock::time_point _startTime;
@@ -57,7 +54,5 @@ private:
 	void touchEnded(Touch* touch, Event* event);
 
 	void updateShapeIsFalling(float);
-	void checkRowFull();
-	bool reSetupBlocksPos(const int& row = -1);
 	void rotateBoard(float);
 };

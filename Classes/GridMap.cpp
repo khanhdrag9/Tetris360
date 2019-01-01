@@ -213,6 +213,9 @@ void GridMap::rotateBoard(Node* layer)
         
         _node->setRotation(0.f);
         ShapeFactory::_pause = false;
+
+        //auto listRowDeleted = findRowFull();
+
     });
     
     auto sequence = Sequence::createWithTwoActions(RotateBy::create(0.5f, 90.f), cb);

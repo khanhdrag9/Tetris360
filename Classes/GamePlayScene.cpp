@@ -13,7 +13,6 @@ const float GamePlayScene::_ratioMove = 0.85f;
 
 GamePlayScene::GamePlayScene() :
     _speedFall(0.5f),
-    _numRowFall(0),
 	_gridMap(nullptr)
 {
 
@@ -220,7 +219,8 @@ void GamePlayScene::updateShapeIsFalling(float)
 	if (ShapeFactory::getInstance()->updateShape() == actionResult::COL_BOTTOM)
 	{
 		ShapeFactory::getInstance()->releaseShape();
-		checkRowFull();
+		//checkRowFull();
+		ManagerLogic::getInstance()->checkRowFull(*_gridMap);
 
 		ShapeFactory::getInstance()->createShape();
 		ShapeFactory::getInstance()->setShapePosition(_createPos);
@@ -229,75 +229,6 @@ void GamePlayScene::updateShapeIsFalling(float)
 
 }
 
-void GamePlayScene::checkRowFull()
-{
-	_listRowDeleted = _gridMap->findRowFull();
-	if (_listRowDeleted.size() <= 0)
-    {
-        if(_numRowFall > 0)
-        {
-             BlockManager::getInstance()->refreshPool();
-            _numRowFall = 0;
-        }
-        
-        return;
-    }
-
-	while (_listRowDeleted.size() > 0)
-	{
-		int row = *(_listRowDeleted.begin());
-		_gridMap->deleteRow(row);
-        
-        ManagerLogic::getInstance()->increScore(1);
-        
-        if (reSetupBlocksPos(row))
-        {
-            _listRowDeleted.pop_front();
-            bool avableDrop = all_of(_listRowDeleted.begin(), _listRowDeleted.end(), [](int& row) {
-                row--;
-                return row >= 0;
-            });
-            if (!avableDrop)break;
-        }
-        
-        _numRowFall++;
-	}
-
-	checkRowFull();
-}
-
-bool GamePlayScene::reSetupBlocksPos(const int& row)
-{
-	if (row == -1)
-	{
-		if (_listRowDeleted.size() > 0)
-		{
-			//feature optimize code...
-			
-		}
-		return false;
-	}
-	else if(row >= 0)
-	{
-		int aboveRow = row + 1;
-		while (aboveRow <= _gridMap->getSize().row)
-		{
-			for (auto& block : _gridMap->getGirdsFont()[aboveRow])
-			{
-				if (block)
-				{
-                    pos newPos = pos(block->_coord.row - 1, block->_coord.col);
-                    BlockManager::getInstance()->moveBlock(block, newPos);
-                    
-				}
-			}
-			aboveRow++;
-		}
-		return true;
-	}
-
-	return false;
-}
 
 void GamePlayScene::rotateBoard(float)
 {
