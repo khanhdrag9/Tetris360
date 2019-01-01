@@ -195,11 +195,11 @@ void GridMap::rotateBoard(Node* layer)
                 if(crd.row >= 0 && crd.row < _row + ABOVE_ROW && crd.col >= 0 && crd.col <= _col - 1)
                 {
                     realPos = _gridsPosi[block->_coord.row][block->_coord.col];
-                   // block->_sprite->setVisible(true);
+                    //block->_sprite->setVisible(true);
                 }
                 else
                 {
-                    //block->_sprite->setVisible(false);
+                   // block->_sprite->setVisible(false);
                 }
                 
                 
@@ -219,7 +219,7 @@ void GridMap::rotateBoard(Node* layer)
 
     });
     
-    auto sequence = Sequence::createWithTwoActions(RotateBy::create(0.5f, 90.f), cb);
+    auto sequence = Sequence::createWithTwoActions(RotateBy::create(1.5f, 90.f), cb);
     _node->runAction(sequence);
     ShapeFactory::_pause = true;
 }

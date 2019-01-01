@@ -96,16 +96,6 @@ void GamePlayScene::setPositionLayer()
     
     this->setContentSize(Size(_boardSize.size.width, _boardSize.size.height));
     this->setScale(0.9f);
-    
-    //set background gameplay
-//    Sprite* bg = Sprite::create(BG_PATH, Rect(0, 0, boardLenW, boardLenH));
-//    float ratioX = _boardSize.width / (float) bg->getBoundingBox().size.width;
-//    float ratioY = _boardSize.height / (float) bg->getBoundingBox().size.height;
-//    bg->setScale(ratioX, ratioY);
-//
-//    bg->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
-//    bg->setPosition(0, 0);
-   // this->addChild(bg, 0);
 }
 
 void GamePlayScene::setupForBgLayer()
